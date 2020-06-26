@@ -44,7 +44,8 @@ class TemplateController extends Controller
 
          $request->validate([
           'TemplateName'  => 'required',
-          'TemplateBackGround' => 'required|image|max:300'
+          'TemplateBackGround' => 'required|image|max:300',
+          'MineColor' => 'required'
          ]);
 
 
@@ -53,7 +54,10 @@ class TemplateController extends Controller
              Response::make($image->encode('jpeg'));
              $form_data = array(
               'TemplateName'  => $request->TemplateName,
-              'TemplateBackGround' => $image
+              'TemplateBackGround' => $image,
+              'MineColor' => $request->MineColor,
+              'SubColor' => $request->SubColor,
+              'SubSubColor' => $request->SubSubColor,
              );
              Template::create($form_data);
 
@@ -74,7 +78,7 @@ class TemplateController extends Controller
     {
         $allImg = TemplateImg::all()->where('TemplateID',$template->id);
         $thisTemplate = $template;
-         return view('admin.template.showTemplate',compact('allImg','thisTemplate'));
+        return view('admin.template.showTemplate',compact('allImg','thisTemplate'));
     }
 
 
@@ -112,8 +116,12 @@ class TemplateController extends Controller
      */
     public function update(Request $request, Template $template)
     {
+
         $form_data = array(
-              'TemplateName' => $request->TemplateName
+              'TemplateName' => $request->TemplateName,
+              'MineColor' => $request->MineColor,
+              'SubColor' => $request->SubColor,
+              'SubSubColor' => $request->SubSubColor,
              );
 
         if ($request->has('TemplateBackGround')) {
@@ -122,6 +130,7 @@ class TemplateController extends Controller
              Response::make($image->encode('jpeg'));
              $form_data['TemplateBackGround'] = $image;
          }
+
          $template->update($form_data);
         return redirect('admin/template')->with('success', 'تم تعديل بيانات القالب بنجاح');
     }

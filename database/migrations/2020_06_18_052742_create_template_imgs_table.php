@@ -17,10 +17,7 @@ class CreateTemplateImgsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('TemplateID');
             $table->longbolb('TheImg');
-            $table->float('dst_x')->default('28');//x-coordinate of destination point.
-            $table->float('dst_y')->default('90');//y-coordinate of destination point.
-            $table->float('dst_w')->default('500');//Destination width.
-            $table->float('dst_h')->default('350');//Destination height.
+            $table->string('ImgType');
             $table->timestamps();
         });
     }

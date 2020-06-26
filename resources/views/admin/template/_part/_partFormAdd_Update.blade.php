@@ -15,6 +15,27 @@
   </div>
 </div>
 
+<div class="form-group">
+    <label class="control-label">لون القالب الأساسي  (Hex)</label> <span style="color: red">اجباري</span>
+    <div>
+     <input type="color" name="MineColor" >
+  </div>
+</div>
+
+  <div class="form-group">
+    <label class="control-label">لون القالب الثانوي  (Hex)</label> <span style="color: green">اختياري</span>
+    <div>
+     <input type="color" name="SubColor">
+  </div>
+</div>
+
+  <div class="form-group">
+    <label class="control-label">لون القالب الثانوي الاضافي  (Hex)</label>  <span style="color: green">اختياري</span>
+    <div>
+     <input type="color" name="SubSubColor">
+  </div>
+</div>
+
 </div>
 
 

@@ -293,6 +293,7 @@ ul {
     border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;
     padding: 0;
+    height: 100%;
 }
 
 .table th, .table td {

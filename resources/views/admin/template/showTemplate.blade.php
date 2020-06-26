@@ -65,7 +65,21 @@
                     <img class="img-responsive" src="{{ url('/admin/templateImg/fetch_image') }}/ {{$img->id}}">
                 </div>
                 <div class="card-footer">
-                    <a href="{{ route('templateImg.edit',$img->id) }}" class="btn btn-primary">احداثيات الصورة</a>
+                    <form  action="{{ route('templateImg.update',$img->id) }}" method="post" style="float: right;">
+                          @csrf
+                          @method('PATCH')
+
+                          <input type="radio" name="ImgType" value="Transparent" id="Transparent_{{$img->id}}"  @if($img->ImgType == 'Transparent') checked @endif>
+                          <label class="ml-4" for="Transparent_{{$img->id}}">مغرغ</label>
+
+
+                          <input type="radio" name="ImgType" value="WithBackGound" id="WithBackGound_{{$img->id}}"  @if($img->ImgType == 'WithBackGound') checked @endif>
+                          <label for="WithBackGound_{{$img->id}}">بيئي</label>
+
+                          <button type="submit" class="btn btn-success ">حفظ </button>
+                    </form>
+
+
                     <form method="Post" action="{{route('templateImg.destroy',$img->id)}}" style="float: left;">
                       @csrf
                       @method('DELETE')

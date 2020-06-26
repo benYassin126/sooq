@@ -1,5 +1,5 @@
 @extends('admin.layouts.adminLTE')
-@section('title','تعديل عامل')
+@section('title','تعديل  قالب')
 
 @section('content')
 

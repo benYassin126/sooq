@@ -13,9 +13,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <title>{{ config('app.name') }} || @yield('title')</title>
 
-      <link href="{{ asset('css/all.css') }}" rel="stylesheet"> <!--load all styles -->
+  <link href="{{ asset('css/all.css') }}" rel="stylesheet"> <!--load all styles -->
 
-<meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
   <!-- Ionicons -->
@@ -68,14 +68,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
       </div>
       <div class="info">
           <a href="" target="_blank" class="d-block">
+            لوحة التحكم
 
+          </a>
+      </div>
+  </div>
 
-        </a>
-    </div>
-</div>
-
-<!-- Sidebar Menu -->
-<nav class="mt-2">
+  <!-- Sidebar Menu -->
+  <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
       <li class="nav-item">
         <a href="" class="nav-link">
@@ -83,19 +83,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
           <p>
               نظرة عامة
-         </p>
-     </a>
- </li>
+          </p>
+      </a>
+  </li>
 
- <li class="nav-item">
+  <li class="nav-item">
     <a href="" class="nav-link">
       <i class="nav-icon fas fa-user"></i>
 
       <p>
-         العملاء
+       العملاء
 
-     </p>
- </a>
+   </p>
+</a>
 </li>
 
 
@@ -104,10 +104,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <i class="nav-icon fas fa-briefcase"></i>
 
       <p>
-         الباقات
+       الباقات
 
-     </p>
- </a>
+   </p>
+</a>
 </li>
 
 <li class="nav-item">
@@ -115,38 +115,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <i class="fas fa-flag"></i>
 
         <p>
-         الاشتراكات
-     </p>
- </a>
+           الاشتراكات
+       </p>
+   </a>
 
 </li>
 
-            <li class="nav-item has-treeview">
-              <a href="" class="nav-link">
-                <i class="nav-icon fa fa-table"></i>
-                <p>
-                  القوالب
-                  <i class="fa fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a  href="{{ route('template.index') }}" class="nav-link">
-                    <i class="fa fa-border-all nav-icon"></i>
-                    <p>قوالب النظام</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="pages/tables/data.html" class="nav-link">
-                    <i class="fa fa-cog nav-icon"></i>
+<li class="nav-item has-treeview">
+  <a href="" class="nav-link">
+    <i class="nav-icon fa fa-table"></i>
+    <p>
+      القوالب
+      <i class="fa fa-angle-left right"></i>
+  </p>
+</a>
+<ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a  href="{{ route('template.index') }}" class="nav-link">
+        <i class="fa fa-border-all nav-icon"></i>
+        <p>قوالب النظام</p>
+    </a>
+</li>
+<li class="nav-item">
+  <a href="pages/tables/data.html" class="nav-link">
+    <i class="fa fa-cog nav-icon"></i>
 
-                    <p>التحكم بالقوالب </p>
-                    <span class="right badge badge-danger">قريبا</span>
-                  </a>
-                </li>
+    <p>التحكم بالقوالب </p>
+    <span class="right badge badge-danger">قريبا</span>
+</a>
+</li>
 
-              </ul>
-            </li>
+</ul>
+</li>
 
 
 
@@ -200,7 +200,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 
-        <script defer src="{{ asset('js/all.js') }}"></script> <!--load all styles -->
+<script defer src="{{ asset('js/all.js') }}"></script> <!--load all styles -->
 <!-- jQuery -->
 <script src="{{url('/')}}/design/AdminLTE/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -211,6 +211,47 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script type="text/javascript">
 
 
+(function($){
+
+  "use strict";
+
+  // Set all required color input values to #010101.
+  $(window).on("load", function() {
+    $("[type='color'][required]").val() == "#010101";
+  });
+
+  $("[type='color'][required]").on("change", function() {
+
+    // Prevent users selecting the color #010101.
+    if($(this).val() == "#010101") {
+      $(this).val() == "#000000";
+    }
+  });
+
+})(jQuery)
+    //To Get ImgID
+    pathArray = window.location.pathname.split('/');
+    var imgID = pathArray[3];
+
+
+    //To Ajax Search
+    $('#dst_x,#dst_y,#dst_w,#dst_h').on('keyup',function(){
+
+        $xValue = $('#dst_x').val();
+        $yValue = $('#dst_y').val();
+        $wValue = $('#dst_w').val();
+        $hValue = $('#dst_h').val();
+
+        $.ajax({
+            type : 'get',
+            url : 'http://127.0.0.1/admin/templateImg/'+ imgID +'/xyz',
+            data:{'dst_x':$xValue,'dst_y':$yValue,'dst_w': $wValue ,'dst_h':$hValue},
+
+            success:function(Response){
+                $('.output').html(Response);
+            }
+        });
+    })
 
 </script>
 
