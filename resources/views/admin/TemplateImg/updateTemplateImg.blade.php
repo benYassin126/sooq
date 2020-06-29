@@ -27,7 +27,7 @@
   @endif
   <!-- End MSG -->
 
-
+<img style="width: 40%" src="/img/output/output.png">
   <!-- Start Content -->
 
 @endsection('content')

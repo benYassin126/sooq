@@ -97,22 +97,17 @@ class TemplateImgController extends Controller
         //will we use this function to edit every image in template like .. transport or not
 
         //Start Handle TestImg
-       $imgTest = './img/testImg/testImg.png';
+       $imgTest = './img/testImg/testImg20.png';
        $imgTest = imagecreatefromstring(file_get_contents($imgTest));
-         //End First Handle TestImg
+         //End Handle TestImg
 
-        //Start BackGround
+        //Start Handle BackGround
        $backgroundImg = Image::make($templateImg->TheImg);
        $backgroundImg = imagecreatefromstring($templateImg->TheImg);
-        //Finsh BackGround
-
-       //start try to change color
-        $index = imagecolorclosest ( $backgroundImg,  110,21,15 ); // get White COlor
-        imagecolorset($backgroundImg,$index,92,92,92); // SET NEW COLOR
-       //end try to change color
+        //Finsh Handle BackGround
 
         //Start Copy Tow Images
-       imagecopyresampled($backgroundImg, $imgTest, 40, 80, 0, 0, 485, 410, imagesx($imgTest), imagesy($imgTest));
+       imagecopyresampled($backgroundImg, $imgTest, 60, 90, 0, 0,450,370, imagesx($imgTest), imagesy($imgTest));
        imagepng($backgroundImg, "./img/output/output.png", 9);
         //Finsh Copy Tow Images
 

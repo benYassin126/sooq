@@ -50,7 +50,7 @@
 </div>
 
 <a href="{{ route('templateImg.create') }}?TemplateID={{$thisTemplate->id}}" class="btn btn-success btn-block mb-4">إضافة  تصاميم القالب</a>
-<a href="" class="btn btn-primary btn-block mb-4">استخدام القالب</a>
+<a href="{{ url('/admin/template')}}/{{$thisTemplate->id}}/useTemplate" class="btn btn-primary btn-block mb-4">استخدام القالب</a>
 
 
 <hr>
