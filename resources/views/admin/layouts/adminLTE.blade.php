@@ -14,6 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <title>{{ config('app.name') }} || @yield('title')</title>
 
   <link href="{{ asset('css/all.css') }}" rel="stylesheet"> <!--load all styles -->
+  <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
 

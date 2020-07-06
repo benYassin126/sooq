@@ -331,3 +331,13 @@ ul {
 .table thead th {
     vertical-align: middle;
 }
+
+.imgesInMockUp {
+    width: 33.33%;
+margin-left: -4.5px;
+border: 1px solid #fff;
+}
+.marvel-device.iphone-x
+{
+    height: 100%;
+}

@@ -40,14 +40,14 @@ class TemplateImgController extends Controller
     public function store(Request $request)
     {
      $request->validate([
-      'TheImg.*' => 'required|image|max:300',
+      'TheImg.*' => 'required|image|max:2000',
 
   ]);
 
      foreach ($request->TheImg as $img) {
          $image_file = $img;
          $image = Image::make($image_file);
-         Response::make($image->encode('jpeg'));
+         Response::make($image->encode('png'));
          $form_data = array(
           'TemplateID'  => $request->TemplateID,
           'TheImg' => $image
@@ -67,9 +67,9 @@ class TemplateImgController extends Controller
 
      $image_file = Image::make($image->TheImg);
 
-     $response = Response::make($image_file->encode('jpeg'));
+     $response = Response::make($image_file->encode('png'));
 
-     $response->header('Content-Type', 'image/jpeg');
+     $response->header('Content-Type', 'image/png');
 
      return $response;
  }
