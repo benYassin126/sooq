@@ -41,15 +41,13 @@ class TemplateController extends Controller
         public function store(Request $request)
         {
 
-
          $request->validate([
           'TemplateName'  => 'required',
           'TemplateBackGround' => 'required|image|max:2000',
           'MineColor' => 'required'
       ]);
 
-
-
+         //Store Template background
 
          $image_file = $request->TemplateBackGround;
          $image = Image::make($image_file);
@@ -62,9 +60,6 @@ class TemplateController extends Controller
           'SubSubColor' => $request->SubSubColor,
       );
          Template::create($form_data);
-
-
-
          return redirect('admin/template')->with('success', 'تم رفع القالب بنجاح');
      }
 
@@ -84,6 +79,8 @@ class TemplateController extends Controller
         }
 
 
+        //show use template form
+
         public function useTemplateShow(Template $template ,Request $request) {
 
             $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$template->id]])->count();
@@ -93,17 +90,16 @@ class TemplateController extends Controller
         }
 
 
+        //display The Dedign after process
 
         public function useTemplateUpload(Template $template,Request $request) {
-
-
-
-
             $request->validate([
-              'Transparent.*' => 'image|max:50120|required',
-              'WithBackGound.*' => 'image|max:50120|required',
+              'Transparent.*' => 'required|image|max:50120',
+              'WithBackGound.*' => 'required|image|max:50120|required',
 
           ]);
+
+            //define if user change color when insert data or not
 
             if ($request->MineColor != strtolower($template->MineColor) || $request->SubColor != strtolower($template->SubColor) || $request->SubSubColor != strtolower($template->SubSubColor)) {
                 $changeColor = true;
@@ -111,44 +107,43 @@ class TemplateController extends Controller
                 $changeColor = false;
             }
 
+            // array to store all image path to call it in blade file
             $allImgPath = array();
 
 
+            // Function to copy alpha image to image
             function imagecopymerge_alpha($dst_image ,$src_image ,$dst_x ,$dst_y ,$src_x ,$src_y ,$dst_w ,$dst_h ,$src_w ,$src_h ) {
-                    // creating a cut resource
                 $cut = imagecreatetruecolor($src_w, $src_h);
-
-                    // copying relevant section from background to the cut resource
                 imagecopy($cut, $dst_image, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
-
-                    // copying relevant section from watermark to the cut resource
                 imagecopy($cut, $src_image, 0, 0, $src_x, $src_y, $src_w, $src_h);
-
-                    // insert cut resource to destination image
-                //imagecopymerge($dst_im, $cut, $dst_x, $dst_y, 0, 0, $src_w, $src_h, $pct);
                 imagecopyresampled($dst_image, $cut, $dst_x, $dst_y,$src_x, $src_y, $dst_w, $dst_h,$src_w,$src_h);
             }
 
 
 
+            // get all Template image ID
+            $allTemplateImg = TemplateImg::select('id')->where('TemplateID',$template->id)->get();
+
+
             //if user change color >> change all template color then store it in another file
             //and return all template with new color
-
-            $allTemplateImg = TemplateImg::select('TheImg','id','imgType')->where('TemplateID',$template->id)->get();
 
             if ($changeColor == true ){
 
              foreach ($allTemplateImg as $index => $img) {
-
+                //get All image and Crate it as PNG
                 $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $img->id;
                 $backImg = imagecreatefrompng($imgUrl);
 
+                //store RGB colors to change template color
                 list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");
                 list($rMineUser, $gMineUser, $bMineUser) = sscanf($request->MineColor, "#%02x%02x%02x");
                 list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf($template->SubColor, "#%02x%02x%02x");
                 list($rSubUser, $gSubUser, $bSubUser) = sscanf($request->SubColor, "#%02x%02x%02x");
                 list($rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate) = sscanf($template->SubSubColor, "#%02x%02x%02x");
                 list($rSubSubUser, $gSubSubUser, $bSubSubUser) = sscanf($request->SubSubColor, "#%02x%02x%02x");
+
+                //make the imgae as platte mode to allow us change template color
                 imagetruecolortopalette($backImg,false, 255);
                 $indexx = imagecolorclosest($backImg,$rMineTemplate, $gMimeTemplate, $bMineTemplate);
                 imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineUser); // SET NEW COLOR
@@ -157,17 +152,12 @@ class TemplateController extends Controller
                 $indexx = imagecolorclosest($backImg,$rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate);
                 imagecolorset($backImg,$indexx,$rSubSubUser,$gSubSubUser,$bSubSubUser); // SET NEW COLOR
 
-
+                //difrent file foreache type
                 $imgName = "Template" . $img->id;
                 if ($img->imgType == 'Transparent') {
-
                     imagepalettetotruecolor($backImg);
                     imagepng($backImg, "./img/newTemplateTrans/" . $imgName .".png", 9);
                 }else {
-
-                    //$indexx = imagecolorallocate($backImg,255,255,255);
-                    //$indexxx = imagecolorat($backImg,1000,0);
-                    //dd($indexx,$indexxx);
                     imagecolortransparent($backImg,imagecolorat($backImg,500,500));
                     imagealphablending($backImg, true);
                     imagesavealpha($backImg, true);
@@ -179,11 +169,10 @@ class TemplateController extends Controller
 
 
         }
-          //  dd('test Trans');
+
 
         //First Case : When user inert Transparent images
         if ($request->has('Transparent')) {
-
             $uploadedTranparent = count(collect($request)->get('Transparent'));
             $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$template->id]])->count();
             $allTransImg = array();
@@ -195,6 +184,7 @@ class TemplateController extends Controller
                 array_push($allTransImg,$img);
             }
 
+            //if user insert images less than transpernt template repetiton images
             if ($uploadedTranparent < $countOFTransparent) {
 
                 for ($i=0; $i < $countOFTransparent - $uploadedTranparent ; $i++) {
@@ -207,6 +197,7 @@ class TemplateController extends Controller
 
             foreach ($TransparentinDesign as $index => $trns) {
 
+                //get template thrgoh two way
                 if ($changeColor == true) {
                     $backImg = imagecreatefrompng('./img/newTemplateTrans/Template' . $trns->id . '.png');
 
@@ -214,11 +205,10 @@ class TemplateController extends Controller
                     $backImg = imagecreatefromstring($trns->TheImg);
                 }
 
-
-
+                //set width and height to image and make it at center
                 if (imagesx($allTransImg[$index]) <= imagesx($backImg) && imagesy($allTransImg[$index]) <= imagesy($backImg)) {
-
-                    $decRate = (imagesx($backImg) * 15) / 100;
+                    //rate of descree from mine image if was it less than template size
+                    $decRate = (imagesx($backImg) * 20) / 100;
                     $new_widht =  imagesx($backImg) - $decRate;
                     $new_height = imagesy($backImg) - $decRate;
                     $xoffset = (imagesx($backImg) -  $new_widht) / 2;
@@ -242,7 +232,6 @@ class TemplateController extends Controller
             }
 
         }
-
 
 
             //Second Case : When user inert WithBackGound images
@@ -286,14 +275,12 @@ class TemplateController extends Controller
 
         }
 
-
+        //sort output images to show it Nice
         sort($allImgPath);
-
-
         return view('admin.template.useTemplate',compact('template','allImgPath'));
     }
 
-
+    //function to show temblate background
     function fetch_image($image_id)
     {
      $image = Template::findOrFail($image_id);
@@ -333,6 +320,8 @@ class TemplateController extends Controller
               'TemplateName' => $request->TemplateName,
           );
 
+            //update color only when user change it
+
             if ($request->MineColor != '#010101') {
               $form_data['MineColor'] = $request->MineColor;
           }
@@ -345,6 +334,7 @@ class TemplateController extends Controller
               $form_data['SubSubColor'] = $request->SubSubColor;
           }
 
+          //if user change image
           if ($request->has('TemplateBackGround')) {
              $image_file = $request->TemplateBackGround;
              $image = Image::make($image_file);

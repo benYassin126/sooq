@@ -37,7 +37,7 @@
       <br>
       <ul>
         <li>يجب ان لايتجاوز حجم الصورة الواحدة     <span class="right badge badge-danger">  5 جيجا بايت  </span></li>
-        <li>الصيغ المسموح بها [ PNG , JPEG ,GIF,SVG , GIF ]</li>
+        <li>الصيغ المسموح بها [ PNG , JPEG ,GIF,SVG ]</li>
       </ul>
     </div>
     <form class="form-horizontal" action="{{ route('template.useTemplate',$template->id) }}" method="post" enctype="multipart/form-data">
@@ -47,13 +47,13 @@
           <label class="control-label ml-2">الصور المفرغة</label><span class="right badge badge-danger">{{{ isset($countOFTransparent) ? $countOFTransparent : '' }}}</span><br>
           <p class="control-label ml-2">اذا كنت لا تملك صور مفرغة إليك هذه الأداة الرائعة</label><a href="https://www.remove.bg"><span class="right badge badge-danger">اضغط هنا لتفريغ الصور</p></a>
             <div>
-             <input type="file" name="Transparent[]"  multiple="multiple" />
+             <input type="file" name="Transparent[]" required  multiple="multiple" />
            </div>
          </div>
          <div class="form-group">
           <label class="control-label ml-2">الصور البيئية</label><span class="right badge badge-danger">{{{ isset($countOFWithBackGound) ? $countOFWithBackGound : '' }}}</span>
           <div>
-           <input type="file" name="WithBackGound[]"  multiple="multiple"  />
+           <input type="file" name="WithBackGound[]" required  multiple="multiple"  />
          </div>
        </div>
 
