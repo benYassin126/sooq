@@ -183,9 +183,14 @@ class UserController extends Controller
             if($allUsers)
             {
                 foreach ($allUsers as $key => $user) {
+                  (isset($user->Subscrip)) ? $Subscrip = $user->Subscrip->PakageName : $Subscrip ='لم يشترك' ;
+                  ($user->Append == 0) ? $Append = 'مفعل' : $Append = 'محظور';
                     $output.='<tr>'.
                     '<td>'.$key.'</td>'.
                     '<td>'.$user->name.'</td>'.
+                    '<td>'.  $Subscrip . '</td>'.
+                    '<td> - </td>'.
+                    '<td>'.$Append.'</td>'.
                     '<td>
                     <a href="user/' . $user->id .'/edit" class="btn btn-info "><i class="fas fa-edit"></i> تعديل </a>'.
                     '</tr>';

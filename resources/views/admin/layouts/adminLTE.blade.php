@@ -1,10 +1,4 @@
-
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="ar">
+<html lang={{config('app.locale')}} >
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,7 +7,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
   <title>{{ config('app.name') }} || @yield('title')</title>
 
-  <link href="{{ asset('css/all.css') }}" rel="stylesheet"> <!--load all styles -->
+  <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet"> <!--load all styles -->
   <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
 
   <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -28,7 +22,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
   <!-- bootstrap rtl -->
-  <link rel="stylesheet" href="{{url('/')}}/design/AdminLTE/dist/css/bootstrap-rtl.min.css">
+  <link rel="stylesheet" href="{{url('/')}}/css/bootstrap-rtl.min.css">
   <!-- template rtl version -->
   <link rel="stylesheet" href="{{url('/')}}/design/AdminLTE/dist/css/custom-style.css">
 
@@ -201,11 +195,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 
-<script defer src="{{ asset('js/all.js') }}"></script> <!--load all fontassowme styles -->
+<script defer src="{{ asset('js/fontawesome.js') }}"></script> <!--load all fontassowme styles -->
 <!-- jQuery -->
-<script src="{{url('/')}}/design/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script src="{{url('/')}}/js/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
-<script src="{{url('/')}}/design/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="{{url('/')}}/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{url('/')}}/design/AdminLTE/dist/js/adminlte.js"></script>
 <script src="{{url('/')}}/design/AdminLTE/dist/js/custom.js"></script>

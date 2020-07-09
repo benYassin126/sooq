@@ -42,7 +42,7 @@
     <div class="card">
         <div class="card-body login-card-body">
 
-
+      {{__('hi')}}
 
           <form method="POST">
              @csrf
