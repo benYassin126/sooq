@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','Balance','Twitter','Instagram','Logo','MineColor','SubColor','Append','BusinessType'
     ];
 
     /**
@@ -43,7 +43,7 @@ class User extends Authenticatable
    }
 
    public function Subscrip() {
-    return $this->hasOne('Subscrip','UserID');
+    return $this->hasOne('\App\Subscrip','UserID');
    }
 
 

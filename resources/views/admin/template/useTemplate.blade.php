@@ -80,7 +80,7 @@
 
 </div>
 <div class="card-footer">
-  <button type="submit" class="btn btn-success btn-block">استخدام القالب</button>
+  <button type="submit" class="btn btn-success btn-block">صمم الآن</button>
 </div>
 </form>
 </div>
@@ -89,7 +89,7 @@
 
 <!-- Start Show Template -->
 <hr>
-<h3 class="text-center mt-4 mb-4">شكل القالب</h3>
+<h3 class="text-center mt-4 mb-4">تصميمك جاهز</h3>
 <div class="MocUp text-center">
   @if(isset($allImgPath))
   <div class="marvel-device iphone-x">

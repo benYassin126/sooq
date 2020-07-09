@@ -14,6 +14,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Route::get('templateImg/{templateImg}/xyz', 'TemplateImgController@xyz')->name('templateImg.xyz');
     Route::get('templateImg/fetch_image/{id}', 'TemplateImgController@fetch_image');
 
+
+    //Template Img Route
+    Route::resource('user','UserController');
+    Route::get('user.search', 'UserController@search')->name('user.search');
     Route::group(['middleware' => 'admin:admin'], function () {
 
         Route::get('/', function () {

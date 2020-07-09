@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </li>
 
   <li class="nav-item">
-    <a href="" class="nav-link">
+    <a href="{{ route('user.index') }}" class="nav-link">
       <i class="nav-icon fas fa-user"></i>
 
       <p>
@@ -201,62 +201,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 
-<script defer src="{{ asset('js/all.js') }}"></script> <!--load all styles -->
+<script defer src="{{ asset('js/all.js') }}"></script> <!--load all fontassowme styles -->
 <!-- jQuery -->
 <script src="{{url('/')}}/design/AdminLTE/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="{{url('/')}}/design/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{url('/')}}/design/AdminLTE/dist/js/adminlte.js"></script>
+<script src="{{url('/')}}/design/AdminLTE/dist/js/custom.js"></script>
 
 <script type="text/javascript">
 
 
-(function($){
 
-  "use strict";
-
-  // Set all required color input values to #010101.
-  $(window).on("load", function() {
-    $("[type='color'][required]").val() == "#010101";
-  });
-
-  $("[type='color'][required]").on("change", function() {
-
-    // Prevent users selecting the color #010101.
-    if($(this).val() == "#010101") {
-      $(this).val() == "#000000";
-    }
-  });
-
-})(jQuery)
-    //To Get ImgID
-    pathArray = window.location.pathname.split('/');
-    var imgID = pathArray[3];
 
 
     //To Ajax Search
-    $('#dst_x,#dst_y,#dst_w,#dst_h').on('keyup',function(){
+    $('#search').on('keyup',function(){
 
-        $xValue = $('#dst_x').val();
-        $yValue = $('#dst_y').val();
-        $wValue = $('#dst_w').val();
-        $hValue = $('#dst_h').val();
-
+        $value=$(this).val();
         $.ajax({
             type : 'get',
-            url : 'http://127.0.0.1/admin/templateImg/'+ imgID +'/xyz',
-            data:{'dst_x':$xValue,'dst_y':$yValue,'dst_w': $wValue ,'dst_h':$hValue},
-
-            success:function(Response){
-                $('.output').html(Response);
+            url : '{{URL::to('admin/user.search')}}',
+            data:{'search':$value},
+            success:function(data){
+                $('tbody').html(data);
             }
         });
     })
 
+
 </script>
 
-
+<script type="text/javascript">
+    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+</script>
 
 </body>
 </html>
