@@ -9,7 +9,7 @@
             <div class="contents text-center">
               <h2 class="head-title wow fadeInUp">حياك في  <span style="color: #3d60f4">سّوق </span> <br> منصة تساعدك في تصميم محتوى رهيب لمنصات التواصل الإجتماعي</h2>
               <div class="header-button wow fadeInUp" data-wow-delay="0.3s">
-                <a href="#services" class="btn btn-common">جرب الآن</a>
+                <a href="{{ route('try') }}" class="btn btn-common">جرب الآن</a>
               </div>
             </div>
             <div class="img-thumb text-center wow fadeInUp" data-wow-delay="0.6s">

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <title>{{ config('app.name') }}</title>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/bootstrap.min.css" >
   <!-- Icon -->
@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/main.css">
   <!-- Responsive Style -->
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/responsive.css">
+  <link rel="stylesheet"  href="{{url('/')}}/design/AdminLTE/plugins/iCheck/square/blue.css">
   <link rel="stylesheet" href="{{url('/')}}/css/bootstrap-rtl.min.css">
 
 </head>
@@ -28,66 +29,77 @@
     <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
       <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
-        <a href="index.html" class="navbar-brand"><img src="{{url('/')}}/design/LandingPage/img/logo.png" alt=""></a>
+        <a href="{{ url('/') }}" class="navbar-brand"><img src="{{url('/')}}/design/LandingPage/img/logo.png" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <i class="lni-menu"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto w-100 justify-content-end clearfix">
-            <li class="nav-item active">
-              <a class="nav-link" href="">
+            @guest
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('try') }}">
                 جرب سوق
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('register') }}">
-                تسجيل جديد
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('login') }}">
-                تسجيل دخول
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- Navbar End -->
+            </a>
+        </li>
 
-    @yield('content')
-
-  </header>
-  <!-- Header Area wrapper End -->
-
-  <!-- Copyright Section Start -->
-  <div class="copyright">
-    <div class="container">
-        <h6 class="text-center">جميع الحقوق محفوظة لسوق</h6>
-    </div>
-  </div>
-  <!-- Copyright Section End -->
-
-  <!-- Go to Top Link -->
-  <a href="#" class="back-to-top">
-    <i class="lni-arrow-up"></i>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ route('register') }}">
+            تسجيل جديد
+        </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ route('login') }}">
+        تسجيل دخول
+    </a>
+</li>
+@endguest
+@if (!Auth::guest())
+<li class="nav-item">
+  <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+      {{ __('Logout') }}
   </a>
+  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+</li>
+@endif
+</ul>
+</div>
+</div>
+</nav>
+<!-- Navbar End -->
 
-  <!-- Preloader -->
-  <div id="preloader">
+@yield('content')
+
+</header>
+<!-- Header Area wrapper End -->
+
+<!-- Copyright Section Start -->
+<div class="copyright">
+    <div class="container">
+        <p class="text-center">جميع الحقوق محفوظة لسوق</p>
+    </div>
+</div>
+<!-- Copyright Section End -->
+
+
+<!-- Preloader -->
+<div id="preloader">
     <div class="loader" id="loader-1"></div>
-  </div>
-  <!-- End Preloader -->
+</div>
+<!-- End Preloader -->
 
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="{{url('/')}}/js/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="{{url('/')}}/js/bootstrap.bundle.min.js"></script>
-  <script src="{{url('/')}}/design/LandingPage/js/wow.js"></script>
-  <script src="{{url('/')}}/design/LandingPage/js/jquery.nav.js"></script>
-  <script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
-  <script src="{{url('/')}}/design/LandingPage/js/jquery.slicknav.js"></script>
-  <script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="{{url('/')}}/js/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="{{url('/')}}/js/bootstrap.bundle.min.js"></script>
+<script src="{{url('/')}}/design/LandingPage/js/wow.js"></script>
+<script src="{{url('/')}}/design/LandingPage/js/jquery.nav.js"></script>
+<script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
+<script src="{{url('/')}}/design/LandingPage/js/jquery.slicknav.js"></script>
+<script  src="{{url('/')}}/design/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
+
 
 
 </body>

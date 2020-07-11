@@ -1,5 +1,11 @@
 {
     "hi" : "هلا",
     "Login" : "تسجيل دخول",
-    "E-Mail Address" : "الايميل"
+    "Register" : "تسجيل جديد",
+    "Name" : "اسمك الكريم",
+    "E-Mail Address" : "الايميل",
+    "Password" : "الرقم السري",
+    "Confirm Password" : "تأكيد الرقم السري",
+    "Remember Me" : "تذكرني",
+    "Logout" : "تسجيل خروج"
 }
