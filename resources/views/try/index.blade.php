@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-md-12 col-sm-12">
             <div class="contents text-center">
-              <h2 class="head-title wow fadeInUp">اصنع محتواك التسويقي  خلال دقائق !!</h2>
+              <h2 class="head-title wow fadeInUp">بخطوتين فقط .. محتواك التسويقي جاهز ..!</h2>
               <div class="header-button wow fadeInUp" data-wow-delay="0.3s">
                 <a href="{{ url('/try/form1') }} " class="btn btn-common">اصنع محتوى الآن !</a>
               </div>

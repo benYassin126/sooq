@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use App\Img;
+use App\TemplateImg;
+use App\Template;
+use Image;
+use Session;
+use Redirect;
+
 
 class TryController extends Controller
 {
@@ -19,81 +26,378 @@ class TryController extends Controller
 
     public function PostcreateStep1(Request $request)
     {
-        $validatedData = $request->validate([
-            'TheImg' => 'required',
-        ]);
-        if(empty($request->session()->get('imgs'))){
-            $imgs = new \App\Img;
-            $imgs->fill($validatedData);
-            $request->session()->put('imgs', $imgs);
-        }else{
-            $imgs = $request->session()->get('imgs');
-            $imgs->fill($validatedData);
-            $request->session()->put('imgs', $imgs);
+        //$request->session()->forget('TransInputImage');
+        $validatedData =  $request->validate([
+          'Transparent.*' => 'required|image|max:10240',
+          'WithBackGound.*' => 'required|image|max:10240',
+
+      ]);
+
+
+        session()->put('TransInputImage.image', []);
+        session()->put('WithBackInputImage.image', []);
+
+
+
+        if ($request->has('Transparent') && $request->has('WithBackGound')  ) {
+
+         foreach ($request->Transparent as $TransparentImg) {
+             $image_file = $TransparentImg;
+             $image = Image::make($image_file);
+             Response::make($image->encode('png'));
+             $request->session()->push('TransInputImage.image', $image);
+         }
+
+         foreach ($request->WithBackGound as $WithBackGoundImg) {
+             $image_file = $WithBackGoundImg;
+             $image = Image::make($image_file);
+             Response::make($image->encode('png'));
+             $request->session()->push('WithBackInputImage.image', $image);
+         }
+
+     }
+
+     Session::put('step1', 1);
+     return redirect('/try/form2');
+ }
+
+ public function createStep2(Request $request)
+ {
+    /*
+    if(!Session::has('step1') || Session::get('step1') != 1) {
+        return Redirect::to('try/form1');
+    }
+    */
+    return view('try.step2');
+}
+
+public function PostcreateStep2(Request $request)
+{
+
+
+
+        session()->put('MineColor',$request->MineColor );
+        session()->put('SubColor',$request->SubColor);
+
+        if ($request->has('anotherTry')) {
+
+           $numberOfTry = $request->anotherTry;
+           $numberOfTry = $numberOfTry + 1 ;
+           session()->put('CountOfTry',$numberOfTry);
+        //  dd($numberOfTry);
+        }else {
+           session()->put('CountOfTry',0);
+        }
+        if (!is_null($request->Transparent)) {
+
+           Session::forget('TransInputImage');
+           session()->put('TransInputImage.image', []);
+           foreach ($request->Transparent as $TransparentImg) {
+                 $image_file = $TransparentImg;
+                 $image = Image::make($image_file);
+                 Response::make($image->encode('png'));
+                 $request->session()->push('TransInputImage.image', $image);
+         }
+
         }
 
-        return redirect('/try/form2');
-    }
 
-    public function createStep2(Request $request)
-    {
-        $imgs = $request->session()->get('imgs');
-        return view('try.step2',compact('imgs'));
-    }
+        if (!is_null($request->WithBackGound)) {
+           Session::forget('WithBackGound');
+           session()->put('WithBackGound.image', []);
+           foreach ($request->WithBackGound as $WithBackGoundImg) {
+                 $image_file = $WithBackGoundImg;
+                 $image = Image::make($image_file);
+                 Response::make($image->encode('png'));
+                 $request->session()->push('WithBackInputImage.image', $image);
+             }
 
-    public function PostcreateStep2(Request $request)
-    {
-        $validatedData = $request->validate([
-            'UserID' => 'required',
-        ]);
-        if(empty($request->session()->get('imgs'))){
-            $imgs = new \App\Img();
-            $imgs->fill($validatedData);
-            $request->session()->put('imgs', $imgs);
-        }else{
-            $imgs = $request->session()->get('imgs');
-            $imgs->fill($validatedData);
-            $request->session()->put('imgs', $imgs);
         }
-        return redirect('/try/form3');
+
+
+
+    return redirect('/try/form3');
+}
+
+
+
+
+
+
+public function createStep3(Request $request)
+{
+
+
+
+
+
+
+
+   // $template = Template::inRandomOrder()->get()->first();
+    $template = Template::all()->where('id',48)->first();
+   // dd($template);
+    $TemplateID = $template->id;
+    $UserMineColor = session()->get('MineColor');
+    $UserSubColor = session()->get('SubColor');
+
+
+    //dd($UserMineColor);
+
+
+
+        //check if user change color
+    if ($UserMineColor != '#010101' || $UserSubColor != '#010101' ) {
+       $changeColor = true;
+   }else {
+       $changeColor = false;
+   }
+
+
+   if ($UserMineColor == '#010101' ) {
+    $UserMineColor = $template->MineColor;
+}
+
+if ($UserSubColor == '#010101') {
+    $UserSubColor = $template->SubColor;
+}
+
+
+
+
+
+
+
+            // array to store all image path to call it in blade file
+$allImgPath = array();
+
+            // Function to copy alpha image to image
+function imagecopymerge_alpha($dst_image ,$src_image ,$dst_x ,$dst_y ,$src_x ,$src_y ,$dst_w ,$dst_h ,$src_w ,$src_h ) {
+    $cut = imagecreatetruecolor($src_w, $src_h);
+    imagecopy($cut, $dst_image, 0, 0, $dst_x, $dst_y, $src_w, $src_h);
+    imagecopy($cut, $src_image, 0, 0, $src_x, $src_y, $src_w, $src_h);
+    imagecopyresampled($dst_image, $cut, $dst_x, $dst_y,$src_x, $src_y, $dst_w, $dst_h,$src_w,$src_h);
+}
+            // get all Template image
+$allTemplateImg = TemplateImg::select('id','imgType')->where('TemplateID',$TemplateID)->get();
+
+if ($changeColor == true ){
+
+   foreach ($allTemplateImg as $index => $img) {
+                //get All image and Crate it as PNG
+    $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $img->id;
+    $backImg = imagecreatefrompng($imgUrl);
+
+                //store RGB colors to change template color
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");
+    list($rMineUser, $gMineUser, $bMineUser) = sscanf($UserMineColor, "#%02x%02x%02x");
+    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf($template->SubColor, "#%02x%02x%02x");
+    list($rSubUser, $gSubUser, $bSubUser) = sscanf($UserSubColor, "#%02x%02x%02x");
+    list($rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate) = sscanf($template->SubSubColor, "#%02x%02x%02x");
+
+
+                //make the imgae as platte mode to allow us change template color
+    imagetruecolortopalette($backImg,false, 255);
+    $indexx = imagecolorclosest($backImg,$rMineTemplate, $gMimeTemplate, $bMineTemplate);
+                imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineUser); // SET NEW COLOR
+                $indexx = imagecolorclosest($backImg,$rSubTemplate, $gSubTemplate, $bSubTemplate);
+                imagecolorset($backImg,$indexx,$rSubUser,$gSubUser,$bSubUser); // SET NEW COLOR
+                $indexx = imagecolorclosest($backImg,$rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate);
+                imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineUser); // SET NEW COLOR
+
+                //difrent file foreache type
+                $imgName = "Template" . $img->id;
+                if ($img->imgType == 'Transparent') {
+                    imagepalettetotruecolor($backImg);
+                    imagepng($backImg, "./img/newTemplateTrans/" . $imgName .".png", 9);
+                    //dd('Template Mine Color',$template->MineColor,'User Color',$UserMineColor);
+                }else {
+                    imagecolortransparent($backImg,imagecolorat($backImg,500,500));
+                    imagealphablending($backImg, true);
+                    imagesavealpha($backImg, true);
+                    imagepng($backImg, "./img/newTemplateBack/" . $imgName .".png", 9);
+                }
+
+
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        $uploadedTranparent =  count(($request)->session()->get('TransInputImage.image'));
+
+        $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->count();
+
+
+        $allTransImg = array();
+        $imges = $request->session()->get('TransInputImage.image');
+        foreach ($imges as $img) {
+            $img = imagecreatefromstring($img);
+            array_push($allTransImg,$img);
+        }
+
+
+            //if user insert images less than transpernt template repetiton images
+        if ($uploadedTranparent < $countOFTransparent) {
+
+            for ($i=0; $i < $countOFTransparent - $uploadedTranparent ; $i++) {
+                array_push($allTransImg,$allTransImg[$i]);
+            }
+
+        }
+
+        $TransparentinDesign = TemplateImg::select('TheImg','id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->get();
+
+        foreach ($TransparentinDesign as $index => $trns) {
+            if ($changeColor == true) {
+                $backImg = imagecreatefrompng('./img/newTemplateTrans/Template' . $trns->id . '.png');
+
+            }else {
+                $backImg = imagecreatefromstring($trns->TheImg);
+            }
+
+
+
+                            //set width and height to image and make it at center
+            if (imagesx($allTransImg[$index]) <= imagesx($backImg) && imagesy($allTransImg[$index]) <= imagesy($backImg)) {
+                                //rate of descree from mine image if was it less than template size
+                $decRate = (imagesx($backImg) * 20) / 100;
+                $new_widht =  imagesx($backImg) - $decRate;
+                $new_height = imagesy($backImg) - $decRate;
+                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
+                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
+
+            }else {
+                $decRate = (imagesx($backImg) * 35) / 100;
+                $new_widht =  imagesx($backImg) - $decRate;
+                $new_height = imagesy($backImg) - $decRate;
+                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
+                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
+            }
+
+            imagecopyresampled($backImg, $allTransImg[$index],  $xoffset, $yoffset, 0, 0,$new_widht,$new_height, imagesx($allTransImg[$index]), imagesy($allTransImg[$index]));
+
+            $imgName = $trns->id;
+            imagepng($backImg, "./img/output/" . $imgName .".png", 9);
+            array_push($allImgPath,$imgName);
+
+
+        }
+
+
+
+            //second case
+
+
+        $uploadedWithBackGround =  count(($request)->session()->get('WithBackInputImage.image'));
+
+        $countOFWithBackGround = TemplateImg::select('id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->count();
+
+
+        $allWithBack = array();
+        $imges = $request->session()->get('WithBackInputImage.image');
+        foreach ($imges as $img) {
+            $img = imagecreatefromstring($img);
+            array_push($allWithBack,$img);
+        }
+
+
+                        //if user insert images less than transpernt template repetiton images
+        if ($uploadedWithBackGround < $countOFWithBackGround) {
+
+            for ($i=0; $i < $countOFWithBackGround - $uploadedWithBackGround ; $i++) {
+                array_push($allWithBack,$allWithBack[$i]);
+            }
+
+        }
+
+        $WithBackinDesign = TemplateImg::select('TheImg','id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->get();
+
+        foreach ($WithBackinDesign as $index => $wtihBack) {
+
+            if ($changeColor == true) {
+                $backImg = imagecreatefrompng('./img/newTemplateBack/Template' . $wtihBack->id . '.png');
+            }else {
+                $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $wtihBack->id;
+                $backImg = imagecreatefrompng($imgUrl);
+            }
+
+            $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
+            imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
+
+            $imgName = $wtihBack->id;
+            imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
+            array_push($allImgPath,$imgName);
+
+        }
+        sort($allImgPath);
+
+        foreach ($allImgPath as $key => $img) {
+            rename('./img/output/' . $img . '.png' , './img/output/[' .($key + 1) .']__' . ($img - 300 ) . '.png');
+        }
+
+        /*
+            Session::forget('MineColor');
+            Session::forget('SubColor');
+           Session::forget('WithBackInputImage');
+           Session::forget('TransInputImage');
+                      Session::forget('step1');
+           Session::forget('step2');
+           */
+
+
+        return view('try.step3',compact('allImgPath'));
     }
 
-   public function createStep3(Request $request)
-    {
-        $user = $request->session()->get('user');
-        return view('try.step3',compact('user'));
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function PostcreateStep3(Request $request)
     {
-        $user = $request->session()->get('user');
 
-
-        $validatedData = $request->validate([
-            'name' => 'required',
-        ]);
-        if(empty($request->session()->get('user'))){
-            $user = new \App\User();
-            $user->fill($validatedData);
-            $request->session()->put('user', $user);
-        }else{
-            $user = $request->session()->get('user');
-            $user->fill($validatedData);
-            $request->session()->put('user', $user);
-        }
-
-         $imgs = $request->session()->get('imgs');
-        return view('try.step4',compact('user','imgs'));
+        return view('try.step4');
     }
 
-        public function store(Request $request)
+    public function store(Request $request)
     {
-        $imgs = $request->session()->get('imgs');
-        $user = $request->session()->get('user');
-
-        $imgs->save();
-
-        return redirect('/');
-    }
+       return view('try.step4');
+   }
 
 }

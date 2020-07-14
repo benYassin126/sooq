@@ -37,15 +37,36 @@
                         <div class="card card-info  mb-4">
                            <div class="card-header">
                               <ul>
-                                <li>محتواك جاهز الآن .. اذا حاب يطلع المحتوى بشكل أفضل عطنا معلومات هويتك :)</li>
-                                <li><span class="right badge badge-danger">كل الحقول اختيارية .. اذا مستعجل تقدر تسوي سكيب :)</span></li>
+                                <li>محتواك جاهز الآن .. اذا حاب يطلع المحتوى بشكل أفضل زودنا بتفاصيل   هويتك :)</li>
                             </ul>
                         </div>
                         <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                           @csrf
                           <div class="card-body">
                             <div class="form-group">
-                                <label class="control-label">لون الهوية الأساسي  (Hex)</label>
+                                <label class="control-label">نشاطك التجاري</label><span style="color: red">*</span>
+                                <select name="BusinessType" class="form-control" onchange='CheckBusinessType(this.value);'>
+                                    <option value="" disabled>اختر نشاط</option>
+                                    <option>ألعاب</option>
+                                    <option >إلكترونيات</option>
+                                    <option >احتياجات المنزل</option>
+                                    <option value="4">حياكة، أعمال يدوية وتجهيزات حفلات</option>
+                                    <option value="14">خدمات</option>
+                                    <option value="7">صحة ولياقة</option>
+                                    <option value="12">قرطاسية</option>
+                                    <option value="1">كتب</option>
+                                    <option value="11">مأكولات ومشروبات</option>
+                                    <option value="3">مجوهرات وإكسسوارات</option>
+                                    <option value="2">ملابس وأحذية</option>
+                                    <option value="9">ملحقات السيارة</option>
+                                    <option value="8">منتجات التجميل والعناية بالبشرة</option>
+                                    <option value="13">هدايا</option>
+                                    <option value="others">أخرى</option>
+                                </select>
+                                <input placeholder="أدخل نشاطك التجاري *" id="OtherBusinessType" class="form-control mt-2" type="text" name="OtherBusinessType" style='display:none;'>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">لون الهوية الأساسي  (Hex)</label><span style="color:black;font-size: 14px;">اختيارك الصحيح لألوان هويتك يساعدنا  في صناعة المحتوى بشكل مخصص</span>
                                 <div>
                                    <input type="color" name="MineColor"{{isset($thisTemplate) ? 'value=' . $thisTemplate->MineColor .'': 'value=#010101'}} >
                                </div>
@@ -58,17 +79,19 @@
                            </div>
                        </div>
                             <div class="form-group">
-                                <label class="control-label">حساب التويتر</label>
-                                <div>
-                                   <input class="form-control" type="text" name="twitter" placeholder="twitter">
-                               </div>
-                           </div>
-                            <div class="form-group">
-                                <label class="control-label">حساب  الانستقرام</label>
+                                <label class="control-label">حساب  الانستقرام</label><span style="color: red">*</span>
                                 <div>
                                    <input class="form-control" type="text" name="inst" placeholder="instAccount">
                                </div>
                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label">حساب التويتر</label>
+                                <div>
+                                   <input class="form-control" type="text" name="twitter" placeholder="twitter" >
+                               </div>
+                           </div>
+
 
                    </div>
                    <div class="div-center">

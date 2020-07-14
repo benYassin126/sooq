@@ -839,11 +839,34 @@ START PROGESS
 }
 
 .card-info .card-header {
-  background: #3d60f4;
+  background: #009688;
   color: #fff;
 }
 
 .badge-praimary {
-  background: #00BCD4;
+  background: #3F51B5;
   color: #fff;
+}
+.imgesInMockUp {
+      width: 33.33%;
+margin-left: -4.5px;
+border: 1px solid #fff;
+}
+
+.marvel-device.iphone-x
+{
+  height: 100% !important;
+}
+
+/* START SHOW TEMPLATE */
+
+.showTemplate .welcomeText {
+  margin-top: 150px;
+  margin-bottom: 20px;
+}
+
+.tweetMock {
+width: 100%;
+height: 628px;
+margin-top: 40px;
 }

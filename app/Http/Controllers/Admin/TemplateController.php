@@ -93,6 +93,7 @@ class TemplateController extends Controller
         //display The Dedign after process
 
         public function useTemplateUpload(Template $template,Request $request) {
+
             $request->validate([
               'Transparent.*' => 'required|image|max:50120',
               'WithBackGound.*' => 'required|image|max:50120|required',
@@ -122,7 +123,7 @@ class TemplateController extends Controller
 
 
             // get all Template image ID
-            $allTemplateImg = TemplateImg::select('id')->where('TemplateID',$template->id)->get();
+            $allTemplateImg = TemplateImg::select('id','imgType')->where('TemplateID',$template->id)->get();
 
 
             //if user change color >> change all template color then store it in another file
@@ -141,7 +142,7 @@ class TemplateController extends Controller
                 list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf($template->SubColor, "#%02x%02x%02x");
                 list($rSubUser, $gSubUser, $bSubUser) = sscanf($request->SubColor, "#%02x%02x%02x");
                 list($rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate) = sscanf($template->SubSubColor, "#%02x%02x%02x");
-                list($rSubSubUser, $gSubSubUser, $bSubSubUser) = sscanf($request->SubSubColor, "#%02x%02x%02x");
+
 
                 //make the imgae as platte mode to allow us change template color
                 imagetruecolortopalette($backImg,false, 255);
@@ -150,22 +151,26 @@ class TemplateController extends Controller
                 $indexx = imagecolorclosest($backImg,$rSubTemplate, $gSubTemplate, $bSubTemplate);
                 imagecolorset($backImg,$indexx,$rSubUser,$gSubUser,$bSubUser); // SET NEW COLOR
                 $indexx = imagecolorclosest($backImg,$rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate);
-                imagecolorset($backImg,$indexx,$rSubSubUser,$gSubSubUser,$bSubSubUser); // SET NEW COLOR
+                imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineTemplate); // SET NEW COLOR
 
                 //difrent file foreache type
                 $imgName = "Template" . $img->id;
                 if ($img->imgType == 'Transparent') {
                     imagepalettetotruecolor($backImg);
-                    imagepng($backImg, "./img/newTemplateTrans/" . $imgName .".png", 9);
-                }else {
+                   imagepng($backImg, "./img/newTemplateTrans/" . $imgName .".png", 9);
+                }elseif($img->imgType == 'WithBackGound') {
+
                     imagecolortransparent($backImg,imagecolorat($backImg,500,500));
                     imagealphablending($backImg, true);
                     imagesavealpha($backImg, true);
                     imagepng($backImg, "./img/newTemplateBack/" . $imgName .".png", 9);
+
                 }
 
 
             }
+
+
 
 
         }

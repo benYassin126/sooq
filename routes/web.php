@@ -29,3 +29,4 @@ Route::post('/try/form2', 'TryController@PostcreateStep2');
 Route::get('/try/form3', 'TryController@createStep3');
 Route::post('/try/form3', 'TryController@PostcreateStep3');
 Route::post('/try/store', 'TryController@store');
+Route::get('/try/store', 'TryController@store');

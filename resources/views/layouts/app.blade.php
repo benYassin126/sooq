@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/main.css">
   <!-- Responsive Style -->
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/responsive.css">
+    <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
   <link rel="stylesheet"  href="{{url('/')}}/design/AdminLTE/plugins/iCheck/square/blue.css">
   <link rel="stylesheet" href="{{url('/')}}/css/bootstrap-rtl.min.css">
 
@@ -99,7 +100,6 @@
 <script src="{{url('/')}}/design/LandingPage/js/jquery.slicknav.js"></script>
 <script  src="{{url('/')}}/design/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 <script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
-
 
 
 </body>
