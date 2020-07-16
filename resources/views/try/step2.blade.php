@@ -40,27 +40,26 @@
                                 <li>محتواك جاهز الآن .. اذا حاب يطلع المحتوى بشكل أفضل زودنا بتفاصيل   هويتك :)</li>
                             </ul>
                         </div>
-                        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                        <form id="form2"class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                           @csrf
                           <div class="card-body">
                             <div class="form-group">
                                 <label class="control-label">نشاطك التجاري</label><span style="color: red">*</span>
                                 <select name="BusinessType" class="form-control" onchange='CheckBusinessType(this.value);'>
                                     <option value="" disabled>اختر نشاط</option>
-                                    <option>ألعاب</option>
-                                    <option >إلكترونيات</option>
-                                    <option >احتياجات المنزل</option>
-                                    <option value="4">حياكة، أعمال يدوية وتجهيزات حفلات</option>
-                                    <option value="14">خدمات</option>
-                                    <option value="7">صحة ولياقة</option>
-                                    <option value="12">قرطاسية</option>
-                                    <option value="1">كتب</option>
-                                    <option value="11">مأكولات ومشروبات</option>
-                                    <option value="3">مجوهرات وإكسسوارات</option>
-                                    <option value="2">ملابس وأحذية</option>
-                                    <option value="9">ملحقات السيارة</option>
-                                    <option value="8">منتجات التجميل والعناية بالبشرة</option>
-                                    <option value="13">هدايا</option>
+                                    <option value="مأكولات ومشروبات  ">مأكولات ومشروبات</option>
+                                    <option value="ألعاب" >ألعاب</option>
+                                    <option value="إلكترونيات" >إلكترونيات</option>
+                                    <option value="احتياجات المنزل" >احتياجات المنزل</option>
+                                    <option value="خدمات">خدمات</option>
+                                    <option value="صحة ولياقة ">صحة ولياقة </option>
+                                    <option value="قرطاسية">قرطاسية</option>
+                                    <option value="كتب">كتب</option>
+                                    <option value="جوهرات وإكسسوارات  ">مجوهرات وإكسسوارات </option>
+                                    <option value="ملابس وأحذية">ملابس وأحذية</option>
+                                    <option value="ملحقات السيارة">ملحقات السيارة</option>
+                                    <option value="منتجات التجميل والعناية بالبشرة">منتجات التجميل والعناية بالبشرة</option>
+                                    <option value="هدايا">هدايا</option>
                                     <option value="others">أخرى</option>
                                 </select>
                                 <input placeholder="أدخل نشاطك التجاري *" id="OtherBusinessType" class="form-control mt-2" type="text" name="OtherBusinessType" style='display:none;'>
@@ -78,17 +77,18 @@
                                <input type="color" name="SubColor" {{isset($thisTemplate) ? 'value=' . $thisTemplate->SubColor .'' : 'value=#010101'}}>
                            </div>
                        </div>
+                       <p>عطنا اي حساب لنشاطك في احد وسائل التوصل التالية</p><span id="alert" style="display: none;" class="right badge badge-danger"> لابد من ادخال حساب واحد على الاقل</span>
                             <div class="form-group">
-                                <label class="control-label">حساب  الانستقرام</label><span style="color: red">*</span>
+                                <label class="control-label">حساب  الانستقرام</label>
                                 <div>
-                                   <input class="form-control" type="text" name="inst" placeholder="instAccount">
+                                   <input  id="inst" class="form-control" type="text" name="Instagram" placeholder="instAccount">
                                </div>
                            </div>
 
                             <div class="form-group">
                                 <label class="control-label">حساب التويتر</label>
                                 <div>
-                                   <input class="form-control" type="text" name="twitter" placeholder="twitter" >
+                                   <input id="tweet" class="form-control" type="text" name="Twitter" placeholder="twitter" >
                                </div>
                            </div>
 

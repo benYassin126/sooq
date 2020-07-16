@@ -1,3 +1,62 @@
+function post()
+{
+    $.ajaxSetup({
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+  var msg = document.getElementById("msg").value;
+  if(msg)
+  {
+
+    $.ajax
+    ({
+      type: 'post',
+      url: '/try.submit',
+      data:
+      {
+         Nots:msg,
+
+      },
+      success: function (response)
+      {
+      document.getElementById("status").innerHTML="شكراااا .. رسالتك وصلت .. باذن الله نتطلع للافضل";
+    //  $("#colse").delay(5000).click();
+      setTimeout(function(){
+         $('#exampleModal2').modal('hide')
+    }, 2000);
+      }
+    });
+  }else {
+    document.getElementById("status").innerHTML="الحقل مطلوب";
+  }
+
+
+  return false;
+}
+
+
+$('#myForm').one('submit', function() {
+    $(this).find('input[type="submit"]').attr('disabled','disabled');
+});
+
+
+
+$('#form2').on('submit', function(e) {
+  var inst = document.getElementById('inst').value;
+ var tweet = document.getElementById('tweet').value;
+
+
+ if (inst == '' && tweet == '') {
+  $('#alert').fadeIn(500);
+    e.preventDefault();
+ }
+
+
+});
+
+
+
 function CheckBusinessType(val){
  var OtherBusinessTypeElement=document.getElementById('OtherBusinessType');
  if(val=='others'){
@@ -6,6 +65,9 @@ function CheckBusinessType(val){
 }
  else{
    OtherBusinessTypeElement.style.display='none';
+  OtherBusinessTypeElement.removeAttribute("required");
+  OtherBusinessTypeElement.value = '';
+
     val ='';
 }
 

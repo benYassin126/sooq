@@ -7,9 +7,14 @@ use Illuminate\Support\Facades\Response;
 use App\Img;
 use App\TemplateImg;
 use App\Template;
+use App\Nots;
+use App\User;
+use App\UserDesign;
 use Image;
 use Session;
+use Auth;
 use Redirect;
+
 
 
 class TryController extends Controller
@@ -26,7 +31,7 @@ class TryController extends Controller
 
     public function PostcreateStep1(Request $request)
     {
-        //$request->session()->forget('TransInputImage');
+
         $validatedData =  $request->validate([
           'Transparent.*' => 'required|image|max:10240',
           'WithBackGound.*' => 'required|image|max:10240',
@@ -36,6 +41,19 @@ class TryController extends Controller
 
         session()->put('TransInputImage.image', []);
         session()->put('WithBackInputImage.image', []);
+
+        //chose two random template
+        $allTemplates = Template::select('id')->get();
+        $allTemplatesID = array();
+        foreach ($allTemplates as $Template) {
+            array_push($allTemplatesID, $Template->id);
+        }
+        $randomKay = array_rand($allTemplatesID,2);
+        session()->put('FirstTemplate',$allTemplatesID[$randomKay[0]]);
+        session()->put('SecondTemplate',$allTemplatesID[$randomKay[1]]);
+        session()->put('CurentTemplate',session()->get('FirstTemplate'));
+
+
 
 
 
@@ -75,9 +93,51 @@ public function PostcreateStep2(Request $request)
 {
 
 
+    if ($request->has('BusinessType')) {
+       session()->put('BusinessType',$request->BusinessType);
 
-        session()->put('MineColor',$request->MineColor );
-        session()->put('SubColor',$request->SubColor);
+    }
+
+    if ($request->has('OtherBusinessType') && $request->OtherBusinessType !=null ) {
+       session()->put('BusinessType',$request->OtherBusinessType );
+    }
+
+
+
+    if ($request->has('Twitter')) {
+       session()->put('Twitter',$request->Twitter );
+    }
+
+    if ($request->has('Instagram')) {
+       session()->put('Instagram',$request->Instagram );
+    }
+    if ($request->has('MineColor')) {
+           session()->put('MineColor',$request->MineColor );
+        }
+
+    if ($request->has('SubColor')) {
+            session()->put('SubColor',$request->SubColor );
+        }
+
+
+    $FirstTemplate = session()->get('FirstTemplate');//47
+    $SecondTemplate = session()->get('SecondTemplate');//48
+    $CurentTemplate = session()->get('CurentTemplate');//47
+
+
+    if ($request->has('changeTemplate')) {
+        if ($CurentTemplate == $FirstTemplate ) {
+            session()->put('CurentTemplate',$SecondTemplate);
+        }else {
+            session()->put('CurentTemplate',$FirstTemplate);
+        }
+
+    }
+
+
+
+
+
 
         if ($request->has('anotherTry')) {
 
@@ -134,14 +194,17 @@ public function createStep3(Request $request)
 
 
    // $template = Template::inRandomOrder()->get()->first();
-    $template = Template::all()->where('id',48)->first();
+    $CurentTemplate = session()->get('CurentTemplate');//47
    // dd($template);
-    $TemplateID = $template->id;
+    $SessinID = substr( Session::getId(), -3);
+
+    $TemplateID = $CurentTemplate;
     $UserMineColor = session()->get('MineColor');
     $UserSubColor = session()->get('SubColor');
 
+    $template = Template::all()->where('id',$TemplateID)->first();
 
-    //dd($UserMineColor);
+
 
 
 
@@ -230,26 +293,6 @@ if ($changeColor == true ){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         $uploadedTranparent =  count(($request)->session()->get('TransInputImage.image'));
 
         $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->count();
@@ -303,7 +346,11 @@ if ($changeColor == true ){
 
             imagecopyresampled($backImg, $allTransImg[$index],  $xoffset, $yoffset, 0, 0,$new_widht,$new_height, imagesx($allTransImg[$index]), imagesy($allTransImg[$index]));
 
-            $imgName = $trns->id;
+
+           // $imgName = $trns->id;
+           // $imgName = $trns->id . '__'. $SessinID;
+            $imgName = $trns->id . rand(0,30);
+          //  dd($imgName);
             imagepng($backImg, "./img/output/" . $imgName .".png", 9);
             array_push($allImgPath,$imgName);
 
@@ -351,16 +398,28 @@ if ($changeColor == true ){
             $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
             imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
 
-            $imgName = $wtihBack->id;
+
+
+           $imgName = $wtihBack->id . rand(0,30);
             imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
             array_push($allImgPath,$imgName);
 
         }
         sort($allImgPath);
 
+
+
+      session()->put('allImgPath.path', []);
+
         foreach ($allImgPath as $key => $img) {
-            rename('./img/output/' . $img . '.png' , './img/output/[' .($key + 1) .']__' . ($img - 300 ) . '.png');
+
+            rename('./img/output/' . $img . '.png' , './img/output/[' . ($key + 1) .']__' . $SessinID  . '.png');
+            $newImgName = "[" . ($key + 1) ."]__" . $SessinID;
+            session()->push('allImgPath.path', $newImgName);
         }
+
+
+
 
         /*
             Session::forget('MineColor');
@@ -370,7 +429,6 @@ if ($changeColor == true ){
                       Session::forget('step1');
            Session::forget('step2');
            */
-
 
         return view('try.step3',compact('allImgPath'));
     }
@@ -392,12 +450,121 @@ if ($changeColor == true ){
     public function PostcreateStep3(Request $request)
     {
 
-        return view('try.step4');
+
+
+
+     // dd($UserMineColor,$UserSubColor,$Instagram,$Twitter,$BusinessType);
+      //  dd($request->BusinessType);
+
+
+         $request->validate([
+          'email'  => 'unique:Users,email',
+      ]);
+
+
+         /*
+         $form_data = array(
+          'name'  => $request->name,
+          'email'  => $request->email,
+          'password' => encrypt($request->password),
+          'Twitter' => $Twitter,
+          'Instagram' => $Instagram,
+          'BusinessType' => $BusinessType,
+          'MineColor' => $UserMineColor,
+          'SubColor' => $UserSubColor,
+      );
+
+      */
+
+
+       $UserMineColor = session()->get('MineColor');
+       $UserSubColor = session()->get('SubColor');
+       $Instagram = session()->get('Instagram');
+       $Twitter = session()->get('Twitter');
+       $BusinessType = session()->get('BusinessType');
+
+$user = new User();
+
+
+//dd(session()->get('BusinessType'));
+
+$user->name =  $request->name;
+$user->email =  $request->email;
+$user->password =  encrypt($request->password);
+$user->Twitter =  $Twitter;
+$user->Instagram =  $Instagram;
+$user->BusinessType =  $BusinessType;
+$user->MineColor =  $UserMineColor;
+$user->SubColor =  $UserSubColor;
+$user->save();
+
+
+$UserID = $user->id;
+
+    //save img
+       foreach ($request->session()->get('TransInputImage.image') as $img) {
+
+           $form_data = array(
+              'UserID'  => $UserID,
+              'ImgType'  => 'Transparent',
+              'TheImg' => $img
+          );
+           Img::create($form_data);
+
+       }
+
+       foreach ($request->session()->get('WithBackInputImage.image') as $img) {
+           $form_data = array(
+              'UserID'  => $UserID,
+              'ImgType'  => 'WithBackGound',
+              'TheImg' => $img
+          );
+           Img::create($form_data);
+
+       }
+
+
+       //save design
+       foreach (session()->get('allImgPath.path') as $key => $img) {
+           $image_file = './img/output/' . $img . '.png';
+           $image = Image::make($image_file);
+           Response::make($image->encode('png'));
+           $form_data = array(
+              'UserID'  => $UserID,
+              'TheImg' => $image
+          );
+           UserDesign::create($form_data);
+       }
+
+
+       //Delete all imgs
+      foreach (session()->get('allImgPath.path') as $key => $img) {
+        $image_file = './img/output/' . $img . '.png';
+          if(is_file($image_file))
+            unlink($image_file); // delete file
+
+      }
+
+       Auth::loginUsingId($UserID, true);
+
+       session()->forget('TransInputImage');
+       session()->forget('WithBackInputImage');
+
+        return Redirect::route('home', array('St' => 'N'));
+
     }
 
-    public function store(Request $request)
-    {
-       return view('try.step4');
+
+   public function submit(Request $request) {
+
+     $form_data = array(
+          'Nots'  => $request->Nots,
+      );
+         Nots::create($form_data);
    }
+
+
+
+
 
 }

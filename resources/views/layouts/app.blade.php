@@ -20,6 +20,7 @@
     <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
   <link rel="stylesheet"  href="{{url('/')}}/design/AdminLTE/plugins/iCheck/square/blue.css">
   <link rel="stylesheet" href="{{url('/')}}/css/bootstrap-rtl.min.css">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
 </head>
 <body>
