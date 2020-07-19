@@ -19,7 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-
+Route::get('home/fetch_image/{id}', 'HomeController@fetch_image');
 //Try Controller
 Route::get('/try','TryController@index')->name('try');
 Route::get('/try/form1', 'TryController@createStep1');
@@ -28,8 +28,19 @@ Route::get('/try/form2', 'TryController@createStep2');
 Route::post('/try/form2', 'TryController@PostcreateStep2');
 Route::get('/try/form3', 'TryController@createStep3');
 Route::post('/try/form3', 'TryController@PostcreateStep3');
+Route::post('/try/form4', 'TryController@PostcreateStep4');
 Route::post('/try.submit', 'TryController@submit')->name('try.submit');
 
 
 
-Route::get('home/fetch_image/{id}', 'HomeController@fetch_image');
+
+
+
+Route::resource('imgs','UserImgsController');
+Route::get('home/imgs/deleteAllImgs', 'UserImgsController@deleteAllImgs');
+Route::get('home/imgs/fetch_image/{id}', 'UserImgsController@fetch_image');
+
+
+
+Route::get('/profile', 'ProfileController@index')->name('profile');
+Route::post('/profile', 'ProfileController@edit')->name('profile');

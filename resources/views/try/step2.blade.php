@@ -40,7 +40,7 @@
                                 <li>محتواك جاهز الآن .. اذا حاب يطلع المحتوى بشكل أفضل زودنا بتفاصيل   هويتك :)</li>
                             </ul>
                         </div>
-                        <form id="form2"class="form-horizontal" action="" method="post" enctype="multipart/form-data">
+                        <form id="ColorsForm"class="form-horizontal" action="" method="post" enctype="multipart/form-data">
                           @csrf
                           <div class="card-body">
                             <div class="form-group">

@@ -44,7 +44,7 @@
                                 <li>الصيغ المسموح بها [ PNG , JPEG ,GIF,SVG ]</li>
                             </ul>
                         </div>
-                        <form class="form-horizontal" action="{{ url('/try/form1') }}" method="post" enctype="multipart/form-data">
+                        <form id="uploadImgsForm" class="form-horizontal" action="{{ url('/try/form1') }}" method="post" enctype="multipart/form-data">
                           @csrf
                           <div class="card-body">
                             <div class="form-group">

@@ -11,9 +11,10 @@ use App\Nots;
 use App\User;
 use App\UserDesign;
 use Image;
-use Session;
 use Auth;
 use Redirect;
+use DB;
+use Session;
 
 
 
@@ -136,7 +137,65 @@ public function PostcreateStep2(Request $request)
 
 
 
+        //if user come from control panel
 
+      if ($request->has('oldUser')) {
+
+        $UserID = $request->UserID;
+        $user = User::select('MineColor','SubColor')->where('id',$UserID)->first();
+    //    dd($user);
+
+
+        //Start chose two random template
+        $allTemplates = Template::select('id')->get();
+        $allTemplatesID = array();
+        foreach ($allTemplates as $Template) {
+            array_push($allTemplatesID, $Template->id);
+        }
+        $randomKay = array_rand($allTemplatesID,2);
+        session()->put('FirstTemplate',$allTemplatesID[$randomKay[0]]);
+        session()->put('SecondTemplate',$allTemplatesID[$randomKay[1]]);
+        session()->put('CurentTemplate',session()->get('FirstTemplate'));
+        //End chose two random template
+
+        //Start Set Mine and Sub Color to Sessions
+        session()->put('MineColor',$user->MineColor );
+        session()->put('SubColor',$user->SubColor );
+
+        //Start Set Images
+
+         $UserImgs = Img::Select('TheImg')->where([['ImgType','Transparent'],['UserID',$UserID]])->get();
+         session()->put('TransInputImage.image', []);
+         foreach ($UserImgs as $TransparentImg) {
+
+               session()->push('TransInputImage.image', $TransparentImg->TheImg);
+       }
+
+         $UserImgs = Img::Select('TheImg')->where([['ImgType','WithBackGound'],['UserID',$UserID]])->get();
+         session()->put('WithBackGound.image', []);
+         foreach ($UserImgs as $WithBackGound) {
+               session()->push('WithBackInputImage.image', $WithBackGound->TheImg);
+       }
+
+
+
+
+        //End Set Mine and Sub Color to Sessions
+
+      }
+
+
+
+
+
+      if ($request->has('changeTemplate')) {
+          if ($CurentTemplate == $FirstTemplate ) {
+              session()->put('CurentTemplate',$SecondTemplate);
+          }else {
+              session()->put('CurentTemplate',$FirstTemplate);
+          }
+
+      }
 
 
         if ($request->has('anotherTry')) {
@@ -148,6 +207,8 @@ public function PostcreateStep2(Request $request)
         }else {
            session()->put('CountOfTry',0);
         }
+
+
         if (!is_null($request->Transparent)) {
 
            Session::forget('TransInputImage');
@@ -176,6 +237,13 @@ public function PostcreateStep2(Request $request)
 
 
 
+
+
+
+
+
+
+
     return redirect('/try/form3');
 }
 
@@ -193,9 +261,12 @@ public function createStep3(Request $request)
 
 
 
-   // $template = Template::inRandomOrder()->get()->first();
-    $CurentTemplate = session()->get('CurentTemplate');//47
-   // dd($template);
+    if (session()->get('CurentTemplate') != null) {
+        $CurentTemplate = session()->get('CurentTemplate');
+    }else {
+         $CurentTemplate = session()->get('FirstTemplate');
+    }
+
     $SessinID = substr( Session::getId(), -3);
 
     $TemplateID = $CurentTemplate;
@@ -203,8 +274,6 @@ public function createStep3(Request $request)
     $UserSubColor = session()->get('SubColor');
 
     $template = Template::all()->where('id',$TemplateID)->first();
-
-
 
 
 
@@ -293,13 +362,13 @@ if ($changeColor == true ){
 
 
 
-        $uploadedTranparent =  count(($request)->session()->get('TransInputImage.image'));
+        $uploadedTranparent =  count(session()->get('TransInputImage'));
 
         $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->count();
 
 
         $allTransImg = array();
-        $imges = $request->session()->get('TransInputImage.image');
+        $imges = session()->get('TransInputImage.image');
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allTransImg,$img);
@@ -332,7 +401,7 @@ if ($changeColor == true ){
                                 //rate of descree from mine image if was it less than template size
                 $decRate = (imagesx($backImg) * 20) / 100;
                 $new_widht =  imagesx($backImg) - $decRate;
-                $new_height = imagesy($backImg) - $decRate;
+                $new_height =  (imagesy($backImg) - ($decRate + 90));
                 $xoffset = (imagesx($backImg) -  $new_widht) / 2;
                 $yoffset = (imagesy($backImg)  -   $new_height) / 2;
 
@@ -349,7 +418,7 @@ if ($changeColor == true ){
 
            // $imgName = $trns->id;
            // $imgName = $trns->id . '__'. $SessinID;
-            $imgName = $trns->id . rand(0,30);
+            $imgName = $trns->id;
           //  dd($imgName);
             imagepng($backImg, "./img/output/" . $imgName .".png", 9);
             array_push($allImgPath,$imgName);
@@ -362,13 +431,13 @@ if ($changeColor == true ){
             //second case
 
 
-        $uploadedWithBackGround =  count(($request)->session()->get('WithBackInputImage.image'));
+        $uploadedWithBackGround =  count(session()->get('WithBackInputImage'));
 
         $countOFWithBackGround = TemplateImg::select('id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->count();
 
 
         $allWithBack = array();
-        $imges = $request->session()->get('WithBackInputImage.image');
+        $imges = session()->get('WithBackInputImage.image');
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allWithBack,$img);
@@ -400,11 +469,13 @@ if ($changeColor == true ){
 
 
 
-           $imgName = $wtihBack->id . rand(0,30);
+           $imgName = $wtihBack->id;
             imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
             array_push($allImgPath,$imgName);
 
+
         }
+
         sort($allImgPath);
 
 
@@ -561,6 +632,32 @@ $UserID = $user->id;
           'Nots'  => $request->Nots,
       );
          Nots::create($form_data);
+   }
+
+
+   public function PostcreateStep4 (Request $request) {
+    $UserID = Auth::id();
+
+    //delete old design
+    DB::table('user_designs')
+    ->where('UserID', $UserID)
+    ->delete();
+
+    //save New Design
+   foreach (session()->get('allImgPath.path') as $key => $img) {
+       $image_file = './img/output/' . $img . '.png';
+       $image = Image::make($image_file);
+       Response::make($image->encode('png'));
+       $form_data = array(
+          'UserID'  => $UserID,
+          'TheImg' => $image
+      );
+       UserDesign::create($form_data);
+   }
+
+   return Redirect::route('home');
+    dd($UserID);
+
    }
 
 

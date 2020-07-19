@@ -32,22 +32,26 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+
         $UserID = Auth::id();
-        $allImg = Img::all()->where('UserID',$UserID);
-        $allUserDesigns = UserDesign::all()->where('UserID',$UserID);
+
+        $allImgTrans = Img::Select('id')->where([['imgType','Transparent'],['UserID',$UserID]])->first();
+        $allImgBack = Img::Select('id')->where([['imgType','WithBackGound'],['UserID',$UserID]])->first();
+        $allUserDesigns = UserDesign::Select('id')->where('UserID',$UserID)->get();
+
 
         //Check If user new
 
         if (isset($_GET['St']) && $_GET['St'] == 'N') {
-
           $user = User::all()->where('id',$UserID);
           Mail::to($user->first()->email)->send(new test1($allUserDesigns));
           $newUser = '';
-         return view('user.home',compact('allImg','allUserDesigns','newUser'));
+         return view('user.home',compact('newUser','allUserDesigns','allImg'));
         }
 
 
-        return view('user.home',compact('allImg','allUserDesigns'));
+        return view('user.home',compact('allUserDesigns','allImgTrans','allImgBack'));
     }
 
    function fetch_image($image_id)
@@ -62,4 +66,5 @@ class HomeController extends Controller
 
        return $response;
    }
+
 }

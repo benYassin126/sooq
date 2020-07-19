@@ -15,7 +15,7 @@
           <input  id="name" type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}"  value="{{ old('name') }}" required autofocus>
 
           <div class="input-group-append">
-            <span class="fa fa-user  input-group-text"></span>
+            <span class="input-group-text"> <i class="fa fa-user"></i></span>
           </div>
 
           @if ($errors->has('name'))
@@ -29,7 +29,7 @@
           <input  id="email" type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('E-Mail Address') }}"  value="{{ old('email') }}" required>
 
           <div class="input-group-append">
-            <span class="fa fa-envelope  input-group-text"></span>
+            <span class="input-group-text"> <i class="fa fa-envelope"></i></span>
           </div>
 
           @if ($errors->has('email'))
@@ -42,7 +42,7 @@
         <div class="input-group mb-3">
           <input  id="password" type="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" required autofocus>
           <div class="input-group-append">
-            <span class="fa fa-lock input-group-text"></span>
+            <span class=" input-group-text"><i class="fa fa-lock"></i></span>
           </div>
 
           @if ($errors->has('password'))
@@ -56,7 +56,7 @@
         <div class="input-group mb-3">
           <input  id="password" type="password" name="password_confirmation" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Confirm Password') }}"   required autofocus>
           <div class="input-group-append">
-            <span class="fa fa-lock input-group-text"></span>
+            <span class=" input-group-text"> <i class="fa fa-lock"></i></span>
           </div>
         </div>
 

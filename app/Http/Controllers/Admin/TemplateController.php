@@ -43,7 +43,7 @@ class TemplateController extends Controller
 
          $request->validate([
           'TemplateName'  => 'required',
-          'TemplateBackGround' => 'required|image|max:2000',
+          'TemplateBackGround' => 'required|image|max:50120',
           'MineColor' => 'required'
       ]);
 

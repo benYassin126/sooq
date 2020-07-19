@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <title>{{ config('app.name') }}</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+  <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet"> <!--load all styles -->
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/bootstrap.min.css" >
   <!-- Icon -->
@@ -24,7 +25,10 @@
 
 </head>
 <body>
-
+<!-- div show when submit -->
+<div id="pageloader">
+   <img src="{{url('/')}}/design/LandingPage/img/loading.gif" alt="processing..." />
+</div>
   <!-- Header Area wrapper Starts -->
   <header id="header-wrap">
     <!-- Navbar Start -->
@@ -100,6 +104,8 @@
 <script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
 <script src="{{url('/')}}/design/LandingPage/js/jquery.slicknav.js"></script>
 <script  src="{{url('/')}}/design/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
+<script defer src="{{ asset('js/fontawesome.js') }}"></script> <!--load all fontassowme styles -->
 <script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
 
 

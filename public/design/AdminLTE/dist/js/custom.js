@@ -10,3 +10,23 @@ function CheckBusinessType(val){
 }
 
 }
+
+$("#changeTemplateForm").on("submit", function(){
+    $("#pageloader").fadeIn();
+  });//submit
+
+
+
+function CheckPhoneType(val){
+ var inst = document.getElementById('inst');
+ var tweet = document.getElementById('tweet');
+ if(val=='tweet'){
+   tweet.style.display='block';
+   inst.style.display='none';
+}
+ else{
+   inst.style.display='block';
+   tweet.style.display='none';
+}
+
+}

@@ -1,3 +1,4 @@
+//Function to send form without refresh page
 function post()
 {
     $.ajaxSetup({
@@ -35,14 +36,15 @@ function post()
   return false;
 }
 
+//Hidde Submit Form After Send data
 
-$('#myForm').one('submit', function() {
+$('#changeTemplateForm').one('submit', function() {
     $(this).find('input[type="submit"]').attr('disabled','disabled');
 });
 
 
-
-$('#form2').on('submit', function(e) {
+//Valdite Form
+$('#ColorsForm').on('submit', function(e) {
   var inst = document.getElementById('inst').value;
  var tweet = document.getElementById('tweet').value;
 
@@ -50,10 +52,16 @@ $('#form2').on('submit', function(e) {
  if (inst == '' && tweet == '') {
   $('#alert').fadeIn(500);
     e.preventDefault();
+ }else {
+    $("#pageloader").fadeIn();
  }
 
 
 });
+
+$("#changeTemplateForm,#tryForm,#uploadImgsForm,#registerForm,#a3tmed").on("submit", function(){
+    $("#pageloader").fadeIn();
+  });//submit
 
 
 
@@ -113,6 +121,13 @@ MineColor.value =  "#010101";
 
 
 }
+
+
+$(function(){
+  $('.fa-minus,.chatbox-top,.a3tmed').click(function(){ $('.fa-minus').closest('.chatbox').toggleClass('chatbox-min');
+  });
+});
+
 
 
 

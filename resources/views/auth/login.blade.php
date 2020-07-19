@@ -15,7 +15,7 @@
           <input  id="email" type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('E-Mail Address') }}"  value="{{ old('email') }}" required autofocus>
 
           <div class="input-group-append">
-            <span class="fa fa-envelope  input-group-text"></span>
+            <span class="input-group-text"><i class="fa fa-envelope"></i></span>
           </div>
 
           @if ($errors->has('email'))
@@ -28,7 +28,7 @@
         <div class="input-group mb-3">
           <input  id="password" type="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}"  value="" required autofocus>
           <div class="input-group-append">
-            <span class="fa fa-lock input-group-text"></span>
+            <span class=" input-group-text"><i class="fa fa-lock"></i></span>
           </div>
 
           @if ($errors->has('password'))
