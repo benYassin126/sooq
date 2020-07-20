@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-md-12 col-sm-12">
             <div class="contents text-center">
-              <h2 class="head-title wow fadeInUp">حياك في  <span style="color: #3d60f4">سّوق </span> <br> منصة تساعدك في تصميم محتوى رهيب لمنصات التواصل الإجتماعي</h2>
+              <h2 class="head-title wow fadeInUp">حياك في  <span style="color: #3d60f4">{{ config('app.name') }}</span> <br> منصة تساعدك في تصميم محتوى رهيب لمنصات التواصل الإجتماعي</h2>
               <div class="header-button wow fadeInUp" data-wow-delay="0.3s">
                 <a href="{{ route('try') }}" class="btn btn-common">جرب الآن</a>
               </div>

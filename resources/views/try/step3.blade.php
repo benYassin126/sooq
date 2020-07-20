@@ -20,11 +20,11 @@
                     <div class="chatbox chatbox-min">
                         <div class="chatbox-top">
                             <div class="chatbox-avatar">
-                                <a target="_blank"><img src="/img/mor.jpg" /></a>
+                                <a target="_blank"><img src="/img/mor.png"/></a>
                             </div>
                             <div href="javascript:void(0);" class="chat-partner-name">
                                 <span class="status online"></span>
-                                <a href="javascript:void(0);">مربح</a>
+                                <a href="javascript:void(0);">{{ config('app.name') }}</a>
                             </div>
                             <div class="chatbox-icons">
                                 <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
@@ -48,7 +48,7 @@
                         <div class="chat-messages">
                             <div class="message-box-holder">
                                 <div class="message-box">
-                                    تم التعديل على التصميم .. اذا ماعجبك التصميم بعد   جرب تغيير الشكل .. ان شاء الله بيعجبك
+                                    إذا ماعجبك .. خلني اصمملك تصميم ثاني
                                 </div>
                             </div>
                         </div>
@@ -59,12 +59,12 @@
                             @if (!Auth::guest())
                             <button class="btn btn-block btn-success">أعتمد التصميم<i class="fas fa-check"></i></button>
                             @endif
-                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">الشكل  رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
+                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
                             <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="changeTemplate">
                                 <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
-                                <input type="submit" class="btn btn-secondary  btn-block mt-2 " value="بجرب اغير الشكل">
+                                <input type="submit" class="btn btn-secondary  btn-block mt-2 " value="ابغى تصميم مختلف">
                             </form>
                         </div>
                         @endif
@@ -72,14 +72,14 @@
                         <div class="chat-messages">
                             <div class="message-box-holder">
                                 <div class="message-box">
-                                    تم التعديل على التصميم .. اذا ماعجبك التصميم بعد   جرب تغيير الشكل .. ان شاء الله بيعجبك
+                                    إذا ماعجبك .. خلني اصمملك تصميم ثاني
                                 </div>
                             </div>
                         </div>
                         <div class="card-footer text-center">
                             @guest
                             <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">الأن التصميم مررة رهيب .. ارسله على الايميل <i class="fas fa-check"></i></button>
-                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">الشكل  رهيب .. لكن بعدل على الصور والألوان  <i class="fas fa-edit"></i></button>
+                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان  <i class="fas fa-edit"></i></button>
                             @endauth
                             @if (!Auth::guest())
                             <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
@@ -90,12 +90,12 @@
                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">جرب تعدل الألوان <i class="fas fa-edit"></i></button>
                             @endif
 
-                            <button class="btn btn-dark float-left mt-4"  data-toggle="modal" data-target="#exampleModal2">غير الشكل  <i class="fas fa-exchange-alt"></i></button>
+                            <button class="btn btn-dark float-left mt-4"  data-toggle="modal" data-target="#exampleModal2">ابغى تصميم مختلف <i class="fas fa-exchange-alt"></i></button>
                             <form id="changeTemplateForm" class="form-horizontal float-right mt-4" action="{{ url('/try/form2') }}" method="post">
                                 @csrf
                                 <input type="hidden" name="changeTemplate">
                                 <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
-                                <input type="submit" class="btn btn-secondary " value="الشكل السابق  ">
+                                <input type="submit" class="btn btn-secondary " value="التصميم السابق">
                             </form>
                         </div>
                         @endif
@@ -115,8 +115,8 @@
                         <!-- Start Show Template -->
                         <form class="form-horizontal">
                             <select class="form-control mb-4" onchange='CheckPhoneType(this.value);'>
-                                <option value="inst" selected>شكل المحتوى في الانستقرام</option>
-                                <option value="tweet">شكل المحتوى في تويتر</option>
+                                <option value="inst" selected>شكل التصميم في الانستقرام</option>
+                                <option value="tweet">شكل التصميم في تويتر</option>
                             </select>
                         </form>
                         @if(isset($allImgPath))
@@ -198,7 +198,7 @@
 
                         <div class="form-group">
                             <label class="control-label ml-2">الصور المفرغة</label><br>
-                            <p class="control-label ml-2">اذا كنت لا تملك صور مفرغة إليك هذه الأداة الرائعة</label><a _blank href="https://www.remove.bg"><span class="right badge badge-danger">اضغط هنا لتفريغ الصور</p></a>
+                            <p class="control-label ml-2">هذي الأداة بتساعدك كثيير في تفريغ الصور </label><a target=" _blank" href="https://www.remove.bg"><span class="right badge badge-danger"> اضغط هنا لتفريغ الصور </p></a>
                             <div>
                                 <input type="file" name="Transparent[]"   multiple="multiple" />
                             </div>
@@ -219,8 +219,7 @@
 
                         <hr>
                          @endauth
-                        <a class="btn btn-dark" onclick="replaceColor();" style="float: left;">عكس الآلوان  </a>
-                        <a class="btn btn-dark" onclick="defultColor();" style="float: right;">الألوان الافتراضية</a>
+                        <a class="btn btn-dark" onclick="replaceColor();">عكس الآلوان  </a>
                         <div class="form-group">
                             <label class="control-label mt-4">لون الهوية الأساسي  (Hex)</label>
                             <div>
@@ -250,21 +249,21 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">ودي أخدمك اكثر لكن للأسف :(</h5>
+                <h5 class="modal-title" id="exampleModalLabel">كيف تبغى التصميم ؟</h5>
             </div>
             <div class="modal-body">
-                <p>عزيزي تذكر ان هذه نسخة تجريبية للمنصة .. يسعدنا كثييير لو تقدملنا ملاحظاتك على التصميم .. صدقني راح اكون ممتن لك بشكل كبيير</p>
+
                 <form method='post' action="" onsubmit="return post();">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
-                            <label class="control-label ml-2">وش هي العيوب والمشاكل اللي واجهتك ؟</label><br>
+                            <label class="control-label ml-2">امر تدلل .. كيف تحب يكون تصميمك ؟</label><br>
                             <div>
                                 <textarea class="form-control" id="msg" name="msg"></textarea>
                             </div>
                         </div>
                         <div class="div-center">
-                            <button type="submit" id="submit" value="Submit"  class="btn btn-success">ارسل ملاحظاتك </button>
+                            <button type="submit" id="submit" value="Submit"  class="btn btn-success">لاهنت</button>
                         </div>
                     </form>
                     <h5 class="mt-2" id="status"></h5>
@@ -280,7 +279,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">خطوة واحدة تفصلنا .. تسجيلك يضمن لك الوصول لمحتواك والتعديل عليه في  اي وقت</h5>
+                <h5 class="modal-title" id="exampleModalLabel">لاهنت ي بعدي ايميلك حتى ارسلك التصميم</h5>
             </div>
             <div class="modal-body">
                 <form id="registerForm" class="form-horizontal" action="{{ url('/try/form3') }}" method="post" enctype="multipart/form-data">
@@ -321,6 +320,8 @@
                         </span>
                         @endif
                     </div>
+                    <p  class="mb-2" style="color: red">ملاحظة : الايميل والرقم السري راح تحتاجهم لدخول النظام المرات الجاية</p>
+
                     <div class="div-center">
                         <button  class="btn btn-success">حفظ وارسال </button>
                     </div>

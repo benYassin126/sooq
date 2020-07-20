@@ -359,7 +359,7 @@ height: 628px;
 margin-top: 40px;
 }
 
-#pageloader
+#pageloader,#pageloaderWhenDesign
 {
   background: rgba( 255, 255, 255, 0.8 );
   display: none;
@@ -376,4 +376,15 @@ margin-top: 40px;
   margin-top: -134px;
   position: absolute;
   top: 50%;
+}
+#pageloaderWhenDesign img
+{
+  left: 50%;
+  margin-left: -235px;
+  margin-top: -231px;
+  position: absolute;
+  top: 50%;
+}
+.modal-dialog {
+ max-width: 550px;
 }

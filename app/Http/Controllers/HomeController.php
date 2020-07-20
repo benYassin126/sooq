@@ -47,7 +47,7 @@ class HomeController extends Controller
           $user = User::all()->where('id',$UserID);
           Mail::to($user->first()->email)->send(new test1($allUserDesigns));
           $newUser = '';
-         return view('user.home',compact('newUser','allUserDesigns','allImg'));
+         return view('user.home',compact('newUser','allUserDesigns','allImgTrans','allImgBack'));
         }
 
 

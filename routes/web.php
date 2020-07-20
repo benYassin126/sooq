@@ -21,7 +21,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('home/fetch_image/{id}', 'HomeController@fetch_image');
 //Try Controller
-Route::get('/try','TryController@index')->name('try');
+Route::get('/try','TryController@createStep1')->name('try');
 Route::get('/try/form1', 'TryController@createStep1');
 Route::post('/try/form1', 'TryController@PostcreateStep1');
 Route::get('/try/form2', 'TryController@createStep2');

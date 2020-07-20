@@ -11,7 +11,11 @@ function CheckBusinessType(val){
 
 }
 
-$("#changeTemplateForm").on("submit", function(){
+$("#changeTemplateForm,#tryForm").on("submit", function(){
+    $("#pageloaderWhenDesign").fadeIn();
+  });//submit
+
+$("#uploadImgsForm,#registerForm,#a3tmed").on("submit", function(){
     $("#pageloader").fadeIn();
   });//submit
 

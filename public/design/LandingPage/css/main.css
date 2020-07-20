@@ -135,7 +135,7 @@ a:not([href]):not([tabindex]) {
   color: #fff;
 }
 
-#pageloader
+#pageloader,#pageloaderWhenDesign
 {
   background: rgba( 255, 255, 255, 0.8 );
   display: none;
@@ -153,6 +153,16 @@ a:not([href]):not([tabindex]) {
   position: absolute;
   top: 50%;
 }
+
+#pageloaderWhenDesign img
+{
+  left: 50%;
+  margin-left: -235px;
+  margin-top: -231px;
+  position: absolute;
+  top: 50%;
+}
+
 
 
 
@@ -1194,4 +1204,8 @@ margin-top: 40px;
 
 .settings-popup ul li a:hover {
   background: rgba(0, 0, 0, .05);
+}
+
+.modal-dialog {
+ max-width: 550px;
 }

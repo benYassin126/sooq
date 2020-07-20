@@ -29,6 +29,9 @@
 <div id="pageloader">
    <img src="{{url('/')}}/design/LandingPage/img/loading.gif" alt="processing..." />
 </div>
+<div id="pageloaderWhenDesign">
+   <img src="{{url('/')}}/design/LandingPage/img/wait.png" alt="processing..." />
+</div>
   <!-- Header Area wrapper Starts -->
   <header id="header-wrap">
     <!-- Navbar Start -->
@@ -44,7 +47,7 @@
             @guest
             <li class="nav-item">
               <a class="nav-link" href="{{ route('try') }}">
-                جرب سوق
+                جرب  {{ config('app.name') }}
             </a>
         </li>
 
@@ -83,7 +86,7 @@
 <!-- Copyright Section Start -->
 <div class="copyright">
     <div class="container">
-        <p class="text-center">جميع الحقوق محفوظة لسوق</p>
+        <p class="text-center">جميع الحقوق محفوظة  ل{{ config('app.name')}}</p>
     </div>
 </div>
 <!-- Copyright Section End -->

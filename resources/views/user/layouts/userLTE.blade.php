@@ -34,6 +34,9 @@
 <div id="pageloader">
    <img src="{{url('/')}}/design/LandingPage/img/loading.gif" alt="processing..." />
 </div>
+<div id="pageloaderWhenDesign">
+   <img src="{{url('/')}}/design/LandingPage/img/wait.png" alt="processing..." />
+</div>
     <div class="wrapper">
 
       <nav class="main-header navbar navbar-expand navbar-white navbar-light ">

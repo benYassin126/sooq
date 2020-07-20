@@ -1,5 +1,5 @@
 @extends('user.layouts.userLTE')
-@section('title','لوحة التجكم')
+@section('title','لوحة التحكم')
 @section('content')
 <!-- Main content -->
 <div class="content">
@@ -43,20 +43,18 @@
             <div class="col-md-6 col-sm-12">
                 <div class=" text-center">
                     @if($allImgTrans != null && $allImgBack != null )
-                        <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
-                            @csrf
-                            <input type="hidden" name="changeTemplate">
-                            <input type="hidden" name="anotherTry" value="3">
-                            <input type="hidden" name="oldUser" value="3">
-                            <input type="hidden" name="UserID" value="{{auth::id()}}">
-                            <button class="btn btn-primary btn-lg a3tmed mt-2 mb-4">تصميم جديد  <i class="fas fa-magic"></i></button>
-                        </form>
+                    <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
+                        @csrf
+                        <input type="hidden" name="changeTemplate">
+                        <input type="hidden" name="anotherTry" value="0">
+                        <input type="hidden" name="oldUser" value="3">
+                        <input type="hidden" name="UserID" value="{{auth::id()}}">
+                        <button class="btn btn-primary btn-lg a3tmed mt-2 mb-4">تصميم جديد  <i class="fas fa-magic"></i></button>
+                    </form>
                     @else
                     <p>عشان أبدأ اصمملك .. احتاج منك ترفع صور مفرغة وبيئية  لاهنت</p>
                     <a href="{{ url('imgs') }} " class="btn btn-primary">مكتبة الصور</a>
                     @endif
-
-
                 </div>
             </div>
             @if(isset($allUserDesigns) && $allImgTrans != null  && $allImgBack !=null)
@@ -70,7 +68,6 @@
                                 <option value="tweet">شكل المحتوى في تويتر</option>
                             </select>
                         </form>
-
                         <!-- inst -->
                         <div class="MocUp text-center" id='inst'>
                             <div class="marvel-device iphone-x">
@@ -117,10 +114,9 @@
                                     <div class="shadow shadow--bl"></div>
                                 </div>
                                 <div class="inner-shadow"></div>
-
                                 <div class="screen">
                                     <img class="tweetMock" src="/img/tweet.png">
-                                                                        @forelse($allUserDesigns as $img)
+                                    @forelse($allUserDesigns as $img)
                                     <img class="imgesInMockUp" style="width: 80%;margin-top: -461px" src="{{url('/')}}/home/fetch_image/{{$img->id}}">
                                     @empty
                                     {{'ليس لديك تصميم حتى الآن'}}
@@ -132,7 +128,6 @@
                 </div>
             </div>
         </div>
-
         @endif
     </div>
 </div>

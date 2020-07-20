@@ -655,7 +655,7 @@ $UserID = $user->id;
        UserDesign::create($form_data);
    }
 
-   return Redirect::route('home');
+  return Redirect::route('home', array('St' => 'N'));
     dd($UserID);
 
    }

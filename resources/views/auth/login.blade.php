@@ -54,7 +54,7 @@
     </form>
 
     <p class="mb-0">
-      <a href="{{ route('register') }}">ليس عندي حساب</a>
+      <a href="{{ route('register') }}">ماعندي حساب</a>
     </p>
   </div>
   <!-- /.login-card-body -->

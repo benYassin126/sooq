@@ -21,11 +21,11 @@ function post()
       },
       success: function (response)
       {
-      document.getElementById("status").innerHTML="شكراااا .. رسالتك وصلت .. باذن الله نتطلع للافضل";
+      document.getElementById("status").innerHTML="طلبك وصل بإذن الله التصميم الجاي بحاول يكون زي ماتبي";
     //  $("#colse").delay(5000).click();
       setTimeout(function(){
          $('#exampleModal2').modal('hide')
-    }, 2000);
+    }, 5000);
       }
     });
   }else {
@@ -53,13 +53,17 @@ $('#ColorsForm').on('submit', function(e) {
   $('#alert').fadeIn(500);
     e.preventDefault();
  }else {
-    $("#pageloader").fadeIn();
+    $("#pageloaderWhenDesign").fadeIn();
  }
 
 
 });
 
-$("#changeTemplateForm,#tryForm,#uploadImgsForm,#registerForm,#a3tmed").on("submit", function(){
+$("#changeTemplateForm,#tryForm").on("submit", function(){
+    $("#pageloaderWhenDesign").fadeIn();
+  });//submit
+
+$("#uploadImgsForm,#registerForm,#a3tmed").on("submit", function(){
     $("#pageloader").fadeIn();
   });//submit
 
