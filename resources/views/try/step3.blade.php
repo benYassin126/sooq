@@ -59,6 +59,7 @@
                             <input type="hidden" name="UserID" value="{{Auth::id()}}">
                             <button class="btn btn-block btn-success">أعتمد التصميم <i class="fas fa-check"></i></button>
                         </form>
+                        @endif
                         <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
                         <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
                             @csrf
