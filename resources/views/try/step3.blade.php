@@ -13,101 +13,98 @@
                 </div>
                 @endif
             </div>
-
-
-
-                <div class="chatbox-holder">
-                    <div class="chatbox chatbox-min">
-                        <div class="chatbox-top">
-                            <div class="chatbox-avatar">
-                                <a target="_blank"><img src="/img/mor.png"/></a>
-                            </div>
-                            <div href="javascript:void(0);" class="chat-partner-name">
-                                <span class="status online"></span>
-                                <a href="javascript:void(0);">{{ config('app.name') }}</a>
-                            </div>
-                            <div class="chatbox-icons">
-                                <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
-                                <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
-                            </div>
+            <div class="chatbox-holder">
+                <div class="chatbox chatbox-min">
+                    <div class="chatbox-top">
+                        <div class="chatbox-avatar">
+                            <a target="_blank"><img src="/img/mor.png"/></a>
                         </div>
-                        @if( session()->get('CountOfTry') == null || session()->get('CountOfTry') == 0 )
-                        <div class="chat-messages">
-                            <div class="message-box-holder">
-                                <div class="message-box">
-                                    هلا والله ومسهلا .. تصميمك الآن جاهز .. شرايك ؟
-                                </div>
+                        <div href="javascript:void(0);" class="chat-partner-name">
+                            <span class="status online"></span>
+                            <a href="javascript:void(0);">{{ config('app.name') }}</a>
+                        </div>
+                        <div class="chatbox-icons">
+                            <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
+                            <a href="javascript:void(0);"><i class="fa fa-minus"></i></a>
+                        </div>
+                    </div>
+                    @if( session()->get('CountOfTry') == null || session()->get('CountOfTry') == 0 )
+                    <div class="chat-messages">
+                        <div class="message-box-holder">
+                            <div class="message-box">
+                                هلا والله ومسهلا .. تصميمك الآن جاهز .. شرايك ؟
                             </div>
                         </div>
-                        <div class="card-footer text-center">
-                            <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">ممتاز جدا .. ارسلها على الايميل <i class="fas fa-check"></i></button>
-                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">عندي بعض التعديلات على الصور والالوان <i class="fas fa-edit"></i></button>
-                        </div>
-                        @endif
-                        @if(session()->get('CountOfTry') == 1 )
-                        <div class="chat-messages">
-                            <div class="message-box-holder">
-                                <div class="message-box">
-                                    إذا ماعجبك .. خلني اصمملك تصميم ثاني
-                                </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">ممتاز جدا .. ارسلها على الايميل <i class="fas fa-check"></i></button>
+                        <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">عندي بعض التعديلات على الصور والالوان <i class="fas fa-edit"></i></button>
+                    </div>
+                    @endif
+                    @if(session()->get('CountOfTry') == 1 )
+                    <div class="chat-messages">
+                        <div class="message-box-holder">
+                            <div class="message-box">
+                                إذا ماعجبك .. خلني اصمملك تصميم ثاني
                             </div>
                         </div>
-                        <div class="card-footer text-center">
-                            @guest
-                            <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">الأن التصميم مررة رهيب .. ارسله على الايميل <i class="fas fa-check"></i></button>
-                            @endauth
-                            @if (!Auth::guest())
-                            <button class="btn btn-block btn-success">أعتمد التصميم<i class="fas fa-check"></i></button>
-                            @endif
-                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
-                            <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="changeTemplate">
-                                <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
-                                <input type="submit" class="btn btn-secondary  btn-block mt-2 " value="ابغى تصميم مختلف">
-                            </form>
-                        </div>
-                        @endif
-                        @if(session()->get('CountOfTry') > 1 )
-                        <div class="chat-messages">
-                            <div class="message-box-holder">
-                                <div class="message-box">
-                                    إذا ماعجبك .. خلني اصمملك تصميم ثاني
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer text-center">
-                            @guest
-                            <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">الأن التصميم مررة رهيب .. ارسله على الايميل <i class="fas fa-check"></i></button>
-                            <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان  <i class="fas fa-edit"></i></button>
-                            @endauth
-                            @if (!Auth::guest())
-                            <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
+                    </div>
+                    <div class="card-footer text-center">
+                        @guest
+                        <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">الأن التصميم مررة رهيب .. ارسله على الايميل <i class="fas fa-check"></i></button>
+                        @endauth
+                        @if (!Auth::guest())
+                        <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
                             @csrf
                             <input type="hidden" name="UserID" value="{{Auth::id()}}">
                             <button class="btn btn-block btn-success">أعتمد التصميم <i class="fas fa-check"></i></button>
-                          </form>
-                           <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">جرب تعدل الألوان <i class="fas fa-edit"></i></button>
-                            @endif
-
-                            <button class="btn btn-dark float-left mt-4"  data-toggle="modal" data-target="#exampleModal2">ابغى تصميم مختلف <i class="fas fa-exchange-alt"></i></button>
-                            <form id="changeTemplateForm" class="form-horizontal float-right mt-4" action="{{ url('/try/form2') }}" method="post">
-                                @csrf
-                                <input type="hidden" name="changeTemplate">
-                                <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
-                                <input type="submit" class="btn btn-secondary " value="التصميم السابق">
-                            </form>
-                        </div>
-                        @endif
+                        </form>
+                        <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
+                        <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="changeTemplate">
+                            <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
+                            <input type="submit" class="btn btn-secondary  btn-block mt-2 " value="ابغى تصميم مختلف">
+                        </form>
                     </div>
+                    @endif
+                    @if(session()->get('CountOfTry') > 1 )
+                    <div class="chat-messages">
+                        <div class="message-box-holder">
+                            <div class="message-box">
+                                إذا ماعجبك .. خلني اصمملك تصميم ثاني
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        @guest
+                        <button class="btn btn-block btn-success" data-toggle="modal" data-target="#exampleModal3">الأن التصميم مررة رهيب .. ارسله على الايميل <i class="fas fa-check"></i></button>
+                        <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان  <i class="fas fa-edit"></i></button>
+                        @endauth
+                        @if (!Auth::guest())
+                        <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
+                            @csrf
+                            <input type="hidden" name="UserID" value="{{Auth::id()}}">
+                            <button class="btn btn-block btn-success">أعتمد التصميم <i class="fas fa-check"></i></button>
+                        </form>
+                        <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">جرب تعدل الألوان <i class="fas fa-edit"></i></button>
+                        @endif
+                        <button class="btn btn-dark float-left mt-4"  data-toggle="modal" data-target="#exampleModal2">ابغى تصميم مختلف <i class="fas fa-exchange-alt"></i></button>
+                        <form id="changeTemplateForm" class="form-horizontal float-right mt-4" action="{{ url('/try/form2') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="changeTemplate">
+                            <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
+                            <input type="submit" class="btn btn-secondary " value="التصميم السابق">
+                        </form>
+                    </div>
+                    @endif
                 </div>
-
+            </div>
             <div class="col-md-6 col-sm-12">
                 <div class=" text-center">
                     <h3>ها شرايك ؟ </h3>
                     <button class="btn btn-primary btn-lg a3tmed mt-2 mb-4">اعتمد / عدل <i class="fas fa-check"></i><i class="fas fa-edit"></i></button>
                 </div>
-
             </div>
             <div class="col-md-6 col-sm-12">
                 <div class=" text-center">
@@ -175,7 +172,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- end Show Template -->
         </div>
     </div>
@@ -193,9 +189,7 @@
                     @csrf
                     <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
                     <div class="card-body">
-                            @guest
-
-
+                        @guest
                         <div class="form-group">
                             <label class="control-label ml-2">الصور المفرغة</label><br>
                             <p class="control-label ml-2">هذي الأداة بتساعدك كثيير في تفريغ الصور </label><a target=" _blank" href="https://www.remove.bg"><span class="right badge badge-danger"> اضغط هنا لتفريغ الصور </p></a>
@@ -216,9 +210,8 @@
                             <p style="color: red;font-weight: bold;">تأكد من صيغ الملفات المدخلة وحجمها</p>
                             @endif
                         </div>
-
                         <hr>
-                         @endauth
+                        @endauth
                         <a class="btn btn-dark" onclick="replaceColor();">عكس الآلوان  </a>
                         <div class="form-group">
                             <label class="control-label mt-4">لون الهوية الأساسي  (Hex)</label>
@@ -252,7 +245,6 @@
                 <h5 class="modal-title" id="exampleModalLabel">كيف تبغى التصميم ؟</h5>
             </div>
             <div class="modal-body">
-
                 <form method='post' action="" onsubmit="return post();">
                     @csrf
                     <div class="card-body">
@@ -288,7 +280,7 @@
                     <div class="input-group mb-3">
                         <input  id="name" type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="{{ __('Name') }}"  value="{{ old('name') }}" required autofocus>
                         <div class="input-group-append">
-                             <span class=" input-group-text">  <i class="fa fa-user"></i></span>
+                            <span class=" input-group-text">  <i class="fa fa-user"></i></span>
                         </div>
                         @if ($errors->has('name'))
                         <span class="invalid-feedback" role="alert">
@@ -312,7 +304,7 @@
                     <div class="input-group mb-3">
                         <input  id="password" type="password" name="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="{{ __('Password') }}" required autofocus>
                         <div class="input-group-append">
-                           <span class=" input-group-text">  <i class="fa fa-user"></i></span>
+                            <span class=" input-group-text">  <i class="fa fa-user"></i></span>
                         </div>
                         @if ($errors->has('password'))
                         <span class="invalid-feedback" role="alert">
@@ -321,7 +313,6 @@
                         @endif
                     </div>
                     <p  class="mb-2" style="color: red">ملاحظة : الايميل والرقم السري راح تحتاجهم لدخول النظام المرات الجاية</p>
-
                     <div class="div-center">
                         <button  class="btn btn-success">حفظ وارسال </button>
                     </div>
