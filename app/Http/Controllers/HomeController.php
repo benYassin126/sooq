@@ -11,7 +11,7 @@ use Session;
 use App\UserDesign;
 use App\User;
 use Mail;
-use App\Mail\test1;
+use App\Mail\images;
 
 class HomeController extends Controller
 {
@@ -22,7 +22,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('fetch_image');
     }
 
     /**
@@ -45,13 +45,14 @@ class HomeController extends Controller
 
         if (isset($_GET['St']) && $_GET['St'] == 'N') {
           $user = User::all()->where('id',$UserID);
-          Mail::to($user->first()->email)->send(new test1($allUserDesigns));
+          Mail::to($user->first()->email)->send(new images($allUserDesigns));
           $newUser = '';
          return view('user.home',compact('newUser','allUserDesigns','allImgTrans','allImgBack'));
         }
 
 
         return view('user.home',compact('allUserDesigns','allImgTrans','allImgBack'));
+
     }
 
    function fetch_image($image_id)

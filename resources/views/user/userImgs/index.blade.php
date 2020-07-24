@@ -38,10 +38,10 @@
       <div class="row">
 
         @forelse($allImg as $img)
-        <div class="col col-6">
+        <div class="col col-sm-12 col-md-6 col-lg-3">
           <div class="card">
             <div class="card-body text-center">
-               <img style="width: 200px; height: 200px;" src="{{ url('/home/imgs/fetch_image') }}/{{$img->id}}">
+               <img style="width: 100%; height: 200px;" src="{{ url('/home/imgs/fetch_image') }}/{{$img->id}}">
             </div>
             <div class="card-footer">
               <form  action="{{ route('imgs.update',$img->id) }}" method="post" style="float: right;">

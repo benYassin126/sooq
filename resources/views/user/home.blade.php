@@ -32,7 +32,7 @@
         </div> <br><br>
         <div class="row justify-content-center">
             <div class="col-7 text-center">
-                <h5 class="purple-text text-center">تم ارسال الصور الى الايميل المسجل .. مرحبا بك في عالمك :)</h5>
+                <h5 class="purple-text text-center">رسلتلك الايميل ي جميل .. اذا ماحصلتها في البريد الوارد اتوقع تحصلها في الرسائل الغير مرغوب بها .. ونورت الحتة الله يسعدك :)</h5>
             </div>
         </div>
         <hr>
@@ -53,11 +53,11 @@
                     </form>
                     @else
                     <p>عشان أبدأ اصمملك .. احتاج منك ترفع صور مفرغة وبيئية  لاهنت</p>
-                    <a href="{{ url('imgs') }} " class="btn btn-primary">مكتبة الصور</a>
+                    <a href="{{ url('imgs') }} " class="btn btn-primary mb-4">مكتبة الصور</a>
                     @endif
                 </div>
             </div>
-            @if(isset($allUserDesigns) && $allImgTrans != null  && $allImgBack !=null)
+            @if(isset($allUserDesigns))
             <div class="col-md-6 col-sm-12">
                 <div class=" text-center">
                     <div class="header-button wow fadeInUp" data-wow-delay="0.3s">

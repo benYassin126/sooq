@@ -154,15 +154,14 @@ a:not([href]):not([tabindex]) {
   top: 50%;
 }
 
-#pageloaderWhenDesign img
-{
-  left: 50%;
-  margin-left: -235px;
-  margin-top: -231px;
-  position: absolute;
-  top: 50%;
+#pageloaderWhenDesign img {
+    width: 358px;
+    left: 50%;
+    margin-left: -180px;
+    margin-top: -150px;
+    position: absolute;
+    top: 50%;
 }
-
 
 
 
@@ -887,6 +886,7 @@ border: 1px solid #fff;
 .marvel-device.iphone-x
 {
   height: 100% !important;
+  left: 50px !important;
 }
 
 /* START SHOW TEMPLATE */
@@ -915,7 +915,7 @@ margin-top: 40px;
 }
 
 .chatbox {
-  width: 400px;
+  width: 385px;
   height: 450px;
   position: relative;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, .2);
@@ -1208,4 +1208,12 @@ margin-top: 40px;
 
 .modal-dialog {
  max-width: 550px;
+}
+
+.badge {
+  white-space: normal;
+}
+.alert-dismissible
+{
+  top: 50px !important;
 }

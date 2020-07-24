@@ -15,7 +15,7 @@ class UserImgsController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('fetch_image');
     }
     /**
      * Display a listing of the resource.

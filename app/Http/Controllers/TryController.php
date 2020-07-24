@@ -316,7 +316,7 @@ if ($changeColor == true ){
 
    foreach ($allTemplateImg as $index => $img) {
                 //get All image and Crate it as PNG
-    $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $img->id;
+    $imgUrl = "https://rwwj.website/admin/templateImg/fetch_image/". $img->id;
     $backImg = imagecreatefrompng($imgUrl);
 
                 //store RGB colors to change template color
@@ -369,11 +369,13 @@ if ($changeColor == true ){
 
         $allTransImg = array();
         $imges = session()->get('TransInputImage.image');
+
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allTransImg,$img);
         }
 
+   
 
             //if user insert images less than transpernt template repetiton images
         if ($uploadedTranparent < $countOFTransparent) {
@@ -460,7 +462,8 @@ if ($changeColor == true ){
             if ($changeColor == true) {
                 $backImg = imagecreatefrompng('./img/newTemplateBack/Template' . $wtihBack->id . '.png');
             }else {
-                $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $wtihBack->id;
+                $imgUrl = "https://rwwj.website/admin/templateImg/fetch_image/". $wtihBack->id;
+                
                 $backImg = imagecreatefrompng($imgUrl);
             }
 
@@ -529,7 +532,7 @@ if ($changeColor == true ){
 
 
          $request->validate([
-          'email'  => 'unique:Users,email',
+          'email'  => 'unique:users,email',
       ]);
 
 

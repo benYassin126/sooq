@@ -340,6 +340,7 @@ border: 1px solid #fff;
 .marvel-device.iphone-x
 {
     height: 100%;
+    left: 50px !important;
 }
 
 
