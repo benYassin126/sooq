@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Hash;
 use App\Img;
 use App\TemplateImg;
 use App\Template;
@@ -49,12 +50,19 @@ class TryController extends Controller
         foreach ($allTemplates as $Template) {
             array_push($allTemplatesID, $Template->id);
         }
-        $randomKay = array_rand($allTemplatesID,2);
-        session()->put('FirstTemplate',$allTemplatesID[$randomKay[0]]);
-        session()->put('SecondTemplate',$allTemplatesID[$randomKay[1]]);
+
+        shuffle($allTemplatesID);
+        $randomKay = array_rand($allTemplatesID,3);
+        session()->put('FirstTemplate',$allTemplatesID[0]);
+        session()->put('SecondTemplate',$allTemplatesID[1]);
+        session()->put('ThirdTemplate',$allTemplatesID[2]);
         session()->put('CurentTemplate',session()->get('FirstTemplate'));
 
 
+        // A/B Testing
+        $TestingArray = ['A','B'];
+        $randomKay = array_rand($TestingArray,1);
+        session()->put('Testing',$TestingArray[$randomKay]);
 
 
 
@@ -82,13 +90,10 @@ class TryController extends Controller
 
  public function createStep2(Request $request)
  {
-    /*
-    if(!Session::has('step1') || Session::get('step1') != 1) {
-        return Redirect::to('try/form1');
-    }
-    */
-    return view('try.step2');
-}
+    $allTemplates = Template::all();
+    $FirstTemplateID = $allTemplates->first()->id;
+    return view('try.step2',compact('allTemplates','FirstTemplateID'));
+ }
 
 public function PostcreateStep2(Request $request)
 {
@@ -96,34 +101,37 @@ public function PostcreateStep2(Request $request)
 
     if ($request->has('BusinessType')) {
        session()->put('BusinessType',$request->BusinessType);
-
     }
 
     if ($request->has('OtherBusinessType') && $request->OtherBusinessType !=null ) {
-       session()->put('BusinessType',$request->OtherBusinessType );
+       session()->put('BusinessType',$request->OtherBusinessType);
     }
 
 
-
-    if ($request->has('Twitter')) {
-       session()->put('Twitter',$request->Twitter );
+    if ($request->has('PhoneNumber')) {
+       session()->put('PhoneNumber',$request->PhoneNumber );
     }
 
     if ($request->has('Instagram')) {
        session()->put('Instagram',$request->Instagram );
     }
+
+    if ($request->has('Twitter')) {
+       session()->put('Twitter',$request->Twitter );
+    }
+
     if ($request->has('MineColor')) {
-           session()->put('MineColor',$request->MineColor );
+        session()->put('MineColor',$request->MineColor );
         }
 
     if ($request->has('SubColor')) {
-            session()->put('SubColor',$request->SubColor );
+        session()->put('SubColor',$request->SubColor );
         }
 
 
-    $FirstTemplate = session()->get('FirstTemplate');//47
-    $SecondTemplate = session()->get('SecondTemplate');//48
-    $CurentTemplate = session()->get('CurentTemplate');//47
+    $FirstTemplate = session()->get('FirstTemplate');
+    $SecondTemplate = session()->get('SecondTemplate');
+    $CurentTemplate = session()->get('CurentTemplate');
 
 
     if ($request->has('changeTemplate')) {
@@ -135,35 +143,26 @@ public function PostcreateStep2(Request $request)
 
     }
 
+    //if user select template
+
+    if ($request->has('TemplateID')) {
+        session()->put('CurentTemplate',$request->TemplateID);
+    }
 
 
-        //if user come from control panel
+        //start if user come from control panel
 
       if ($request->has('oldUser')) {
 
         $UserID = $request->UserID;
-        $user = User::select('MineColor','SubColor')->where('id',$UserID)->first();
-    //    dd($user);
-
-
-        //Start chose two random template
-        $allTemplates = Template::select('id')->get();
-        $allTemplatesID = array();
-        foreach ($allTemplates as $Template) {
-            array_push($allTemplatesID, $Template->id);
-        }
-        $randomKay = array_rand($allTemplatesID,2);
-        session()->put('FirstTemplate',$allTemplatesID[$randomKay[0]]);
-        session()->put('SecondTemplate',$allTemplatesID[$randomKay[1]]);
-        session()->put('CurentTemplate',session()->get('FirstTemplate'));
-        //End chose two random template
+        $user = User::select('MineColor','SubColor','CurentTemplate')->where('id',$UserID)->first();
 
         //Start Set Mine and Sub Color to Sessions
         session()->put('MineColor',$user->MineColor );
         session()->put('SubColor',$user->SubColor );
+        //End Set Mine and Sub Color to Sessions
 
         //Start Set Images
-
          $UserImgs = Img::Select('TheImg')->where([['ImgType','Transparent'],['UserID',$UserID]])->get();
          session()->put('TransInputImage.image', []);
          foreach ($UserImgs as $TransparentImg) {
@@ -177,25 +176,8 @@ public function PostcreateStep2(Request $request)
                session()->push('WithBackInputImage.image', $WithBackGound->TheImg);
        }
 
-
-
-
-        //End Set Mine and Sub Color to Sessions
-
       }
-
-
-
-
-
-      if ($request->has('changeTemplate')) {
-          if ($CurentTemplate == $FirstTemplate ) {
-              session()->put('CurentTemplate',$SecondTemplate);
-          }else {
-              session()->put('CurentTemplate',$FirstTemplate);
-          }
-
-      }
+        //end if user come from control panel
 
 
         if ($request->has('anotherTry')) {
@@ -203,7 +185,6 @@ public function PostcreateStep2(Request $request)
            $numberOfTry = $request->anotherTry;
            $numberOfTry = $numberOfTry + 1 ;
            session()->put('CountOfTry',$numberOfTry);
-        //  dd($numberOfTry);
         }else {
            session()->put('CountOfTry',0);
         }
@@ -224,8 +205,8 @@ public function PostcreateStep2(Request $request)
 
 
         if (!is_null($request->WithBackGound)) {
-           Session::forget('WithBackGound');
-           session()->put('WithBackGound.image', []);
+           Session::forget('WithBackInputImage');
+           session()->put('WithBackInputImage.image', []);
            foreach ($request->WithBackGound as $WithBackGoundImg) {
                  $image_file = $WithBackGoundImg;
                  $image = Image::make($image_file);
@@ -234,15 +215,6 @@ public function PostcreateStep2(Request $request)
              }
 
         }
-
-
-
-
-
-
-
-
-
 
     return redirect('/try/form3');
 }
@@ -256,20 +228,16 @@ public function createStep3(Request $request)
 {
 
 
-
-
-
-
-
     if (session()->get('CurentTemplate') != null) {
         $CurentTemplate = session()->get('CurentTemplate');
     }else {
          $CurentTemplate = session()->get('FirstTemplate');
     }
 
-    $SessinID = substr( Session::getId(), -3);
 
     $TemplateID = $CurentTemplate;
+    $SessinID = substr(Session::getId(), -3);
+
     $UserMineColor = session()->get('MineColor');
     $UserSubColor = session()->get('SubColor');
 
@@ -358,10 +326,6 @@ if ($changeColor == true ){
 
 
 
-
-
-
-
         $uploadedTranparent =  count(session()->get('TransInputImage'));
 
         $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->count();
@@ -373,9 +337,10 @@ if ($changeColor == true ){
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allTransImg,$img);
+            imagepng($img, "./img/all_images/" . rand(0,1000) .".png", 9);
         }
 
-   
+
 
             //if user insert images less than transpernt template repetiton images
         if ($uploadedTranparent < $countOFTransparent) {
@@ -418,11 +383,24 @@ if ($changeColor == true ){
             imagecopyresampled($backImg, $allTransImg[$index],  $xoffset, $yoffset, 0, 0,$new_widht,$new_height, imagesx($allTransImg[$index]), imagesy($allTransImg[$index]));
 
 
-           // $imgName = $trns->id;
-           // $imgName = $trns->id . '__'. $SessinID;
             $imgName = $trns->id;
-          //  dd($imgName);
             imagepng($backImg, "./img/output/" . $imgName .".png", 9);
+
+
+            //Start Create Uniqe Folder
+            if (session()->get('PhoneNumber') != null) {
+               $folderName = './img/allOutputs/' . session()->get('PhoneNumber');
+            }else {
+                $folderName = './img/allOutputs/show';
+            }
+
+            if (!file_exists($folderName)) {
+                mkdir($folderName, 0777, true);
+            }
+
+            imagepng($backImg, $folderName . "/" . rand(0,1000) .".png", 9);
+
+            //End Create Uniqe Folder
             array_push($allImgPath,$imgName);
 
 
@@ -431,7 +409,6 @@ if ($changeColor == true ){
 
 
             //second case
-
 
         $uploadedWithBackGround =  count(session()->get('WithBackInputImage'));
 
@@ -443,6 +420,7 @@ if ($changeColor == true ){
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allWithBack,$img);
+            imagepng($img, "./img/all_images/" . rand(0,1000) .".png", 9);
         }
 
 
@@ -457,54 +435,68 @@ if ($changeColor == true ){
 
         $WithBackinDesign = TemplateImg::select('TheImg','id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->get();
 
-        foreach ($WithBackinDesign as $index => $wtihBack) {
+            foreach ($WithBackinDesign as $index => $wtihBack) {
+                if ($changeColor == true) {
+                    $backImg = imagecreatefrompng('./img/newTemplateBack/Template' . $wtihBack->id . '.png');
+                }else {
+                    $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $wtihBack->id;
+                    $backImg = imagecreatefrompng($imgUrl);
+                }
 
-            if ($changeColor == true) {
-                $backImg = imagecreatefrompng('./img/newTemplateBack/Template' . $wtihBack->id . '.png');
-            }else {
-                $imgUrl = "https://rwwj.website/admin/templateImg/fetch_image/". $wtihBack->id;
-                
-                $backImg = imagecreatefrompng($imgUrl);
+
+
+              //  $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
+
+                $height = imagesy($allWithBack[$index]);
+                $width = imagesx($allWithBack[$index]);
+                if ( $width > 1080 || $height > 1080) {
+
+                  if ($width > $height) {
+                      $y = 0;
+                      $x = ($width - $height) / 2;
+                      $smallestSide = $height;
+                    } else {
+                      $x = 0;
+                      $y = ($height - $width) / 2;
+                      $smallestSide = $width;
+                }
+
+                $thumbSize = 1080;
+                $thumb = imagecreatetruecolor($thumbSize, $thumbSize);
+                imagecopyresampled($thumb, $allWithBack[$index], 0, 0, $x, $y, $thumbSize, $thumbSize, $smallestSide, $smallestSide);
+                imagecopymerge_alpha($thumb,$backImg, 0, 0, 0, 0,1080,1080, imagesx($backImg), imagesy($backImg));
+                $imgName = $wtihBack->id;
+                imagepng($thumb, "./img/output/" . $imgName .".png", 9);
+                imagepng($thumb, $folderName . "/"  . rand(0,1000) .".png", 9);
+
+                }else {
+                $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
+                imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
+                $imgName = $wtihBack->id;
+                imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
+                imagepng($allWithBack[$index], $folderName . "/" .  rand(0,1000) .".png", 9);
+
+
+                }
+                array_push($allImgPath,$imgName);
             }
-
-            $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
-            imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
-
-
-
-           $imgName = $wtihBack->id;
-            imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
-            array_push($allImgPath,$imgName);
-
-
-        }
-
-        sort($allImgPath);
-
-
-
+      sort($allImgPath);
       session()->put('allImgPath.path', []);
 
-        foreach ($allImgPath as $key => $img) {
 
-            rename('./img/output/' . $img . '.png' , './img/output/[' . ($key + 1) .']__' . $SessinID  . '.png');
-            $newImgName = "[" . ($key + 1) ."]__" . $SessinID;
-            session()->push('allImgPath.path', $newImgName);
+
+        foreach ($allImgPath as $key => $img) {
+            session()->push('allImgPath.path', $img);
         }
 
 
 
+            $myfile = fopen('./img/allOutputs/TestingType/' . session()->get('PhoneNumber'). ".txt", "w") or die("Unable to open file!");
+            fwrite($myfile, session::get('Testing'));
+            fclose($myfile);
 
-        /*
-            Session::forget('MineColor');
-            Session::forget('SubColor');
-           Session::forget('WithBackInputImage');
-           Session::forget('TransInputImage');
-                      Session::forget('step1');
-           Session::forget('step2');
-           */
 
-        return view('try.step3',compact('allImgPath'));
+        return view('try.step3',compact('allImgPath','UserMineColor','UserSubColor'));
     }
 
 
@@ -554,8 +546,11 @@ if ($changeColor == true ){
        $UserMineColor = session()->get('MineColor');
        $UserSubColor = session()->get('SubColor');
        $Instagram = session()->get('Instagram');
+       $PhoneNumber = session()->get('PhoneNumber');
        $Twitter = session()->get('Twitter');
        $BusinessType = session()->get('BusinessType');
+       $CurentTemplate = session()->get('CurentTemplate');
+       $TestingType = session()->get('Testing');
 
 $user = new User();
 
@@ -564,10 +559,13 @@ $user = new User();
 
 $user->name =  $request->name;
 $user->email =  $request->email;
-$user->password =  encrypt($request->password);
+$user->PhoneNumber =  $request->PhoneNumber;
+$user->password =  Hash::make(($request->password));
 $user->Twitter =  $Twitter;
 $user->Instagram =  $Instagram;
 $user->BusinessType =  $BusinessType;
+$user->CurentTemplate =  $CurentTemplate;
+$user->TestingType =  $TestingType;
 $user->MineColor =  $UserMineColor;
 $user->SubColor =  $UserSubColor;
 $user->save();
@@ -605,12 +603,13 @@ $UserID = $user->id;
            Response::make($image->encode('png'));
            $form_data = array(
               'UserID'  => $UserID,
-              'TheImg' => $image
+              'TheImg' => $image,
+              'DesignID' =>$img
           );
            UserDesign::create($form_data);
        }
 
-
+/*
        //Delete all imgs
       foreach (session()->get('allImgPath.path') as $key => $img) {
         $image_file = './img/output/' . $img . '.png';
@@ -618,6 +617,7 @@ $UserID = $user->id;
             unlink($image_file); // delete file
 
       }
+      */
 
        Auth::loginUsingId($UserID, true);
 
@@ -631,8 +631,10 @@ $UserID = $user->id;
 
    public function submit(Request $request) {
 
+
      $form_data = array(
           'Nots'  => $request->Nots,
+          'PhoneNumber' =>session()->get('PhoneNumber'),
       );
          Nots::create($form_data);
    }
@@ -653,13 +655,19 @@ $UserID = $user->id;
        Response::make($image->encode('png'));
        $form_data = array(
           'UserID'  => $UserID,
-          'TheImg' => $image
+          'TheImg' => $image,
+          'DesignID' =>$img
       );
        UserDesign::create($form_data);
    }
+    $form_data = array(
+        'CurentTemplate' => session::get('CurentTemplate'),
+    );
+    $user = User::find($UserID);
+    $user->update($form_data);
 
   return Redirect::route('home', array('St' => 'N'));
-    dd($UserID);
+
 
    }
 

@@ -46,6 +46,7 @@
             <tr>
               <th>#</th>
               <th>اسم العميل</th>
+              <th>نشاط العميل</th>
               <th>نوع الباقة</th>
               <th>المتبقي على الاشتراك</th>
               <th>حالة العميل</th>
@@ -59,6 +60,7 @@
         <tr>
             <td>{{$kay+1}}</td>
             <td>{{$user->name}}</td>
+            <td>{{$user->BusinessType}}</td>
             <td>{{isset($user->Subscrip) ? $user->Subscrip->PakageName : 'لم يشترك'}}</td>
             <td>-</td>
             <td>{{$user->Append == 1 ? "مغعل" : "محظور"}}</td>

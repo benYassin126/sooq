@@ -39,7 +39,7 @@
         </div>
         <div class="row">
           <div class="col-8">
-            <div class="checkbox icheck">
+            <div class="checkbox icheck mr-4">
               <label>
                <input class="form-check-input" type="checkbox" name="remember" id="remember" > {{ __('Remember Me') }}
              </label>

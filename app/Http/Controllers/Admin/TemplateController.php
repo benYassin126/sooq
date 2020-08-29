@@ -16,6 +16,9 @@ class TemplateController extends Controller
          *
          * @return \Illuminate\Http\Response
          */
+
+
+
         public function index()
         {
             $allTemplates = Template::all();
@@ -270,11 +273,38 @@ class TemplateController extends Controller
                     $backImg = imagecreatefrompng($imgUrl);
                 }
 
+
+
+              //  $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
+
+                $height = imagesy($allWithBack[$index]);
+                $width = imagesx($allWithBack[$index]);
+                if ( $width > 1080 || $height > 1080) {
+
+                  if ($width > $height) {
+                      $y = 0;
+                      $x = ($width - $height) / 2;
+                      $smallestSide = $height;
+                    } else {
+                      $x = 0;
+                      $y = ($height - $width) / 2;
+                      $smallestSide = $width;
+                }
+
+                $thumbSize = 1080;
+                $thumb = imagecreatetruecolor($thumbSize, $thumbSize);
+                imagecopyresampled($thumb, $allWithBack[$index], 0, 0, $x, $y, $thumbSize, $thumbSize, $smallestSide, $smallestSide);
+                imagecopymerge_alpha($thumb,$backImg, 0, 0, 0, 0,1080,1080, imagesx($backImg), imagesy($backImg));
+                $imgName = $wtihBack->id;
+                imagepng($thumb, "./img/output/" . $imgName .".png", 9);
+
+                }else {
                 $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
                 imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
-
-                $imgName = "Template" . $wtihBack->id;
+                $imgName = $wtihBack->id;
                 imagepng($allWithBack[$index], "./img/output/" . $imgName .".png", 9);
+
+                }
                 array_push($allImgPath,$imgName);
             }
 

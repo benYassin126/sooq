@@ -72,15 +72,38 @@
   <!-- Sidebar Menu -->
   <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-      <li class="nav-item">
-        <a href="" class="nav-link">
-          <i class="nav-icon fas fa-tachometer-alt"></i>
+<li class="nav-item has-treeview">
+  <a href="" class="nav-link">
+    <i class="fas fa-tachometer-alt"></i>
+    <p>
+      نظرة عامة
+      <i class="fa fa-angle-left right"></i>
+  </p>
+</a>
+<ul class="nav nav-treeview">
+    <li class="nav-item">
+      <a  href="{{ route('overView') }}" class="nav-link">
+        <i class="fas fa-chart-line"></i>
+        <p>احصائيات روج</p>
+    </a>
+</li>
+    <li class="nav-item">
+      <a  href="{{ route('allDesigns') }}" class="nav-link">
+        <i class="fa fa-border-all nav-icon"></i>
+        <p>جميع التصاميم</p>
+    </a>
+</li>
+<li class="nav-item">
+  <a href="{{ route('allImages') }}" class="nav-link">
+    <i class="fas fa-images"></i>
 
-          <p>
-              نظرة عامة
-          </p>
-      </a>
-  </li>
+    <p>جميع الصور </p>
+
+</a>
+</li>
+
+</ul>
+</li>
 
   <li class="nav-item">
     <a href="{{ route('user.index') }}" class="nav-link">

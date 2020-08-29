@@ -1,5 +1,14 @@
 <html lang={{config('app.locale')}} >
 <head>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-173944302-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-173944302-1');
+</script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -89,6 +98,19 @@
       </a>
   </li>
 
+
+     <li class="nav-item">
+        <a href="{{ route('text') }}" class="nav-link">
+          <i class="nav-icon fas fa-text-height"></i>
+
+          <p>
+              اضافة النصوص
+          </p>
+      </a>
+  </li>
+
+
+
   <li class="nav-item">
     <a href="{{ url('/imgs') }}" class="nav-link">
       <i class="nav-icon fas fa-image"></i>
@@ -100,6 +122,17 @@
 </a>
 </li>
 
+      <li class="nav-item">
+        <a href="#" class="nav-link">
+          <i class="nav-icon fas fa-bullhorn"></i>
+
+
+
+          <p>
+              ترويج <span class="right badge badge-danger">قريبا</span>
+          </p>
+      </a>
+  </li>
 
 <li class="nav-item">
     <a href="{{ url('profile') }}" class="nav-link">

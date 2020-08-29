@@ -1,3 +1,4 @@
+
 //Function to send form without refresh page
 function post()
 {
@@ -36,6 +37,23 @@ function post()
   return false;
 }
 
+
+//make value of inpue equal pic
+
+function picMineFun() {
+ var MineColor = document.getElementById('MineColor');
+ var PicMineColor = document.getElementById('PicMineColor').value;
+
+ MineColor.value = PicMineColor;
+}
+
+function picSubeFun() {
+ var SubColor = document.getElementById('SubColor');
+ var PicSubColor = document.getElementById('PicSubColor').value;
+
+ SubColor.value = PicSubColor;
+}
+
 //Hidde Submit Form After Send data
 
 $('#changeTemplateForm').one('submit', function() {
@@ -43,23 +61,9 @@ $('#changeTemplateForm').one('submit', function() {
 });
 
 
-//Valdite Form
-$('#ColorsForm').on('submit', function(e) {
-  var inst = document.getElementById('inst').value;
- var tweet = document.getElementById('tweet').value;
 
 
- if (inst == '' && tweet == '') {
-  $('#alert').fadeIn(500);
-    e.preventDefault();
- }else {
-    $("#pageloaderWhenDesign").fadeIn();
- }
-
-
-});
-
-$("#changeTemplateForm,#tryForm").on("submit", function(){
+$("#changeTemplateForm,#tryForm,#ColorsForm").on("submit", function(){
     $("#pageloaderWhenDesign").fadeIn();
   });//submit
 
@@ -132,121 +136,136 @@ $(function(){
   });
 });
 
+$(function() {
+
+    "use strict";
+
+    //===== Prealoder
+
+    $(window).on('load', function(event) {
+        $('.preloader').delay(500).fadeOut(500);
+    });
 
 
+    //===== Mobile Menu
 
-(function($) {
+    $(".navbar-toggler").on('click', function() {
+        $(this).toggleClass('active');
+    });
 
-  "use strict";
-
-  $(window).on('load', function() {
-
-
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass   : 'iradio_square-blue',
-      increaseArea : '20%' // optional
-  })
-})
+    $(".navbar-nav a").on('click', function() {
+        $(".navbar-toggler").removeClass('active');
+    });
 
 
+    //===== close navbar-collapse when a  clicked
+
+    $(".navbar-nav a").on('click', function () {
+        $(".navbar-collapse").removeClass("show");
+    });
 
 
+    //===== Sticky
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  /*Page Loader active
-  ========================================================*/
-  $('#preloader').fadeOut();
-
-  // Sticky Nav
-    $(window).on('scroll', function() {
-        if ($(window).scrollTop() > 100) {
-            $('.scrolling-navbar').addClass('top-nav-collapse');
-        } else {
-            $('.scrolling-navbar').removeClass('top-nav-collapse');
+    $(window).on('scroll',function(event) {
+        var scroll = $(window).scrollTop();
+        if (scroll < 10) {
+            $(".navigation-bar").removeClass("sticky");
+        }else{
+            $(".navigation-bar").addClass("sticky");
         }
     });
 
-    /* Auto Close Responsive Navbar on Click
-    ========================================================*/
-    function close_toggle() {
-        if ($(window).width() <= 768) {
-            $('.navbar-collapse a').on('click', function () {
-                $('.navbar-collapse').collapse('hide');
-            });
-        }
-        else {
-            $('.navbar .navbar-inverse a').off('click');
-        }
-    }
-    close_toggle();
-    $(window).resize(close_toggle);
 
-    // one page navigation
-    $('.navbar-nav').onePageNav({
-      currentClass: 'active'
+
+
+    //===== wow
+
+    new WOW().init();
+
+
+    //===== AOS
+
+     AOS.init({
+         duration: 800,
+     });
+
+
+    //===== Slick project
+
+    $('.project-active').slick({
+        dots: true,
+        infinite: true,
+        speed: 800,
+        slidesToShow: 5,
+        slidesToScroll: 3,
+        arrows: false,
+        responsive: [
+            {
+              breakpoint: 1200,
+              settings: {
+                slidesToShow: 4,
+              }
+            },
+            {
+              breakpoint: 992,
+              settings: {
+                slidesToShow: 3,
+              }
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                slidesToShow: 2,
+              }
+            },
+            {
+              breakpoint: 576,
+              settings: {
+                slidesToShow: 1,
+              }
+            }
+        ]
     });
 
-    /* slicknav mobile menu active  */
-    $('.mobile-menu').slicknav({
-        prependTo: '.navbar-header',
-        parentTag: 'liner',
-        allowParentLinks: true,
-        duplicate: true,
-        label: '',
-        closedSymbol: '<i class="lni-chevron-right"></i>',
-        openedSymbol: '<i class="lni-chevron-down"></i>',
-      });
 
-      /* WOW Scroll Spy
-    ========================================================*/
-     var wow = new WOW({
-      //disabled for mobile
-        mobile: false
+    //===== Slick Testimonial
+
+    $('.testimonial-active').slick({
+        dots: true,
+        infinite: true,
+        speed: 800,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
     });
 
-    wow.init();
 
-    /*
+    //===== Back to top
 
-    /* Testimonials Carousel
-
-
-    /* Back Top Link active
-    ========================================================*/
-      var offset = 200;
-      var duration = 500;
-      $(window).scroll(function() {
-        if ($(this).scrollTop() > offset) {
-          $('.back-to-top').fadeIn(400);
-        } else {
-          $('.back-to-top').fadeOut(400);
+    // Show or hide the sticky footer button
+    $(window).on('scroll', function(event) {
+        if($(this).scrollTop() > 600){
+            $('.back-to-top').fadeIn(200)
+        } else{
+            $('.back-to-top').fadeOut(200)
         }
-      });
+    });
 
-      $('.back-to-top').on('click',function(event) {
+    //Animate the scroll to yop
+    $('.back-to-top').on('click', function(event) {
         event.preventDefault();
+
         $('html, body').animate({
-          scrollTop: 0
-        }, 600);
-        return false;
-      });
+            scrollTop: 0,
+        }, 1500);
+    });
 
-  });
 
-}(jQuery));
+
+
+
+
+
+
+});

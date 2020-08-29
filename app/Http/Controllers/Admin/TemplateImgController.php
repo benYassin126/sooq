@@ -16,6 +16,8 @@ class TemplateImgController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
     public function index()
     {
         //show all templte images

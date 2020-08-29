@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Nots extends Model
 {
     protected $fillable = [
-        'Nots',
+        'Nots','PhoneNumber',
     ];
 }

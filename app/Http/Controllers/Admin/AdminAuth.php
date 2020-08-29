@@ -19,7 +19,7 @@ class AdminAuth extends Controller {
     public function dologin() {
         $rememberme = request('rememberme') == 1?true:false;
         if (auth()->guard('admin')->attempt(['email' => request('email'), 'password' => request('password')], $rememberme)) {
-            return redirect('admin');
+            return redirect('admin/overView');
         } else {
             return  redirect('admin/login')->with('erorrMsg','خطأ في بيانات الدخول');
         }

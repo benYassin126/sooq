@@ -1,122 +1,213 @@
 
 <html dir={{config('app.direction')}} lang={{config('app.locale')}}>
-<head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <title>{{ config('app.name') }}</title>
+<head>
+    <!--====== Required meta tags ======-->
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--====== Title ======-->
+    <title>{{ config('app.name') }}</title>
 
   <link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet"> <!--load all styles -->
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/bootstrap.min.css" >
-  <!-- Icon -->
-  <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/fonts/line-icons.css">
-  <!-- Animate -->
-  <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/animate.css">
-  <!-- Main Style -->
-  <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/main.css">
-  <!-- Responsive Style -->
-  <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/responsive.css">
-    <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
-  <link rel="stylesheet"  href="{{url('/')}}/design/AdminLTE/plugins/iCheck/square/blue.css">
-  <link rel="stylesheet" href="{{url('/')}}/css/bootstrap-rtl.min.css">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="{{url('/')}}/design/LandingPage/images/favicon.png" type="image/png">
 
+    <!--====== Bootstrap css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/bootstrap.min.css">
+
+    <!--====== Bootstrap RTL css  ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/bootstrap-rtl.min.css">
+
+    <!--====== Fontawesome css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/font-awesome.min.css">
+
+    <!--====== Line Icons css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/LineIcons.css">
+
+    <!--====== Animate css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/animate.css">
+
+    <!--====== Aos css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/aos.css">
+
+    <!--====== Slick css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/slick.css">
+
+    <!--====== Default css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/default.css">
+
+    <!--====== Style css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/style.css">
+    <!--====== Style css ======-->
+    <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/responsive.css">
+
+
+    <link rel="stylesheet"  href="{{url('/')}}/design/AdminLTE/plugins/iCheck/square/blue.css">
+    <link href="{{ asset('css/devices.min.css') }}" rel="stylesheet"> <!--load devices styles -->
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body>
 <!-- div show when submit -->
 <div id="pageloader">
-   <img src="{{url('/')}}/design/LandingPage/img/loading.gif" alt="processing..." />
+   <img src="{{url('/')}}/design/LandingPage/images/loading.gif" alt="processing..." />
 </div>
 <div id="pageloaderWhenDesign">
-   <img src="{{url('/')}}/design/LandingPage/img/wait.png" alt="processing..." />
+   <img src="{{url('/')}}/design/LandingPage/images/wait.png" alt="processing..." />
 </div>
-  <!-- Header Area wrapper Starts -->
-  <header id="header-wrap">
-    <!-- Navbar Start -->
-    <nav class="navbar navbar-expand-md bg-inverse fixed-top scrolling-navbar">
-      <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <a href="{{ url('/') }}" class="navbar-brand"><img src="{{url('/')}}/design/LandingPage/img/logo.png" alt=""></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-          <i class="lni-menu"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-          <ul class="navbar-nav mr-auto w-100 justify-content-end clearfix">
-            @guest
-            <li class="nav-item">
-              <a class="nav-link" href="{{ route('try') }}">
-                جرب  {{ config('app.name') }}
-            </a>
-        </li>
+    <!--====== PRELOADER PART START ======-->
 
-        <li class="nav-item">
-          <a class="nav-link" href="{{ route('register') }}">
-            تسجيل جديد
-        </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('login') }}">
-        تسجيل دخول
-    </a>
-</li>
-@endguest
-@if (!Auth::guest())
-    <li class="nav-item">
-      <a class="nav-link" href="{{ route('home') }}">
-        لوحة التحكم
-    </a>
-</li>
-
-<li class="nav-item">
-  <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-      {{ __('Logout') }}
-  </a>
-  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-    @csrf
-</form>
-</li>
-@endif
-</ul>
-</div>
-</div>
-</nav>
-<!-- Navbar End -->
-
-@yield('content')
-
-</header>
-<!-- Header Area wrapper End -->
-
-<!-- Copyright Section Start -->
-<div class="copyright">
-    <div class="container">
-        <p class="text-center">جميع الحقوق محفوظة  ل{{ config('app.name')}}</p>
+    <div class="preloader">
+        <div class="loader_34">
+            <div class="ytp-spinner">
+                <div class="ytp-spinner-container">
+                    <div class="ytp-spinner-rotator">
+                        <div class="ytp-spinner-left">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                        <div class="ytp-spinner-right">
+                            <div class="ytp-spinner-circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<!-- Copyright Section End -->
+
+    <!--====== PRELOADER ENDS START ======-->
+
+    <!--====== HEADER PART START ======-->
+
+    <header id="home" class="header-area pt-100">
 
 
-<!-- Preloader -->
-<div id="preloader">
-    <div class="loader" id="loader-1"></div>
-</div>
-<!-- End Preloader -->
 
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="{{url('/')}}/js/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="{{url('/')}}/js/bootstrap.bundle.min.js"></script>
-<script src="{{url('/')}}/design/LandingPage/js/wow.js"></script>
-<script src="{{url('/')}}/design/LandingPage/js/jquery.nav.js"></script>
-<script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
-<script src="{{url('/')}}/design/LandingPage/js/jquery.slicknav.js"></script>
-<script  src="{{url('/')}}/design/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+        <div class="shape header-shape-tow animation-one">
+            <img src="{{url('/')}}/design/LandingPage/images/banner/shape/shape-2.png" alt="shape">
+        </div> <!-- header shape tow -->
 
+        <div class="shape header-shape-three animation-one">
+            <img src="{{url('/')}}/design/LandingPage//images/banner/shape/shape-3.png" alt="shape">
+        </div> <!-- header shape three -->
+        <div class="navigation-bar">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <nav class="navbar navbar-expand-lg">
+                            <a class="navbar-brand" href="{{ url('/') }}">
+                                <img src="{{url('/')}}/design/LandingPage/images/logo.png" alt="Logo">
+                            </a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                                <span class="toggler-icon"></span>
+                            </button>
+
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                                <ul id="nav" class="navbar-nav ml-auto">
+                                    @if(Auth::guest())
+                                    <li class="nav-item active">
+                                        <a class="page-scroll" href="{{ url('/') }}">الصفحة الرئيسية</a>
+                                    </li>
+                                     <li class="nav-item">
+                                        <a class="page-scroll" href="{{ route('register') }}">تسجيل جديد</a>
+                                    </li>
+                                     <li class="nav-item">
+                                        <a class="page-scroll" href="{{ route('login') }}">تسجيل دخول</a>
+                                    </li>
+                                    @endif
+                                </ul> <!-- navbar nav -->
+                            </div>
+                             @guest
+                            <div class="navbar-btn ml-20 d-none d-sm-block">
+                                <a class="main-btn" href="{{ url('try') }}"><i class="lni-whatsapp ml-2"></i>جرب   {{ config('app.name') }}</a>
+                            </div>
+                            @endguest
+                            <div class="navbar-btn ml-20 d-none d-sm-block">
+                                <a class="main-btn" target="_blank" href="https://api.whatsapp.com/send?phone=966552300079"><i class="lni-whatsapp ml-2"></i>0552300079</a>
+                            </div>
+                        </nav> <!-- navbar -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+        </div> <!-- navigation bar -->
+
+        @yield('content')
+
+
+    <!--====== FOOTER PART START ======-->
+        <div class="copyright-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright text-center">
+                            <p>جميع الحقوق محفوظة  سوّق</p>
+                        </div> <!-- copyright -->
+                    </div>
+                </div> <!-- row -->
+            </div> <!-- container -->
+        </div> <!-- copyright-area -->
+    </footer>
+
+    <!--====== FOOTER PART ENDS ======-->
+
+
+
+    <!--====== PART START ======-->
+
+    <!--
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-"></div>
+            </div>
+        </div>
+    </section>
+-->
+
+    <!--====== PART ENDS ======-->
+
+
+    <!-- row -->
+
+
+
+
+
+
+
+
+
+    <!--====== jquery js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="{{url('/')}}/design/LandingPage/js/vendor/jquery-1.12.4.min.js"></script>
+
+    <!--====== Bootstrap js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/bootstrap.min.js"></script>
+
+    <!--====== WOW js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/wow.min.js"></script>
+
+    <!--====== Slick js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/slick.min.js"></script>
+
+    <!--====== Scrolling Nav js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/scrolling-nav.js"></script>
+    <script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
+
+    <!--====== Aos js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/aos.js"></script>
 <script defer src="{{ asset('js/fontawesome.js') }}"></script> <!--load all fontassowme styles -->
-<script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
 
+    <!--====== Main js ======-->
+    <script src="{{url('/')}}/design/LandingPage/js/main.js"></script>
+
+<script src="//code.tidio.co/aaui0ro9xrcz6iprtyahopicsoeyp9cb.js" async></script>
 
 </body>
+
 </html>

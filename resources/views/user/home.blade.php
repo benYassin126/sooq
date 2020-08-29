@@ -45,7 +45,6 @@
                     @if($allImgTrans != null && $allImgBack != null )
                     <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
                         @csrf
-                        <input type="hidden" name="changeTemplate">
                         <input type="hidden" name="anotherTry" value="0">
                         <input type="hidden" name="oldUser" value="3">
                         <input type="hidden" name="UserID" value="{{auth::id()}}">
@@ -93,6 +92,11 @@
                                     @empty
                                     {{'ليس لديك تصميم حتى الآن'}}
                                     @endforelse
+                                    @if (count($allUserDesigns) < 24 )
+                                        @for($i = 0; $i < (24 - count($allUserDesigns)); $i++)
+                                            <img class="imgesInMockUp" src="/img/show.png">
+                                        @endfor
+                                    @endif
                                 </div>
                             </div>
                         </div>

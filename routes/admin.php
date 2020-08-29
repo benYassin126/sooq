@@ -4,6 +4,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     Config::set('auth.defines', 'admin');
     Route::get('login', 'AdminAuth@login');
     Route::post('login', 'AdminAuth@dologin');
+    //OverView Route
+
+    Route::get('overView','OverViewController@index')->name('overView');
+    Route::get('allDesigns','OverViewController@allDesigns')->name('allDesigns');
+    Route::get('allImages','OverViewController@allImages')->name('allImages');
+    Route::get('overView/allImages/deleteAll', 'OverViewController@deleteAll');
     //Template Route
     Route::resource('template','TemplateController');
     Route::get('template/fetch_image/{id}', 'TemplateController@fetch_image');
@@ -18,6 +24,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin'], function () {
     //Template Img Route
     Route::resource('user','UserController');
     Route::get('user.search', 'UserController@search')->name('user.search');
+
+
     Route::group(['middleware' => 'admin:admin'], function () {
 
         Route::get('/', function () {

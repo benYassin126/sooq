@@ -13,8 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-
-});
+})->middleware('guest');
 
 Auth::routes();
 
@@ -44,3 +43,10 @@ Route::get('home/imgs/fetch_image/{id}', 'UserImgsController@fetch_image');
 
 Route::get('/profile', 'ProfileController@index')->name('profile');
 Route::post('/profile', 'ProfileController@edit')->name('profile');
+
+
+Route::get('/text', 'TextController@index')->name('text');
+Route::post('/text/add', 'TextController@add');
+Route::post('/text/edit', 'TextController@edit');
+Route::post('/text/delete', 'TextController@delete');
+Route::get('home/text/fetch_image/{id}', 'TextController@fetch_image');

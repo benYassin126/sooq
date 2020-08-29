@@ -13,7 +13,7 @@
                 </div>
                 @endif
             </div>
-            <div class="chatbox-holder">
+            <div class="chatbox-holder" style="display: none;">
                 <div class="chatbox chatbox-min">
                     <div class="chatbox-top">
                         <div class="chatbox-avatar">
@@ -57,13 +57,14 @@
                         <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
                             @csrf
                             <input type="hidden" name="UserID" value="{{Auth::id()}}">
-                            <button class="btn btn-block btn-success">أعتمد التصميم <i class="fas fa-check"></i></button>
+                            <button class="btn btn-block btn-success mb-2">أعتمد التصميم <i class="fas fa-check"></i></button>
                         </form>
                         @endif
                         <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">التصميم رهيب .. لكن بعدل على الصور والألوان <i class="fas fa-edit"></i></button>
                         <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post">
                             @csrf
                             <input type="hidden" name="changeTemplate">
+                            <input type="hidden" name="anotherTemplate">
                             <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
                             <input type="submit" class="btn btn-secondary  btn-block mt-2 " value="ابغى تصميم مختلف">
                         </form>
@@ -86,7 +87,7 @@
                         <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
                             @csrf
                             <input type="hidden" name="UserID" value="{{Auth::id()}}">
-                            <button class="btn btn-block btn-success">أعتمد التصميم <i class="fas fa-check"></i></button>
+                            <button class="btn btn-block btn-success mb-2">أعتمد التصميم <i class="fas fa-check"></i></button>
                         </form>
                         <button class="btn btn-block btn-info "  data-toggle="modal" data-target="#exampleModal">جرب تعدل الألوان <i class="fas fa-edit"></i></button>
                         @endif
@@ -99,12 +100,6 @@
                         </form>
                     </div>
                     @endif
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <div class=" text-center">
-                    <h3>ها شرايك ؟ </h3>
-                    <button class="btn btn-primary btn-lg a3tmed mt-2 mb-4">اعتمد / عدل <i class="fas fa-check"></i><i class="fas fa-edit"></i></button>
                 </div>
             </div>
             <div class="col-md-6 col-sm-12">
@@ -138,11 +133,14 @@
                                 <div class="inner-shadow"></div>
                                 <div class="screen">
                                     <img style="width: 100%;height: 250px" src="/img/instMock.png">
-                                    @forelse(session()->get('allImgPath.path') as $key => $img)
+                                    @foreach(session()->get('allImgPath.path') as $key => $img)
                                     <img class="imgesInMockUp" src="/img/output/{{$img}}.png">
-                                    @empty
-                                    {{'pre'}}
-                                    @endforelse
+                                    @endforeach
+                                    @if (count(session()->get('allImgPath.path')) < 24 )
+                                    @for($i = 0; $i < (24 - count(session()->get('allImgPath.path'))); $i++)
+                                    <img class="imgesInMockUp" src="/img/show.png">
+                                    @endfor
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -174,6 +172,38 @@
                 </div>
             </div>
             <!-- end Show Template -->
+
+            <div class="col-md-6 col-sm-12 mt-4 mt-50">
+                <div class="text-center allBut">
+                    <!-- Save -->
+                    @guest
+                    <button class="btn main-btn-success main-btn-sm   ml-2 mb-4" data-toggle="modal" data-target="#exampleModal3"><i class="fas fa-check"></i> حفظ   </button>
+                    @endauth
+                    @if (!Auth::guest())
+                    <form id="a3tmed" action="{{ url('/try/form4') }}"  class="form-horizontal" method="post">
+                        @csrf
+                        <input type="hidden" name="UserID" value="{{Auth::id()}}">
+                        <button class="btn main-btn-success main-btn-sm "> حفظ    <i class="fas fa-check"></i></button>
+                    </form>
+                    @endif
+                    <!-- Edit -->
+                    <button class="btn main-btn main-btn-sm  ml-2 mb-4"  data-toggle="modal" data-target="#exampleModal"><i class="fas fa-edit"></i> تعديل</button>
+                    <!-- New Design -->
+                    @if(session()->get('CountOfTry') >= 0 && session()->get('CountOfTry') <= 2 )
+                    <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post" style="display: inline;">
+                        @csrf
+                        <input type="hidden" name="changeTemplate">
+                        <input type="hidden" name="anotherTemplate">
+                        <input type="hidden" name="anotherTry" value="{{session()->get('CountOfTry')}}">
+                        <button type="submit" class="btn main-btn main-btn-sm  ml-2 mb-4"><i class="nav-icon fas fa-magic"></i> تصميم جديد</button>
+                    </form>
+                    @endif
+                    @if(session()->get('CountOfTry') > 2)
+                        <button class="btn main-btn ml-2 mb-4 main-btn-sm "  data-toggle="modal" data-target="#exampleModal2">تصميم جديد<i class="fas fa-exchange-alt"></i></button>
+                    @endif
+                    <button style="display: none;" class="main-btn a3tmed mt-2 mb-50">اعتمد / عدل <i class="fas fa-check"></i><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -192,10 +222,9 @@
                     <div class="card-body">
                         @guest
                         <div class="form-group">
-                            <label class="control-label ml-2">الصور المفرغة</label><br>
-                            <p class="control-label ml-2">هذي الأداة بتساعدك كثيير في تفريغ الصور </label><a target=" _blank" href="https://www.remove.bg"><span class="right badge badge-danger"> اضغط هنا لتفريغ الصور </p></a>
+                            <label class="control-label ml-2">صور المنتجات ( بدون خلفية )</label><br>
                             <div>
-                                <input type="file" name="Transparent[]"   multiple="multiple" />
+                                <input type="file" name="Transparent[]"   multiple="multiple" accept="image/*"  />
                             </div>
                             @if($errors->has('Transparent.*'))
                             <p style="color: red;font-weight: bold;">تأكد من صيغ الملفات المدخلة وحجمها</p>
@@ -203,9 +232,9 @@
                         </div>
                         <hr>
                         <div class="form-group">
-                            <label class="control-label ml-2">الصور البيئية</label>
+                            <label class="control-label ml-2">صور المنتجات ( مع خلفية )</label>
                             <div>
-                                <input type="file" name="WithBackGound[]"   multiple="multiple"  />
+                                <input type="file" name="WithBackGound[]"   multiple="multiple" accept="image/*"  />
                             </div>
                             @if($errors->has('WithBackGound.*'))
                             <p style="color: red;font-weight: bold;">تأكد من صيغ الملفات المدخلة وحجمها</p>
@@ -213,7 +242,9 @@
                         </div>
                         <hr>
                         @endauth
+                        @if(session()->get('MineColor') != '#010101' || session()->get('SubColor') != '#010101')
                         <a class="btn btn-dark" onclick="replaceColor();">عكس الآلوان  </a>
+                        @endif
                         <div class="form-group">
                             <label class="control-label mt-4">لون الهوية الأساسي  (Hex)</label>
                             <div>
