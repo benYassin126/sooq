@@ -11,6 +11,7 @@ use Session;
 use App\UserDesign;
 use App\User;
 use Mail;
+use ZipArchive;
 use App\Mail\images;
 
 class HomeController extends Controller
@@ -66,6 +67,35 @@ class HomeController extends Controller
        $response->header('Content-Type', 'image/png');
 
        return $response;
+   }
+
+   function dwonloadAllImages(Request $request) {
+
+    $UserID = Auth::id();
+    $allUserDesigns = UserDesign::Select('id')->where('UserID',$UserID)->get();
+
+
+$files = $allUserDesigns;
+
+
+$tmpFile = tempnam('.', '');
+
+$zip = new ZipArchive;
+$zip->open($tmpFile, ZipArchive::CREATE);
+foreach ($files as $file) {
+  $imgUrl = "https://rwwj.website/home/fetch_image/". $file->id . ".png";
+
+    $download_file = file_get_contents($imgUrl);
+
+    #add it to the zip
+    $zip->addFromString(basename($imgUrl), $download_file);
+}
+$zip->close();
+header('Content-disposition: attachment; filename=file.zip');
+header('Content-Type: application/zip');
+readfile($tmpFile);
+unlink($tmpFile);
+
    }
 
 }

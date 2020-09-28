@@ -414,20 +414,32 @@ margin-top: 40px;
 .content-wrapper {
 background: #fff;
 }
-/*
-.sidebar-dark-primary {
-  background-color: #EB3656;
+
+.slick-prev:before, .slick-next:before {
+    color: #dc3545;
+
+}
+.slick-slider {
+    direction: ltr;
+}
+.MySlide {
+    height: 400px;
+max-width:400px;
+    margin: 0 auto;
+}
+.progress {
+    height: 20px;
+    margin: 0 auto;
 }
 
-.sidebar-dark-primary .sidebar a
-{
-    color: #fff;
+.progress-bar {
+    background-color: #eb3656;
+        transition: width 50s ease-in-out;
 }
-[class*="sidebar-dark"] .brand-link
-{
-    border-bottom: 1px solid #fff
+#pageloaderWhenDesign .contentWhenDesign {
+margin-top: 20%;
 }
-[class*="sidebar-dark"] .user-panel {
-    border-bottom-color: #fff;
+#typed {
+  color: #eb3656;
+  font-size: 30px;
 }
-*/

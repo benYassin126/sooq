@@ -39,7 +39,7 @@
                               <img style="width:150px;height: 110px; float: left;" src="/img/back.jpg">
                               <h6 class="control-label ml-2">صور منتجاتك ( مع خلفية)</h6>
                               <div>
-                                <input type="file" name="WithBackGound[]" required style="max-width: 100%"  multiple="multiple"  accept="image/*"  />
+                                <input type="file" name="WithBackGound[]" id="WithBackGound"  style="max-width: 100%"  multiple="multiple"  accept="image/*"  />
                               </div>
                               @if($errors->has('WithBackGound.*'))
                               <p style="color: red;font-weight: bold;">تأكد من صيغ الملفات المدخلة وحجمها</p>
@@ -53,7 +53,7 @@
 
                               <h6 class="control-label mb-2">صور منتجاتك ( بدون خلفية )</h6>
                               <div>
-                                <input type="file" name="Transparent[]" style="max-width: 100%" required multiple="multiple"  accept="image/*" />
+                                <input type="file" name="Transparent[]" id="Transparent" style="max-width: 100%" required multiple="multiple"  accept="image/*" />
                               </div>
                               @if($errors->has('Transparent.*'))
                               <p style="color: red;font-weight: bold;">تأكد من صيغ الملفات المدخلة وحجمها</p>

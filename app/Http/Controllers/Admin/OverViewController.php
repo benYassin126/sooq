@@ -21,7 +21,44 @@ class OverViewController extends Controller
         $Nots = Nots::select('Nots','PhoneNumber')->get();
         $CountOfUsers = User::select('id')->count();
         $CountOfImgs = Img::select('id')->count();
-        return view('admin.overView.index',compact('BusinessTypeTotal','CountOfUsers','CountOfImgs','Nots'));
+
+        //Statical For A/B Testing
+
+        //Total of A Before
+        $fname = './img/TestingType/A/befor_send.txt';
+        $fp = fopen($fname,'r');
+        $ABefore = fread($fp, filesize($fname));
+        //Total of B Before
+        $fname = './img/TestingType/B/befor_send.txt';
+        $fp = fopen($fname,'r');
+        $BBefore = fread($fp, filesize($fname));
+        //Total of A After
+        $fname = './img/TestingType/A/after_send.txt';
+        $fp = fopen($fname,'r');
+        $AAfter = fread($fp, filesize($fname));
+        //Total of B After
+        $fname = './img/TestingType/B/after_send.txt';
+        $fp = fopen($fname,'r');
+        $BAfter = fread($fp, filesize($fname));
+        //Total of A compleate
+        $AComplate = User::select('id')->where('TestingType','A')->count();
+        //Total of B compleate
+        $BComplate = User::select('id')->where('TestingType','B')->count();
+
+        //PRESINT For B [wash and go]
+        $PrB = ($BAfter / $BBefore) * 100;
+
+        //PRESINT FOR A COMPLATE
+        $PrAComplate = ($AComplate / $AAfter) * 100;
+
+
+        //PRESINT FOR B COMPLATE
+        $PrBComplate = ($BComplate / $BAfter) * 100;
+
+        //End Statical For A/B Testing
+
+
+        return view('admin.overView.index',compact('BusinessTypeTotal','CountOfUsers','CountOfImgs','Nots','ABefore','AAfter','BBefore','BAfter','AComplate','BComplate','PrAComplate','PrBComplate','PrB'));
     }
     public function allDesigns () {
         $log_directory = 'img/show';

@@ -623,7 +623,7 @@ p {
   padding: 0;
   position: relative; }
   .navbar .navbar-brand img {
-    max-width: 112px; }
+    max-width: 70px; }
   .navbar .navbar-toggler .toggler-icon {
     width: 30px;
     height: 2px;
@@ -1653,11 +1653,13 @@ START PROGESS
 }
 
 .progress {
-    height: 20px
+    height: 20px;
+    margin: 0 auto;
 }
 
 .progress-bar {
-    background-color: #eb3656
+    background-color: #eb3656;
+        transition: width 50s ease-in-out;
 }
 .progress-barComplate {
       background-color: green;
@@ -2054,7 +2056,7 @@ margin-top: 40px;
 
 #pageloader,#pageloaderWhenDesign
 {
-  background: rgba( 255, 255, 255, 0.8 );
+  background:#f8f9faeb;
   display: none;
   height: 100%;
   position: fixed;
@@ -2071,13 +2073,8 @@ margin-top: 40px;
   top: 50%;
 }
 
-#pageloaderWhenDesign img {
-    width: 358px;
-    left: 50%;
-    margin-left: -180px;
-    margin-top: -150px;
-    position: absolute;
-    top: 50%;
+#pageloaderWhenDesign .contentWhenDesign {
+margin-top: 20%;
 }
 .pricing-table {
   text-align: center;
@@ -2256,5 +2253,14 @@ margin-top: 40px;
     border-top: 5px solid;
     border-bottom: 5px solid;
     padding-top: 20px;
-    margin-bottom: 80px;
+    margin-bottom:40px;
+}
+
+#typed {
+  color: #eb3656;
+  font-size: 30px;
+}
+
+.btn-primary {
+    color: #fff !important;
 }

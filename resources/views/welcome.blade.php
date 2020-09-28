@@ -2,14 +2,14 @@
 
 @section('content')
 
-        <div class="header-banner d-flex align-items-center mt-30">
+        <div class="header-banner d-flex align-items-center mt-80">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-sm-12 ">
                         <div class="banner-content">
                             <h4 class="sub-title wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="1s">ياهلا فيك</h4>
                             <h1 class="banner-title mt-10 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="2s"><span>سّوق  </span> .. اصنع محتوى شهر في دقيقة !</h1>
-                            <a class="main-btn mt-25 wow fadeInUp mb-4" data-wow-duration="1.5s" data-wow-delay="2.3s" href="{{ route('try') }}">جرب سوّق</a>
+                            <a class="main-btn mt-25 wow fadeInUp mb-4" data-wow-duration="1.5s" data-wow-delay="2.3s" href="{{ route('try') }}">جرب سوّق مجاناً</a>
 
                         </div> <!-- banner content -->
                     </div>

@@ -1,3 +1,14 @@
+//valdite max file for images
+$("#Transparent,#WithBackGound").on("change", function() {
+    if ($("#Transparent")[0].files.length > 6 || $("#WithBackGound")[0].files.length > 6) {
+        alert("العدد  المسموح به 6 صور فقط");
+    }
+
+});
+function goBack() {
+  alert(document.referrer);
+  window.history.back();
+}
 
 //Function to send form without refresh page
 function post()
@@ -61,10 +72,39 @@ $('#changeTemplateForm').one('submit', function() {
 });
 
 
+$('#ColorsForm').on("submit",function(){
 
+  var MineColor = document.getElementById('MineColor');
+  var SubColor = document.getElementById('SubColor');
+  var Coloralert = document.getElementById('Coloralert');
 
-$("#changeTemplateForm,#tryForm,#ColorsForm").on("submit", function(){
+   if (MineColor.value == '#010101' || SubColor.value == '#010101') {
+    event.preventDefault();
+    Coloralert.style.display='block';
+   }else
+   {
+     $("#pageloaderWhenDesign").fadeIn();
+     $('.progress-bar').css('width', '95%');
+     var typed = new Typed('#typed',{
+                    stringsElement: '#typed-strings',
+                    backSpeed: 30,
+                    typeSpeed: 90,
+                     shuffle: true,
+                    loop: true,
+                  });
+   }
+})
+
+$("#changeTemplateForm,#tryForm").on("submit", function(){
     $("#pageloaderWhenDesign").fadeIn();
+    $('.progress-bar').css('width', '95%');
+     var typed = new Typed('#typed',{
+                    stringsElement: '#typed-strings',
+                    backSpeed: 30,
+                    typeSpeed: 90,
+                     shuffle: true,
+                    loop: true,
+                  });
   });//submit
 
 $("#uploadImgsForm,#registerForm,#a3tmed").on("submit", function(){
@@ -115,20 +155,6 @@ SubColor.value = TempColor;
 
 }
 
-
-function defultColor(){
-
- var MineColor = document.getElementById('MineColor');
- var SubColor = document.getElementById('SubColor');
- var TempColor = SubColor.value;
-
-
-    SubColor.value = "#010101";
-MineColor.value =  "#010101";
-
-
-
-}
 
 
 $(function(){

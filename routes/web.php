@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/home/dwonloadAllImages', 'HomeController@dwonloadAllImages');
 Route::get('home/fetch_image/{id}', 'HomeController@fetch_image');
 //Try Controller
 Route::get('/try','TryController@createStep1')->name('try');
@@ -46,6 +47,7 @@ Route::post('/profile', 'ProfileController@edit')->name('profile');
 
 
 Route::get('/text', 'TextController@index')->name('text');
+Route::post('/text/addPrices', 'TextController@addPrices');
 Route::post('/text/add', 'TextController@add');
 Route::post('/text/edit', 'TextController@edit');
 Route::post('/text/delete', 'TextController@delete');

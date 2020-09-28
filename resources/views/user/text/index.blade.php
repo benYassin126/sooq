@@ -48,7 +48,6 @@
                             <button data-toggle="modal" data-target="#{{$img->id}}" class="btn btn-block btn-success">اضافة نص</button>
                             @else
                             <button data-toggle="modal" data-target="#{{$img->id * 2}}" class="btn btn-block btn-info">تعديل النص</button>
-
                             <form action="{{ url('/text/delete') }}" method="post" class="mt-2">
                                 @csrf
                                 <input type="hidden" name="id" value="{{$img->id}}">

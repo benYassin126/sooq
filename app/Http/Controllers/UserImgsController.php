@@ -134,12 +134,31 @@ class UserImgsController extends Controller
      */
     public function update(Request $request, Img $img)
     {
-
-        $request->validate([
+      $request->validate([
            'ImgType' => 'required'
        ]);
-        $img->update($request->all());
-        return redirect('/imgs')->with('success', 'تم تغيير نوع الصورة بنجاح');
+
+
+      if ($request->ShowName == 'on') {
+         $request->ShowName = 'yes';
+      }else {
+        $request->ShowName = 'no';
+      }
+
+      $form_data = array(
+      'ImgName' => $request->ImgName,
+      'ShowName' => $request->ShowName,
+      'ImgSection' => $request->ImgSection,
+      'ImgType' => $request->ImgType,
+      'ImgPrice' => $request->ImgPrice,
+      'ImgSPrice' => $request->ImgSPrice,
+      'ImgMPrice' => $request->ImgMPrice,
+      'ImgLPrice' => $request->ImgLPrice,
+      );
+
+
+        $img->update($form_data);
+        return redirect('/imgs')->with('success', 'تم تحديث بيانات المنتج');
     }
 
     /**

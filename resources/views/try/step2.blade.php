@@ -18,6 +18,7 @@
                         <!-- Main content -->
                         <div class="content">
                             <div class="container-fluid">
+                                {{( session()->get('Testing') )}}
                                 <!-- Srtat Form -->
                                 <div class="row">
                                     <div class="card card-info bg-color  mb-4" style="width:100%">
@@ -26,7 +27,7 @@
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-sm-12 mb-30" style="border-left: 1px solid #eb36561f">
-                                                        @if (session()->get('Testing') == 'A')
+                                                        @if ( session()->get('Testing') == 'B')
                                                         <div class="form-group select-img">
                                                             <h6 class="control-label">اختر التصميم</h6>
                                                             <div class="row">
@@ -46,9 +47,8 @@
                                                         </div>
                                                         <hr>
                                                         @endif
-                                                        {{session()->get('Testing')}}
-
-                                                        <div class="form-group mt-4 mb-4">
+                                                        <div class="form-group mt-4 mb-2">
+                                                            <p id="Coloralert" class="mb-4 alert alert-danger" style="font-weight: bold;display: none;">زودنا بألوان هويتك لاهنت</p>
                                                             <h6 class="control-label">لون الهوية الأساسي  (Hex) </h6>
                                                             <div>
                                                                 <input type="color" name="PicMineColor" id= "PicMineColor" onchange="picMineFun()" >
@@ -65,52 +65,46 @@
                                                     </div>
                                                     <div class="col-lg-6 col-sm-12">
                                                         <div class="form-group">
-                                                            <h6 style="display: none;" class="control-label">نشاطك التجاري</h6>
-                                                            <select style="display: none;" name="BusinessType" class="form-control" onchange='CheckBusinessType(this.value);'>
+                                                            <h6  class="control-label">نوع المطعم</h6>
+                                                            <select  name="BusinessType" class="form-control" onchange='CheckBusinessType(this.value);'>
                                                                 <option value="" disabled>اختر نشاط</option>
-                                                                <option value="مأكولات ومشروبات  ">مأكولات ومشروبات</option>
-                                                                <option value="ألعاب" >ألعاب</option>
-                                                                <option value="مفروشات" >مفروشات</option>
-                                                                <option value="إلكترونيات" >إلكترونيات</option>
-                                                                <option value="احتياجات المنزل" >احتياجات المنزل</option>
-                                                                <option value="خدمات">خدمات</option>
-                                                                <option value="صحة ولياقة ">صحة ولياقة </option>
-                                                                <option value="قرطاسية">قرطاسية</option>
-                                                                <option value="كتب">كتب</option>
-                                                                <option value="جوهرات وإكسسوارات  ">مجوهرات وإكسسوارات </option>
-                                                                <option value="ملابس وأحذية">ملابس وأحذية</option>
-                                                                <option value="ملحقات السيارة">ملحقات السيارة</option>
-                                                                <option value="منتجات التجميل والعناية بالبشرة">منتجات التجميل والعناية بالبشرة</option>
-                                                                <option value="هدايا">هدايا</option>
-                                                                <option value="others">أخرى</option>
+                                                                <option value="cofy">كوفي شوب</option>
+                                                                <option value="borgar">برجر</option>
+                                                                <option value="shawrma">شاورما</option>
+                                                                <option value="brost">بروست</option>
+                                                                <option value="mshweat">مشويات</option>
+                                                                <option value="pizza">بيتزا</option>
+                                                                <option value="flafel">فلافل</option>
+                                                                <option value="mandy">شعبيات ( رز - دجاج )</option>
+                                                                <option value="ftor">شعبيات ( فطور )</option>
+                                                                <option value="others">اخرى</option>
                                                             </select>
-                                                            <input placeholder="أدخل نشاطك التجاري *" id="OtherBusinessType" class="form-control mt-2" type="text" name="OtherBusinessType" style='display:none;'>
+                                                            <input placeholder="نوع مطعمك*" id="OtherBusinessType" class="form-control mt-2" type="text" name="OtherBusinessType" style='display:none;'>
                                                         </div>
                                                         <div class="form-group mt-4">
                                                             <h6 class="control-label">رقم الجوال</h6>
                                                             <div>
-                                                                <input id="phone" class="form-control" type="tel" name="PhoneNumber" placeholder="05xxxxxxx" minlength="10" maxlength="10" size="10" required >
+                                                                <input id="phone" class="form-control" type="tel" name="PhoneNumber" placeholder="05xxxxxxx" minlength="10" maxlength="10" size="10"  >
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="div-center">
-                                                <button type="submit" class="btn btn-success"> شوف المحتوى   <i class="fa fa-eye mr-2"></i> </button>
-                                            </div>
-                                        </form>
+                                                <div class="div-center">
+                                                    <button type="submit" class="btn btn-success"> شوف المحتوى   <i class="fa fa-eye mr-2"></i> </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
+                                    <!-- End Form -->
                                 </div>
-                                <!-- End Form -->
+                                <!-- /.login-card-body -->
                             </div>
-                            <!-- /.login-card-body -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 <!-- Hero Area End -->
 @endsection
