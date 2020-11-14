@@ -69,7 +69,8 @@ class TextController extends Controller
 
         //get all Template Imgs
         foreach ($allUserDesign as $singleDesign) {
-            $img = imagecreatefromstring($singleDesign->TheImg);
+            $imgPath = './img/storage/user_designs/'.$singleDesign->TheImg.'.png';
+            $img = imagecreatefrompng($imgPath);
 
             //get Prodect Data
             $TheProdect = Img::select('ImgPrice','ImgLPrice','ImgMPrice','ImgSPrice','ImgSection','ImgName','ShowName')->where('id',$singleDesign->ImgID)->first();
@@ -100,13 +101,13 @@ class TextController extends Controller
                 imagettftext($img, 14, 0, $xC  - 23, 640 + 10 , $color, $font, $ProcdectLargePrice . ' SR');
 
             }elseif ($ProcdectOrginalPrice != null && $ProcdectLargePrice == null) {
-                //Second Case [Fill Just Orginal] = >fill just orginal
-                imagefilledellipse($img, 750, 260, 90, 90, $White);
+                //Second Case [Fill Just Orginal] = fill just orginal
+               // imagefilledellipse($img, 750, 260, 90, 90, $White);
                 if ($ProcdectOrginalPrice - floor($ProcdectOrginalPrice)>0) {
-                    imagettftext($img, 18, 0,720, 270, $color, $font, $ProcdectOrginalPrice);
+                    imagettftext($img, 18, 0,720, 240, $color, $font, $ProcdectOrginalPrice);
 
                 }else{
-                imagettftext($img, 18, 0, 720, 270, $color, $font, $ProcdectOrginalPrice .' SR');
+                imagettftext($img, 60, 0, 720, 240, $color, $font, $ProcdectOrginalPrice .' SR');
 
             }
 
@@ -125,12 +126,16 @@ class TextController extends Controller
             //start update image
             $img = Image::make($img);
             Response::make($img->encode('png'));
-            $form_data = array(
-            'TheImg' => $img,
-            );
+            $img = imagecreatefromstring($img);
 
-            $image = UserDesign::find($singleDesign->id);
-            $image->update($form_data);
+            //Delete OLD Image ..
+
+            if (file_exists($imgPath)) {
+                unlink($imgPath);
+            }
+
+            //Storage New Image With same name
+            imagepng($img,$imgPath, 9);
         }
 
 
@@ -172,8 +177,9 @@ class TextController extends Controller
     public function add(Request $request) {
 
       $image_id = $request->id;
-      $color = hexdec($request->color);
+      $color = hexdec('#000000');
       $text = $request->text;
+      $font =  realpath('./font/ae_AlHor.ttf');
       $UserID = Auth::id();
       $folderName = './img/before/'. $UserID;
      //   $price = $request->price;
@@ -188,21 +194,23 @@ class TextController extends Controller
        $text = $Arabic->utf8Glyphs($text);
 
 
+      $allImg = UserDesign::select('TheImg','DesignID')->where('id',$image_id)->first();
+      $DesignID = $allImg->DesignID;
 
-        //get the image and store it into before file
-        $allImg = UserDesign::select('TheImg','DesignID')->where('id',$image_id)->first();
-        $img = imagecreatefromstring($allImg->TheImg);
-        imagepng($img, "./img/before/". $UserID . '/' . $image_id .".png", 9);
-
-        $DesignID = $allImg->DesignID;
-
-        $font =  realpath('./font/ae_AlHor.ttf');
+      //get the image and store it into before file
+      $imgPath = './img/storage/user_designs/'.$allImg->TheImg.'.png';
+      $img = imagecreatefrompng($imgPath);
+      imagepng($img, "./img/before/". $UserID . '/' . $image_id .".png", 9);
 
 
+
+
+
+
+/*
         //get x and y place
        $Template = TemplateImg::select('TextX','TextY','PriceX','PriceY')->where('id',$DesignID)->first();
 
-/*
        //if template not aceprt text
        if ($Template->TextX == 0 || $Template->TextY == 0) {
              return redirect()->back()->with('erorr', 'صورة غير قابلة للكتابة');
@@ -216,48 +224,14 @@ class TextController extends Controller
 
 
         //start write a text into image
-        // imagettftext($img, 100, 0, $xRight, 200, $color, $font, $text);
-          // imagettftext($img, 100, 0,$Template->PriceX, $Template->PriceY, $color, $font, $price);
+         imagettftext($img, 100, 0, $xRight, 200,$color , $font, $text);
 
-
-$White = hexdec('#ffffff');
-
-$xC = 100;
-$yC = 440;
-$yT = $yC - 20;
-$yP = $yC + 10;
-$text = $Arabic->utf8Glyphs('مظغوط');
-/*
-$xT =
-$yT =
-$xP =
-$yP =
-*/
-
-
-/*
-$text = '10 SR';
-imagefilledellipse($img, $xC * 2, $yC, 90, 90, $White);
-imagettftext($img, 18, 0, $xC * 2 - 20, $yT, $color, $font, $Arabic->utf8Glyphs('وسط'));
-imagettftext($img, 14, 0, $xC * 2 - 20, $yP, $color, $font, $text);
-
-
-$text = '15 SR';
-imagefilledellipse($img, $xC * 3, $yC, 90, 90, $White);
-imagettftext($img, 18, 0, $xC * 3 - 15, $yT, $color, $font, $Arabic->utf8Glyphs('كبير'));
-imagettftext($img, 14, 0, $xC * 3 - 20, $yP, $color, $font, $text);
-*/
 
         $image = Image::make($img);
         Response::make($image->encode('png'));
+        $image = imagecreatefromstring($image);
+        imagepng($image,"./img/storage/user_designs/". $allImg->TheImg .".png",9);
 
-        //start update image
-           $form_data = array(
-              'TheImg' => $image,
-          );
-
-       $image = UserDesign::find($image_id);
-       $image->update($form_data);
        return redirect()->back()->with('success', 'تم اضافة النص');
 
     }
@@ -308,9 +282,7 @@ imagettftext($img, 14, 0, $xC * 3 - 20, $yP, $color, $font, $text);
        Response::make($image->encode('png'));
 
        //start update image
-       $form_data = array(
-          'TheImg' => $image,
-       );
+       imagepng($image,"./img/storage/user_designs/". $TheImg .".png",9);
 
        $image = UserDesign::find($image_id);
        $image->update($form_data);

@@ -41,6 +41,7 @@ $app->singleton(
     App\Exceptions\Handler::class
 );
 
+$app->register(Mtownsend\RemoveBg\Providers\RemoveBgServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Return The Application

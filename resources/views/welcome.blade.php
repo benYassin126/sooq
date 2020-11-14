@@ -8,7 +8,7 @@
                     <div class="col-xl-6 col-lg-6 col-sm-12 ">
                         <div class="banner-content">
                             <h4 class="sub-title wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="1s">ياهلا فيك</h4>
-                            <h1 class="banner-title mt-10 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="2s"><span>سّوق  </span> .. اصنع محتوى شهر في دقيقة !</h1>
+                            <h1 class="banner-title mt-10 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="2s"><span>سوّق  </span> .. اصنع محتوى شهر في دقيقة !</h1>
                             <a class="main-btn mt-25 wow fadeInUp mb-4" data-wow-duration="1.5s" data-wow-delay="2.3s" href="{{ route('try') }}">جرب سوّق مجاناً</a>
 
                         </div> <!-- banner content -->
@@ -31,7 +31,7 @@
 
     <section id="about" class="about-area pt-80 pb-130">
         <div class="section-title text-center pb-20">
-              <h2 class="title">كيف ممكن يفيدني سوق ؟</h2>
+              <h2 class="title">كيف ممكن يفيدني سوّق ؟</h2>
         </div> <!-- section title -->
         <div class="container">
             <div class="row">
@@ -52,10 +52,10 @@
 
                     <div class="about-content mt-45">
 
-                        <h4 class="about-welcome">سوق هو</h4>
+                        <h4 class="about-welcome">سوّق هو</h4>
                         <h3 class="about-title mt-10">
                             عبارة عن منصة تساعدك على صناعة محتوى رائع لمنصات التواصل الاجتماعي وخلال مدة زمنية قصيرة</h3>
-                                              <a class="main-btn mt-25 " href="#">جرب سوّق</a>
+                                              <a class="main-btn mt-25 " href="{{ route('try') }}">جرب سوّق</a>
                     </div> <!-- about content -->
                 </div>
             </div> <!-- row -->
@@ -71,7 +71,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="section-title text-center pb-20">
-                        <h5 class="sub-title mb-15">مميزات سوق</h5>
+                        <h5 class="sub-title mb-15">مميزات سوّق</h5>
                         <h2 class="title">وش يقدم سوّق</h2>
                     </div> <!-- section title -->
                 </div>
@@ -139,7 +139,7 @@
                         </div>
                         <div class="services-content mt-15">
                             <h4 class="services-title">بناء محتوى مخصص بهويتك التجارية  </h4>
-                            <p class="mt-20">تتميز تصاميم سوق بأنها موافقة لهويتك الإعلامية</p>
+                            <p class="mt-20">تتميز تصاميم سوّق بأنها موافقة لهويتك الإعلامية</p>
                         </div>
                     </div> <!-- single services -->
                 </div>
@@ -150,7 +150,7 @@
     <!--====== SERVICES PART ENDS ======-->
 
 
-    <!--====== START Price ======-->
+    <!--====== START Price ======--
 
 <h2 class="title text-center mt-30 mb-4 ">باقات سوّق</h2>
 <div class="pricing-table">
@@ -197,12 +197,12 @@
             <div class="row justify-content-center">
                 <div class="col-lg-6">
                     <div class="section-title text-center pb-20">
-                        <h2 class="title mt-0">عملاء سوق</h2>
+                        <h2 class="title mt-0">عملاء سوّق</h2>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
             <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="single-team text-center mt-30 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="0.4s">
                         <div class="team-image">
                             <img src="{{url('/')}}/design/LandingPage/images/team/team-1.png" alt="Team">
@@ -215,17 +215,7 @@
                         </div>
                     </div> <!-- single team -->
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="single-team text-center mt-30 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="0.8s">
-                        <div class="team-image">
-                            <img src="{{url('/')}}/design/LandingPage/images/team/team-2.png" alt="Team">
-                        </div>
-                        <div class="team-content">
-                            <h4 class="team-name"><a target="_blank" href="https://salla.sa/chicbody/">chic body</a></h4>
-                        </div>
-                    </div> <!-- single team -->
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="single-team text-center mt-30 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="1.2s">
                         <div class="team-image">
                             <img src="{{url('/')}}/design/LandingPage/images/team/team-3.png" alt="Team">
@@ -235,7 +225,7 @@
                         </div>
                     </div> <!-- single team -->
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
+                <div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="single-team text-center mt-30 wow fadeInUp" data-wow-duration="1.5s" data-wow-delay="1.6s">
                         <div class="team-image">
                             <img src="{{url('/')}}/design/LandingPage/images/team/team-4.png" alt="Team">
@@ -257,10 +247,14 @@
 
     <!--====== TESTIMONIAL PART START ======-->
 
-    <section id="testimonial" class="testimonial-area pt-130 pb-130  gray-bg">
+    <section id="testimonial" class="testimonial-area pt-100 pb-100  gray-bg">
         <div class="container">
+                   <div class="section-title text-center">
+                        <h2 class="title mt-0 mb-50"> قالوا عن سوّق</h2>
+                    </div> <!-- section title -->
             <div class="testimonial-bg bg_cover pt-80 pb-80" style="background-image: url(design/LandingPage/images/testimonial/testimonial-bg.png)">
                 <div class="row">
+
                     <div class="col-xl-4 offset-xl-7 col-lg-5 offset-lg-6 col-md-8 offset-md-2 col-sm-10 offset-sm-1">
                         <div class="testimonial-active">
                             <div class="single-testimonial text-center">
@@ -271,37 +265,26 @@
                                     </div>
                                 </div>
                                 <div class="testimonial-content mt-20">
-                                    <p>والله انتم كويسين .. فديتكم</p>
-                                    <h5 class="testimonial-name mt-15">وائل ياسين</h5>
-                                    <span class="sub-title">مطور سوّق</span>
+                                    <p>ما كنت اتوقع أنه شئ آلي راح يظهر الحساب كبراند احترافي وبشكل آلي
+شئ خراافي   </p>
+                                    <h5 class="testimonial-name mt-15">عبدالرحمن العليان</h5>
+                                    <span class="sub-title"> مؤسس نايس ون وشريك مؤسس لمطاعم كوزي</span>
                                 </div>
                             </div> <!-- single-testimonial -->
                             <div class="single-testimonial text-center">
                                 <div class="testimonial-image">
-                                    <img src="{{url('/')}}/design/LandingPage/images/testimonial/t-2.jpg" alt="Testimonial">
+                                    <img src="{{url('/')}}/design/LandingPage/images/testimonial/t-2.png" alt="Testimonial">
                                     <div class="quota">
                                         <i class="lni-quotation"></i>
                                     </div>
                                 </div>
                                 <div class="testimonial-content mt-20">
-                                    <p>Lorem ipsum dolor sit amet, ectetur adipiscing elit. Phasellus vel erat ces, commodo lectus eu, finibus diam. m ipsum dolor sit amet, ectetur.</p>
-                                    <h5 class="testimonial-name mt-15">Alina</h5>
-                                    <span class="sub-title">Tesla Motors</span>
+                                    <p>للامانه عمل جبار من افضل وابدع من ادار محتوى الحساب حتى اني قارنت مابين حسابات الفروع حنا من أفضل الحسابات .. الف الف شكر لكم</p>
+                                    <h5 class="testimonial-name mt-15">محمد السعوي</h5>
+                                    <span class="sub-title">مدير اقليمي لسلسة مطاعم فطيرة الفلافل</span>
                                 </div>
                             </div> <!-- single-testimonial -->
-                            <div class="single-testimonial text-center">
-                                <div class="testimonial-image">
-                                    <img src="{{url('/')}}/design/LandingPage/images/testimonial/t-3.jpg" alt="Testimonial">
-                                    <div class="quota">
-                                        <i class="lni-quotation"></i>
-                                    </div>
-                                </div>
-                                <div class="testimonial-content mt-20">
-                                    <p>Lorem ipsum dolor sit amet, ectetur adipiscing elit. Phasellus vel erat ces, commodo lectus eu, finibus diam. m ipsum dolor sit amet, ectetur.</p>
-                                    <h5 class="testimonial-name mt-15">Celina</h5>
-                                    <span class="sub-title">CEO, Alo</span>
-                                </div>
-                            </div> <!-- single-testimonial -->
+
                         </div> <!--  testimonial active -->
                     </div>
                 </div> <!-- row -->
@@ -326,7 +309,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="contact-form">
-                        <form id="contact-form" action="assets/contact.php" method="post" data-toggle="validator">
+                        <form id="contact-form" action="" method="post" data-toggle="validator">
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="single-form form-group">
@@ -337,12 +320,6 @@
                                 <div class="col-md-6">
                                     <div class="single-form form-group">
                                         <input type="email" name="email" placeholder="ايميلك" data-error="Valid email is required." required="required">
-                                        <div class="help-block with-errors"></div>
-                                    </div> <!-- single form -->
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="single-form form-group">
-                                        <input type="text" name="subject" placeholder="العنوان" data-error="Subject is required." required="required">
                                         <div class="help-block with-errors"></div>
                                     </div> <!-- single form -->
                                 </div>

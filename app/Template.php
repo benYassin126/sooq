@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Template extends Model
 {
     protected $fillable = [
-        'TemplateName', 'TemplateBackGround','MineColor','SubColor','SubSubColor',
+        'TemplateName', 'TemplateBackGround','MineColor','SubColor','SubSubColor','TemplateBackGroundName'
     ];
    public function TemplateImgs() {
     return $this->hasMany('TemplateImg','TemplateID');

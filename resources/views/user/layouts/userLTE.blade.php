@@ -95,9 +95,10 @@
                                     </p>
                                 </a>
                             </li>
-                            <!--
+                            {{--
+
                             <li class="nav-item">
-                                <a href="{{-- route('text') --}}" class="nav-link">
+                                <a href="{{ route('text') }}" class="nav-link">
                                     <i class="nav-icon fas fa-text-height"></i>
                                     <p>
                                         اضافة النصوص
@@ -105,7 +106,7 @@
                                 </a>
                             </li>
 
-                        -->
+                            --}}
 
                             <li class="nav-item">
                                 <a href="{{ url('/imgs') }}" class="nav-link">
@@ -116,10 +117,10 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ url('/publish') }}" class="nav-link">
                                     <i class="nav-icon fas fa-bullhorn"></i>
                                     <p>
-                                        ترويج <span class="right badge badge-danger">قريبا</span>
+                                        جدولة التصميم <span class="right badge badge-danger">انشر الآن</span>
                                     </p>
                                 </a>
                             </li>

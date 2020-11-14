@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Image;
+use Crypt;
 
 
 class UserController extends Controller
@@ -56,7 +57,7 @@ class UserController extends Controller
          $form_data = array(
           'name'  => $request->name,
           'email'  => $request->email,
-          'password' => encrypt($request->password),
+          'password' => Crypt::encrypt($request->password),
           'Balance' => $request->Balance,
           'Twitter' => $request->Twitter,
           'Instagram' => $request->Instagram,
@@ -111,7 +112,8 @@ class UserController extends Controller
     public function edit(User $user)
     {
          $thisUser = $user;
-         return view('admin.user.updateTemplate',compact('thisUser'));
+         $plinPassword = Crypt::decrypt($thisUser->password);
+         return view('admin.user.updateTemplate',compact('thisUser','plinPassword'));
     }
 
     /**
@@ -134,7 +136,7 @@ class UserController extends Controller
          $form_data = array(
           'name'  => $request->name,
           'email'  => $request->email,
-          'password' => encrypt($request->password),
+          'password' => Crypt::encrypt($request->password),
           'Balance' => $request->Balance,
           'Twitter' => $request->Twitter,
           'Instagram' => $request->Instagram,

@@ -41,7 +41,7 @@
                 <div class="col col-sm-12 col-md-6 col-lg-3">
                     <div class="card">
                         <div class="card-body text-center">
-                            <img style="width: 100%; height: 200px;" src="{{ url('/home/text/fetch_image') }}/{{$img->id}}">
+                            <img style="width: 100%; height: 200px;"  src="{{ url('/') }}/img/storage/user_designs/{{$img->TheImg}}.png">
                         </div>
                         <div class="card-footer">
                             @if(!file_exists('./img/before/' . auth::id() . '/'. $img->id .'.png'))

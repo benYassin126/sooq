@@ -61,12 +61,12 @@ class OverViewController extends Controller
         return view('admin.overView.index',compact('BusinessTypeTotal','CountOfUsers','CountOfImgs','Nots','ABefore','AAfter','BBefore','BAfter','AComplate','BComplate','PrAComplate','PrBComplate','PrB'));
     }
     public function allDesigns () {
-        $log_directory = 'img/show';
+        $log_directory = 'img/storage/user_designs';
         $all = glob($log_directory .'/*.*');
         return view('admin.overView.allDesigns',compact('all'));
     }
     public function allImages () {
-        $log_directory = 'img/all_images';
+        $log_directory = 'img/storage/imgs';
         $all = glob($log_directory .'/*.*');
         return view('admin.overView.allImages',compact('all'));
     }

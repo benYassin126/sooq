@@ -1,6 +1,33 @@
+$(".MainecolorPickSelector").colorPick({
+    'initialColor':'#010101',
+  'onColorSelected': function() {
+    this.element.css({'backgroundColor': this.color, 'color': this.color});
+    $('#MineColor').val(this.color);
+  }
+});
+
+$(".SubcolorPickSelector").colorPick({
+  'onColorSelected': function() {
+    this.element.css({'backgroundColor': this.color, 'color': this.color});
+    $('#SubColor').val(this.color);
+  }
+});
+
+$(".fileUpload").on("change", ".uploadBtn", function () {
+        $(this).siblings(".fileName").text($(this).val().replace(/C:\\fakepath\\/i, ''));
+});
+
+$('.MinePalateButton').click(function(){
+    $('#MineColorPalete').toggle('3000');
+})
+
+$('.SubPalateButton').click(function(){
+    $('#SubColorPalete').toggle('3000');
+})
+
 //valdite max file for images
 $("#Transparent,#WithBackGound").on("change", function() {
-    if ($("#Transparent")[0].files.length > 6 || $("#WithBackGound")[0].files.length > 6) {
+    if ( $("#WithBackGound")[0].files.length > 15) {
         alert("العدد  المسموح به 6 صور فقط");
     }
 
@@ -52,18 +79,30 @@ function post()
 //make value of inpue equal pic
 
 function picMineFun() {
+
  var MineColor = document.getElementById('MineColor');
  var PicMineColor = document.getElementById('PicMineColor').value;
-
  MineColor.value = PicMineColor;
 }
 
 function picSubeFun() {
+
  var SubColor = document.getElementById('SubColor');
  var PicSubColor = document.getElementById('PicSubColor').value;
 
  SubColor.value = PicSubColor;
 }
+
+function selectSubFun(color) {
+ var SubColor = document.getElementById('SubColor');
+ SubColor.value = color;
+}
+
+function selectMineFun(color) {
+ var MineColor = document.getElementById('MineColor');
+ MineColor.value = color;
+}
+
 
 //Hidde Submit Form After Send data
 
@@ -147,11 +186,21 @@ function replaceColor(){
 
  var MineColor = document.getElementById('MineColor');
  var SubColor = document.getElementById('SubColor');
+ var PicMineColor = document.getElementById('PicMineColor');
+ var PicSubColor = document.getElementById('PicSubColor');
  let TempColor;
- TempColor = MineColor.value;
+
+TempColor = MineColor.value;
 
 MineColor.value = SubColor.value;
 SubColor.value = TempColor;
+
+ var MineColor = document.getElementById('MineColor');
+ var SubColor = document.getElementById('SubColor');
+ TempColor = MineColor.value;
+
+PicMineColor.value = TempColor;
+PicSubColor.value = SubColor.value;
 
 }
 

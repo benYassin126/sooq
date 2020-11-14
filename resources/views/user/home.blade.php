@@ -46,11 +46,11 @@
         <hr>
         @endisset
         <br>
-        <h4 class="text-center ">حياك الله لوحة التحكم</h4>
+        <h4 class="text-center ">مرحبا بك في لوحة التحكم</h4>
         <div class="row showTemplate">
             <div class="col-sm-12 mt-4">
                 <div class=" text-center ">
-                    @if($allImgTrans != null )
+                    @if($allImgTrans != null && $allImgBack != null)
                     <form id="changeTemplateForm" class="form-horizontal" action="{{ url('/try/form2') }}" method="post" style="display: inline;">
                         @csrf
                         <input type="hidden" name="anotherTry" value="0">
@@ -62,14 +62,18 @@
                         @csrf
                         <button class="btn btn-primary  mt-2 "><i class="fas fa-tags"></i>  إضافة الأسعار الى التصميم</button>
                     </form>
-                    @else
-                    <p>عشان أبدأ اصمملك .. احتاج منك ترفع صور مفرغة وبيئية  لاهنت</p>
-                    <a href="{{ url('imgs') }} " class="btn btn-primary ">مكتبة الصور</a>
-                    @endif
+
                     <form  class="form-horizontal" action="{{ url('/home/dwonloadAllImages') }}" method="post" style="display: inline;">
                         @csrf
                         <button class="btn btn-primary mt-2 "><i class="fas fa-download"></i>  تحميل جميع الصور</button>
                     </form>
+
+
+                    @else
+                    <p>عشان أبدأ اصمملك .. احتاج منك ترفع صور مفرغة وبيئية  لاهنت</p>
+                    <a href="{{ url('imgs') }} " class="btn btn-primary ">مكتبة الصور</a>
+                    @endif
+
                 </div>
             </div>
             @if(isset($allUserDesigns))
@@ -81,8 +85,9 @@
                         <!-- Start Show Template -->
                         <div class="MySlide mt-4" id='one' >
                             <div class="autoplay">
+
                                 @forelse($allUserDesigns as $img)
-                                <div> <img style="width: 100%;height: 100%;" src="{{url('/')}}/home/fetch_image/{{$img->id}}"></div>
+                                <div> <img style="width: 100%;height: 100%;"  src="{{ url('/') }}/img/storage/user_designs/{{$img->TheImg}}.png"></div>
                                 @empty
                                 {{'ليس لديك تصميم حتى الآن'}}
                                 @endforelse
@@ -113,15 +118,17 @@
                                 <div class="screen">
                                     <img style="width: 100%;height: 250px" src="/img/instMock.png">
                                     @forelse($allUserDesigns as $img)
-                                    <img class="imgesInMockUp" src="{{url('/')}}/home/fetch_image/{{$img->id}}">
+                                    <img class="imgesInMockUp"  src="{{ url('/') }}/img/storage/user_designs/{{$img->TheImg}}.png">
                                     @empty
-                                    {{'ليس لديك تصميم حتى الآن'}}
+                                    {{''}}
                                     @endforelse
-                                    @if (count($allUserDesigns) < 24 )
-                                    @for($i = 0; $i < (24 - count($allUserDesigns)); $i++)
+
+                                    @if (count($allUserDesigns) < 12 )
+                                    @for($i = 0; $i < (12 - count($allUserDesigns)); $i++)
                                     <img class="imgesInMockUp" src="/img/show.png">
                                     @endfor
                                     @endif
+
                                 </div>
                             </div>
                         </div>

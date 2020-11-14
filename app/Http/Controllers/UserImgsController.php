@@ -64,20 +64,27 @@ class UserImgsController extends Controller
 
         $UserID = Auth::id();
        $request->validate([
-          'Transparent.*' => 'image|max:50120',
-          'WithBackGound.*' => 'image|max:50120',
+          'Transparent.*' => 'image|max:10240',//10MB
+          'WithBackGound.*' => 'image|max:10240',//10MB
 
       ]);
 
+
        if ($request->has('Transparent')) {
            foreach ($request->Transparent as $img) {
-               $image_file = $img;
-               $image = Image::make($image_file);
-               Response::make($image->encode('png'));
+             $destinationPath = public_path('./img/storage/imgs');
+             $name =  rand(0,5000000) . '.png';
+             $image_file = $img;
+             $image = Image::make($image_file);
+             Response::make($image->encode('png'));
+            $image = imagecreatefromstring($image);
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+             imagepng($image,$destinationPath.'/'.$name,9);
                $form_data = array(
                   'UserID'  => $UserID,
                   'ImgType'  => 'Transparent',
-                  'TheImg' => $image
+                  'TheImg' => $name
               );
                Img::create($form_data);
 
@@ -86,14 +93,18 @@ class UserImgsController extends Controller
 
        if ($request->has('WithBackGound')) {
            foreach ($request->WithBackGound as $img) {
-               $image_file = $img;
-               $image = Image::make($image_file);
-               Response::make($image->encode('png'));
-               $form_data = array(
-                  'UserID'  => $UserID,
-                  'ImgType'  => 'WithBackGound',
-                  'TheImg' => $image
-              );
+             $destinationPath = public_path('./img/storage/imgs');
+             $name =  rand(0,5000000) . '.png';
+             $image_file = $img;
+             $image = Image::make($image_file);
+             Response::make($image->encode('png'));
+            $image = imagecreatefromstring($image);
+             imagepng($image,$destinationPath.'/'.$name,9);
+                   $form_data = array(
+                      'UserID'  => $UserID,
+                      'ImgType'  => 'WithBackGound',
+                      'TheImg' => $name
+                  );
                Img::create($form_data);
 
            }

@@ -46,7 +46,7 @@
                 <div class="col col-sm-12 col-md-6 col-lg-3">
                     <div class="card">
                         <div class="card-body text-center">
-                            <img style="width: 100%; height: 200px;" src="{{ url('/home/imgs/fetch_image') }}/{{$img->id}}">
+                                <img style="width: 100%; height: 200px;"  src="{{ url('/') }}/img/storage/imgs/{{$img->TheImg}}">
                         </div>
                         <div class="card-footer">
                             <button data-toggle="modal" data-target="#{{$img->id}}" onclick="showAllPrices({{$img->id}})" class="btn btn-block btn-info">معلومات المنتج</button>

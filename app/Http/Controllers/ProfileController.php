@@ -7,7 +7,7 @@ use App\User;
 use Auth;
 use Redirect;
 use DB;
-use Hash;
+use Crypt;
 
 class ProfileController extends Controller
 {
@@ -42,7 +42,7 @@ class ProfileController extends Controller
 
 
          if ($request->MineColor != '') {
-          $form_data['password'] =  Hash::make($request->password);
+          $form_data['password'] =  Crypt::encrypt($request->password);
          }
          //update color only when user change it
          if ($request->MineColor != '#010101') {

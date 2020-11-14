@@ -30,6 +30,10 @@
         <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/animate.css">
         <!--====== Aos css ======-->
         <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/aos.css">
+        <!--====== colorPick.dark.theme css ======-->
+        <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/colorPick.dark.theme.css">
+        <!--====== colorPick css ======-->
+        <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/colorPick.css">
         <!--====== Slick css ======-->
         <link rel="stylesheet" href="{{url('/')}}/design/LandingPage/css/slick.css">
         <!--====== Default css ======-->
@@ -125,6 +129,10 @@
                                                     <div class="col-lg-12">
                                                         <div class="copyright text-center">
                                                             <p>جميع الحقوق محفوظة  سوّق</p>
+                                                            <a target="_blank" style="color: #eb3656; font-size: 20px;" href="https://twitter.com/soouq_sa"> <i class="lni-twitter"></i></a>
+                                                            <a target="_blank" style="color: #eb3656; font-size:  20px;"href="https://www.instagram.com/Soouq_sa"> <i class="lni-instagram"></i></a>
+                                                            <a target="_blank" style="color: #eb3656; font-size: 20px;" href="https://api.whatsapp.com/send?phone=966552300079"><i class="lni-whatsapp"></i></a>
+                                                            <br>
                                                             <a target="_blank" href="https://maroof.sa/147949">
                                                                 <img width="65px" height="30px"  src="https://niceonesa.com/_nuxt/img/7faf3e6.png">
                                                             </a>
@@ -159,8 +167,11 @@
                                                     <!--====== Scrolling Nav js ======-->
                                                     <script src="{{url('/')}}/design/LandingPage/js/scrolling-nav.js"></script>
                                                     <script src="{{url('/')}}/design/LandingPage/js/jquery.easing.min.js"></script>
+                                                    <script src="{{url('/')}}/design/LandingPage/js/color-scheme.js"></script>
                                                     <!--====== Aos js ======-->
                                                     <script src="{{url('/')}}/design/LandingPage/js/aos.js"></script>
+                                                    <!--====== colorPick js ======-->
+                                                    <script src="{{url('/')}}/design/LandingPage/js/colorPick.js"></script>
                                                     <!--====== Aos js ======-->
                                                     <!--====== Typed js ======-->
                                                     <script src="{{url('/')}}/design/LandingPage/js/typed.js"></script>

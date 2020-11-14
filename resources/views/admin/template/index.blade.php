@@ -41,7 +41,7 @@
                 <a href="{{ route('template.show',$template->id) }}">  {{$template->TemplateName}} </a>
             </div>
             <div class="card-body">
-                <a href="{{ route('template.show',$template->id) }}"> <img class="card-img-top" src="template/fetch_image/{{$template->id }}"></a>
+                <a href="{{ route('template.show',$template->id) }}"> <img class="card-img-top" src="{{url('/')}}/img/storage/templates/{{$template->TemplateBackGroundName}}"></a>
             </div>
             <div class="card-footer"><a href="{{ route('template.show',$template->id) }}" class="btn btn-primary btn-block">إدارة القالب</a></div>
         </div>

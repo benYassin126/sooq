@@ -1693,9 +1693,11 @@ border: 1px solid #fff;
 
 .marvel-device.iphone-x
 {
-  height: 1245px !important;
+  height: 84%;
 }
 
+.marvel-device.iphone-x .screen {
+    direction: ltr; }
 /* START SHOW TEMPLATE */
 
 .showTemplate .welcomeText {
@@ -2039,7 +2041,6 @@ margin-top: 40px;
   z-index:100;
 }
 .bg-color {
-    margin-top: 20px;
     border: 1px solid #eb36561f;
     padding: 35px;
 }
@@ -2263,4 +2264,129 @@ margin-top: 20%;
 
 .btn-primary {
     color: #fff !important;
+}
+
+div.scrollmenu {
+  overflow: auto;
+  white-space: nowrap;
+  background: #fff;
+}
+
+div.scrollmenu div.card  {
+  margin-top: 10px;
+  margin-right: 10px;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.ColorGrups {
+ width: 30px;
+    height: 30px;
+    border: 1px solid #eee;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* HIDE RADIO */
+.select-color [type=radio] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Color */
+.select-color [type=radio] + .ColorGrups {
+  cursor: pointer;
+}
+
+/* CHECKED STYLES */
+.select-color [type=radio]:checked + .ColorGrups {
+  outline: 2px solid green;
+}
+
+.MainecolorPickSelector,.SubcolorPickSelector {
+  display: inline-block;
+  margin-top: 20px;
+  border-radius: 5px;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  -webkit-transition: all linear .2s;
+  -moz-transition: all linear .2s;
+  -ms-transition: all linear .2s;
+  -o-transition: all linear .2s;
+  transition: all linear .2s;
+}
+
+.colorPickSelector:hover { transform: scale(1.1); }
+.fileUpload {
+  direction: ltr;
+  position: relative;
+  display: inline-block;
+  color: #333;
+  font-size: 0;
+  white-space: nowrap;
+}
+
+.fileUpload .fileName {
+display: inline-block;
+    padding: 11px 17px;
+    width: 200px;
+    height: 35px;
+    box-sizing: border-box;
+    vertical-align: top;
+    background: #f8f9fa;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #33333369;
+    border-radius: 5px;
+}
+.fileUpload .customUploadBtn {
+display: inline-block;
+    padding: 5px 17px;
+    width: 100px;
+    height: 35px;
+    box-sizing: border-box;
+    vertical-align: top;
+    background: #f8f9fa;
+    font-size: 16px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid #33333369;
+    border-radius: 5px;
+}
+.fileUpload .uploadBtn:hover + .customUploadBtn {
+   background-color: #eb3656;
+   color : #fff;
+}
+.fileUpload .uploadBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    height: 100%;
+    text-align: center;
+    z-index: 2;
+}
+
+.MinePalateButton,.SubPalateButton {
+    color: #495057;
+    font-size: 25px;
+    cursor: pointer;
+
+}
+.MinePalateButton:hover,.SubPalateButton:hover {
+  color: #eb3656;
 }

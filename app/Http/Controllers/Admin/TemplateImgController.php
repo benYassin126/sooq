@@ -41,18 +41,19 @@ class TemplateImgController extends Controller
      */
     public function store(Request $request)
     {
+
        $request->validate([
           'TheImg.*' => 'required|image|max:2000',
 
       ]);
 
        foreach ($request->TheImg as $img) {
-           $image_file = $img;
-           $image = Image::make($image_file);
-           Response::make($image->encode('png'));
+        $name =  rand(0,50000).'.'.$img->getClientOriginalExtension();
+        $destinationPath = public_path('./img/storage/template_imgs');
+        $img->move($destinationPath, $name);
            $form_data = array(
               'TemplateID'  => $request->TemplateID,
-              'TheImg' => $image
+              'TheImg' => $name
           );
            TemplateImg::create($form_data);
 
@@ -63,18 +64,6 @@ class TemplateImgController extends Controller
    }
 
 
-   function fetch_image($image_id)
-   {
-       $image = TemplateImg::findOrFail($image_id);
-
-       $image_file = Image::make($image->TheImg);
-
-       $response = Response::make($image_file->encode('png'));
-
-       $response->header('Content-Type', 'image/png');
-
-       return $response;
-   }
 
     /**
      * Display the specified resource.
@@ -106,7 +95,6 @@ class TemplateImgController extends Controller
      */
     public function update(Request $request, TemplateImg $templateImg)
     {
-
         $request->validate([
            'ImgType' => 'required'
        ]);

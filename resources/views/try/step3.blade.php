@@ -47,8 +47,8 @@
                                     @foreach(session()->get('allImgPath.path') as $key => $img)
                                     <img class="imgesInMockUp" src="{{$FolderPath}}/{{$img}}.png">
                                     @endforeach
-                                    @if (count(session()->get('allImgPath.path')) < 24 )
-                                    @for($i = 0; $i < (24 - count(session()->get('allImgPath.path'))); $i++)
+                                    @if (count(session()->get('allImgPath.path')) < 12 )
+                                    @for($i = 0; $i < (12 - count(session()->get('allImgPath.path'))); $i++)
                                     <img class="imgesInMockUp" src="/img/show.png">
                                     @endfor
                                     @endif
@@ -108,9 +108,6 @@
                         <button type="submit" class="btn main-btn main-btn-sm  ml-2 mb-4"><i class="nav-icon fas fa-magic"></i> تصميم جديد</button>
                     </form>
                     @endif
-
-                    {{session()->get('CountOfTry')}}
-
                     @if(session()->get('CountOfTry') >= 0 && session()->get('CountOfTry') < 2  && session()->get('Testing') == 'B' || !Auth::guest())
                     <button class="btn main-btn ml-2 mb-4 main-btn-sm "  data-toggle="modal" data-target="#exampleModal4">تصميم جديد  <i class="nav-icon fas fa-magic"></i> </button>
                     @endif
@@ -166,19 +163,65 @@
                         @if(session()->get('MineColor') != '#010101' || session()->get('SubColor') != '#010101')
                         <a class="btn btn-primary" onclick="replaceColor();">عكس الآلوان  </a>
                         @endif
-                        <div class="form-group">
-                            <label class="control-label mt-4">لون الهوية الأساسي  (Hex)</label>
-                            <div>
-                                <input type="color" id="MineColor" name="MineColor" value="{{ session()->get('MineColor') }}">
+                        <div class="form-group mt-4 mb-2 select-color">
+                            <p id="Coloralert" class="mb-4 alert alert-danger" style="font-weight: bold;display: none;">زودنا بألوان هويتك لاهنت</p>
+                            <h6 class="control-label ">اللون الأساسي</h6>
+                            @if ($LogoColors != null)
+                            {{-- <p class="ml-2" style="display: inline;">اختر من الهوية :</p> --}}
+                            <label>
+                                <input type="radio"  @if( session()->get('MineColor')  == $LogoColors[0] ) checked @endif  name="MineColor">
+                                <span onclick="selectMineFun('{{$LogoColors[0]}}')" class="ColorGrups" style="background:{{$LogoColors[0]}}"></span>
+                            </label>
+                            <label>
+                                <input type="radio"  @if( session()->get('MineColor')  == $LogoColors[1] ) checked @endif  name="MineColor">
+                                <span onclick="selectMineFun('{{$LogoColors[1]}}')" class="ColorGrups" style="background:{{$LogoColors[1]}}"></span>
+                            </label>
+                            <label>
+                                <input type="radio"  @if( session()->get('MineColor')  == $LogoColors[2] ) checked @endif  name="MineColor">
+                                <span onclick="selectMineFun('{{$LogoColors[2]}}')" class="ColorGrups" style="background:{{$LogoColors[2]}}"></span>
+                            </label>
+                            @endif
+                            <span class="MinePalateButton mr-2"> <i class="fas fa-fill-drip"></i> </span>
+                            <br>
+                            <div id="MineColorPalete" style="display: none;">
+                                <span class="mt-2 ml-2"> لوحة الألوان</span>
+                                <div style="display: inline;">
+                                    <input type="color" id="PicMineColor" onchange="picMineFun()" value="{{ session()->get('MineColor') }}">
+                                    <input id ="MineColor" type="text" name="MineColor" class="mr-2" style="width: 80px;" value="{{ session()->get('MineColor') }}"  maxlength="7" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-4 mb-2 select-color">
+                            <p id="Coloralert" class="mb-4 alert alert-danger" style="font-weight: bold;display: none;">زودنا بألوان هويتك لاهنت</p>
+                            <h6 class="control-label ">اللون الثانوي</h6>
+                            @if ($LogoColors != null)
+
+                            <label>
+                                <input @if( session()->get('SubColor')  == $LogoColors[0] ) checked @endif type="radio" name="SubColor">
+                                <span onclick="selectSubFun('{{$LogoColors[0]}}')" class="ColorGrups" style="background:{{$LogoColors[0]}}"></span>
+                            </label>
+                            <label>
+                                <input  @if( session()->get('SubColor')  == $LogoColors[1] ) checked @endif  type="radio" name="SubColor">
+                                <span onclick="selectSubFun('{{$LogoColors[1]}}')" class="ColorGrups" style="background:{{$LogoColors[1]}}"></span>
+                            </label>
+                            <label>
+                                <input @if( session()->get('SubColor')  == $LogoColors[2] ) checked @endif type="radio" name="SubColor">
+                                <span onclick="selectSubFun('{{$LogoColors[2]}}')" class="ColorGrups" style="background:{{$LogoColors[2]}}"></span>
+                            </label>
+                            @endif
+                            <span class="SubPalateButton mr-2"> <i class="fas fa-fill-drip"></i> </span>
+                            <br>
+                            <div id="SubColorPalete" style="display: none;">
+
+
+                            <span class="mt-2 ml-2">لوحة الألوان</span>
+                            <div  id="SubColorPalete" style="display: inline;">
+                                <input type="color" id= "PicSubColor" onchange="picSubeFun()"  value="{{ session()->get('SubColor') }}">
+                                <input type="text" id="SubColor"  value="{{ session()->get('SubColor') }}" name="SubColor" class="mr-2" style="width: 80px;"  maxlength="7" >
+                            </div>
                             </div>
                         </div>
                         <hr>
-                        <div class="form-group">
-                            <label class="control-label">لون الهوية الثانوي  (Hex)</label>
-                            <div>
-                                <input type="color" id="SubColor" name="SubColor" value="{{ session()->get('SubColor') }}">
-                            </div>
-                        </div>
                     </div>
                     <div class="div-center">
                         <button type="submit" class="btn btn-success">جرب الآن <i class="fa fa-eye mr-2"></i> </button>
@@ -298,7 +341,7 @@
                                     <input @if($FirstTemplateID == $template->id) checked @endif type="radio" name="TemplateID" value="{{$template->id}}">
                                     <div class="card mb-2 select-img">
                                         <div class="card-body">
-                                            <img style="width: 200px; height: 200px;" src="{{url('/')}}/admin/template/fetch_image/{{$template->id }}">
+                                            <img style="width: 200px; height: 360px;"src="{{ url('/') }}/img/storage/templates/{{$template->TemplateBackGroundName}}">
                                         </div>
                                     </div>
                                 </label>

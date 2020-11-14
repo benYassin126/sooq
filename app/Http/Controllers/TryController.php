@@ -17,11 +17,20 @@ use Auth;
 use Redirect;
 use DB;
 use Session;
+use Crypt;
+use inRandomOrder;
+use League\ColorExtractor\Color;
+use League\ColorExtractor\ColorExtractor;
+use League\ColorExtractor\Palette;
+use I18N_Arabic;
+require('./I18N/Arabic.php');
+
 
 
 
 class TryController extends Controller
 {
+
     public function index() {
         return view('try.index');
     }
@@ -33,16 +42,23 @@ class TryController extends Controller
 
     public function PostcreateStep1(Request $request)
     {
+        //check if not insert any image
+        if ($request->Transparent == null && $request->WithBackGound == null) {
+              return back()->with('erorr', 'لابد من ادخال صورة منتج واحد على الاقل');
+        }
+        if ($request->Logo == null) {
+              return back()->with('erorr', 'يرجى ادخال صورة الشعار او اي صورة تحتوي على الوان الهوية');
+        }
 
        $messages = [
-            "Transparent.max" => "عدد الصور اكثر من 6 صور",
-            "WithBackGound.max" => "عدد الصور أكثر من 6 صور"
+            "WithBackGound.max" => "عدد الصور أكثر من 15 صور",
+            "Logo.required" => "يرجى ادخال صورة الشعار او اي صورة تحتوي على الوان الهوية",
          ];
         $validatedData = $this->validate($request, [
-          'Transparent.*' => 'required|image|max:10240',
-          'Transparent' => 'max:6',
-          'WithBackGound.*' => 'image|max:10240',
-          'WithBackGound' => 'max:6',
+          'Transparent.*' => 'image|max:5120',//5MB
+          'WithBackGound.*' => 'image|max:5120',//5MB
+          'Logo' => 'image',//5MB
+          'WithBackGound' => 'max:15',
 
        ],$messages);
 
@@ -54,9 +70,15 @@ class TryController extends Controller
 
         //chose two random template
         $allTemplates = Template::select('id')->get();
+        /*
         if ($request->WithBackGound == null) {
             $allTemplates = Template::select('id')->where('TemplateType','Transparent')->get();
+
         }
+        if ($request->Transparent == null) {
+            $allTemplates = Template::select('id')->where('TemplateType','WithBackGound')->get();
+        }
+        */
         $allTemplatesID = array();
         foreach ($allTemplates as $Template) {
             array_push($allTemplatesID, $Template->id);
@@ -65,8 +87,8 @@ class TryController extends Controller
 
         shuffle($allTemplatesID);
         session()->put('FirstTemplate',$allTemplatesID[0]);
-        session()->put('SecondTemplate',$allTemplatesID[1]);
-        session()->put('ThirdTemplate',$allTemplatesID[2]);
+        session()->put('SecondTemplate',$allTemplatesID[0]);
+        session()->put('ThirdTemplate',$allTemplatesID[0]);
         session()->put('CurentTemplate',session()->get('FirstTemplate'));
 
 
@@ -74,6 +96,21 @@ class TryController extends Controller
         $TestingArray = ['A','B'];
         $randomKay = array_rand($TestingArray,1);
         session()->put('Testing',$TestingArray[$randomKay]);
+
+
+        //STORE LOGO
+        if ($request->has('Logo')) {
+            $logoName = 'Logo_'. rand(0,9999);
+            session()->put('logoName',$logoName);
+            $image_file = $request->Logo;
+            $image = Image::make($image_file);
+            Response::make($image->encode('png'));
+            session()->put('logoAsImage',$image);
+            $image = imagecreatefromstring($image);
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
+            imagepng($image,'./img/storage/logos/'. $logoName . '.png',9);
+        }
 
 
 
@@ -134,9 +171,40 @@ class TryController extends Controller
 
  public function createStep2(Request $request)
  {
-    $allTemplates = Template::all();
+
+    if (session::get('WithBackInputImage.image') == null) {
+       $allTemplates = Template::select('id','TemplateBackGroundName')->where('TemplateType','Transparent')->get();
+    }
+    if(session::get('TransInputImage.image') == null) {
+
+       $allTemplates = Template::select('id','TemplateBackGroundName')->where('TemplateType','WithBackGound')->get();
+    }
+    if(session::get('WithBackInputImage.image') != null && session::get('TransInputImage.image') != null ) {
+      $allTemplates = Template::select('id','TemplateBackGroundName')->get();
+    }
+
     $FirstTemplateID = $allTemplates->first()->id;
-    return view('try.step2',compact('allTemplates','FirstTemplateID'));
+
+
+    //START GET COLORS FROM LOGO
+    $LogoColors = array();
+    session()->put('LogoColors.color', []);
+
+    if (session()->get('logoName') != null) {
+    $logoName = session()->get('logoName');
+    $palette = Palette::fromFilename('./img/storage/logos/'. $logoName .'.png');
+    $topFive = $palette->getMostUsedColors(5);
+
+    foreach ($topFive as $color => $index) {
+       $oneColor =  Color::fromIntToHex($color);
+       array_push($LogoColors,$oneColor);
+       $request->session()->push('LogoColors.color', $oneColor);
+    }
+    }
+
+    //END GET COLORS FROM LOGO
+
+    return view('try.step2',compact('allTemplates','FirstTemplateID','LogoColors'));
  }
 
 public function PostcreateStep2(Request $request)
@@ -182,7 +250,7 @@ public function PostcreateStep2(Request $request)
       if ($request->has('oldUser')) {
 
         $UserID = $request->UserID;
-        $user = User::select('MineColor','SubColor','CurentTemplate')->where('id',$UserID)->first();
+        $user = User::select('MineColor','SubColor','CurentTemplate','Instagram')->where('id',$UserID)->first();
         //chose two random template
         $allTemplates = Template::select('id')->get();
         $allTemplatesID = array();
@@ -193,8 +261,8 @@ public function PostcreateStep2(Request $request)
 
         shuffle($allTemplatesID);
         session()->put('FirstTemplate',$allTemplatesID[0]);
-        session()->put('SecondTemplate',$allTemplatesID[1]);
-        session()->put('ThirdTemplate',$allTemplatesID[2]);
+        session()->put('SecondTemplate',$allTemplatesID[0]);
+        session()->put('ThirdTemplate',$allTemplatesID[0]);
 
         if ($user->CurentTemplate != null) {
             session()->put('CurentTemplate',$user->CurentTemplate);
@@ -207,8 +275,9 @@ public function PostcreateStep2(Request $request)
 
 
         //Start Set Mine and Sub Color to Sessions
-        session()->put('MineColor',$user->MineColor );
-        session()->put('SubColor',$user->SubColor );
+        session()->put('MineColor',$user->MineColor);
+        session()->put('SubColor',$user->SubColor);
+        session()->put('SocialText',$user->Instagram);
         //End Set Mine and Sub Color to Sessions
 
 
@@ -217,13 +286,28 @@ public function PostcreateStep2(Request $request)
          $UserImgs = Img::Select('TheImg')->where([['ImgType','Transparent'],['UserID',$UserID]])->get();
          session()->put('TransInputImage.image', []);
          foreach ($UserImgs as $TransparentImg) {
-               session()->push('TransInputImage.image', $TransparentImg->TheImg);
+            if (strpos($TransparentImg->TheImg, 'png') !== false) {
+                 $img = './img/storage/imgs/' . $TransparentImg->TheImg;
+            }else {
+                 $img = './img/storage/imgs/' . $TransparentImg->TheImg . '.png';
+            }
+            $img = Image::make($img);
+            Response::make($img->encode('png'));
+            session()->push('TransInputImage.image', $img);
        }
 
          $UserImgs = Img::Select('TheImg')->where([['ImgType','WithBackGound'],['UserID',$UserID]])->get();
          session()->put('WithBackInputImage.image', []);
          foreach ($UserImgs as $WithBackGound) {
-               session()->push('WithBackInputImage.image', $WithBackGound->TheImg);
+
+            if (strpos($WithBackGound->TheImg, 'png') !== false) {
+                 $img = './img/storage/imgs/' . $WithBackGound->TheImg;
+            }else {
+                 $img = './img/storage/imgs/' . $WithBackGound->TheImg . '.png';
+            }
+            $img = Image::make($img);
+            Response::make($img->encode('png'));
+            session()->push('WithBackInputImage.image',$img);
        }
 
       }
@@ -357,6 +441,10 @@ public function createStep3(Request $request)
     $UserMineColor = session()->get('MineColor');
     $UserSubColor = session()->get('SubColor');
     $template = Template::all()->where('id',$TemplateID)->first();
+    $InteractivePositions =  explode('-',$template->InteractivePositions);
+
+
+
 
 
 
@@ -365,7 +453,8 @@ public function createStep3(Request $request)
     if ($UserMineColor != '#010101' || $UserSubColor != '#010101' ) {
        $changeColor = true;
    }else {
-       $changeColor = false;
+        //FORCE ALL BECOME CHANGE COLOR
+       $changeColor = true;
    }
 
 
@@ -376,33 +465,47 @@ public function createStep3(Request $request)
 if ($UserSubColor == '#010101') {
     $UserSubColor = $template->SubColor;
 }
-/*
 
+/*
 //START To Get All Enteractive Images
 
 $BusinessType = session()->get('BusinessType');
 
 // 1- Get Custom Enteractive
- $CustomEnteractive = Interactive::select('id','TheImg','Type')->where('Type',$BusinessType)->get();
+ $CustomEnteractive = Interactive::all()->where('Type',$BusinessType)->first();
+
 // 2- Get Genral Enteractive
- $GenralEnteractive = Interactive::select('id','TheImg','Type')->where('Type','general')->get();
-// 3- Get Friday Enteractive
- $FridayEnteractive = Interactive::select('id','TheImg','Type')->where('Type','Friday')->get();
-
-
-
-//End To Get All Enteractive Images
+ $GenralEnteractive = Interactive::all()->where('Type','general')->first();
+ //3- Get Friday Enteractive
+ $FridayEnteractive = Interactive::all()->where('Type','Friday')->first();
 
 
 */
+
+ //START To Get All Friday Images
+
+// 1- Get Genral Enteractive
+
+
+ $FridayEnteractiveG = Interactive::inRandomOrder()->select('TheImg')->where('FridayType','G')->first();
+ // 2- Get Genral Enteractive
+ $FridayEnteractiveH = Interactive::inRandomOrder()->select('TheImg')->where('FridayType','H')->first();
+ // 3- Get Genral Enteractive
+ $FridayEnteractiveD = Interactive::inRandomOrder()->select('TheImg')->where('FridayType','D')->first();
+
+//End To Get All Enteractive Images
+
 
 
 
 
             // array to store all image path to call it in blade file
+  $FolderPath = session()->get('FolderPath');
   $allImgPath = array();
   $allImgPathTrans = array();
   $allImgPathBack = array();
+
+
 
             // Function to copy alpha image to image
 function imagecopymerge_alpha($dst_image ,$src_image ,$dst_x ,$dst_y ,$src_x ,$src_y ,$dst_w ,$dst_h ,$src_w ,$src_h ) {
@@ -412,72 +515,115 @@ function imagecopymerge_alpha($dst_image ,$src_image ,$dst_x ,$dst_y ,$src_x ,$s
     imagecopyresampled($dst_image, $cut, $dst_x, $dst_y,$src_x, $src_y, $dst_w, $dst_h,$src_w,$src_h);
 }
             // get all Template image
-$allTemplateImg = TemplateImg::select('id','imgType')->where('TemplateID',$TemplateID)->get();
+$allTemplateImg = TemplateImg::select('id','imgType','TheImg','Blurry')->where('TemplateID',$TemplateID)->get();
+
+
+
+
+
+    //Start Color
+
+
+
 
 if ($changeColor == true ){
 
    foreach ($allTemplateImg as $index => $img) {
 
-/*
+
 switch ($index) {
-  case '0':
-    $backImg = imagecreatefromstring($CustomEnteractive[0]->TheImg);
+/*
+  case $InteractivePositions[0]:
+    $imgUrl = "./img/storage/interactives/". $FridayEnteractiveH->TheImg;
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf('#710a0b', "#%02x%02x%02x");
+    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf('#FCE604', "#%02x%02x%02x");
+    $imgIntractiveName = $img->id;
     break;
-  case '1':
-    $backImg = imagecreatefromstring($FridayEnteractive[0]->TheImg);
-    break;
-  case '2':
-    $backImg = imagecreatefromstring($FridayEnteractive[1]->TheImg);
-    break;
-  case '3':
-    $backImg = imagecreatefromstring($FridayEnteractive[2]->TheImg);
-    break;
-  case '4':
-    $backImg = imagecreatefromstring($GenralEnteractive[0]->TheImg);
+  case $InteractivePositions[1]:
+    $imgUrl = "./img/storage/interactives/". $FridayEnteractiveG->TheImg;
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf('#710a0b', "#%02x%02x%02x");
+    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf('#FCE604', "#%02x%02x%02x");
+    $imgIntractiveName = $img->id;
     break;
 
+  case 1:
+    $imgUrl = "./img/storage/interactives/". $FridayEnteractiveD->TheImg;
+    $imgE = imagecreatefrompng($imgUrl);
+    $w = imagesx($imgE);
+    $h = imagesy($imgE);
+    imagesavealpha($imgE, true);
+
+    $img2 = imagecreatefrompng('./img/storage/interactives/test.png');
+    imagefilter($img2, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf('#AD3C35', "#%02x%02x%02x");
+   // imagefill($img2, 0, 0, imagecolorallocatealpha($imgE, $rMineTemplate,$gMimeTemplate, $bMineTemplate, 30));
+$imgIntractiveName = $img->id;
+    imagecopy($imgE, $img2, 0, 0, 0, 0, $w, $h);
+    imagepng($imgE,'./' . $FolderPath . '/' .$imgIntractiveName .".png", 9);
+
+    array_push($allImgPath,$imgIntractiveName);
+    /*
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf('#342f58', "#%02x%02x%02x");
+    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf('#332d57', "#%02x%02x%02x");
+
+
+
+    break;
+
+ */
   default:
-    $imgUrl = "https://soouq.sa/admin/templateImg/fetch_image/". $img->id;
-    $backImg = imagecreatefrompng($imgUrl);
+    $imgUrl = "./img/storage/template_imgs/". $img->TheImg;
+    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");
+    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf($template->SubColor, "#%02x%02x%02x");
     break;
 }
-*/
+
+
 
     //get All image and Crate it as PNG
-
-    $imgUrl = "https://rwwj.website/admin/templateImg/fetch_image/". $img->id;
     $backImg = imagecreatefrompng($imgUrl);
 
-    //store RGB colors to change template color
-    list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");
     list($rMineUser, $gMineUser, $bMineUser) = sscanf($UserMineColor, "#%02x%02x%02x");
-    list($rSubTemplate, $gSubTemplate, $bSubTemplate) = sscanf($template->SubColor, "#%02x%02x%02x");
     list($rSubUser, $gSubUser, $bSubUser) = sscanf($UserSubColor, "#%02x%02x%02x");
-    list($rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");
+
 
 
     //make the imgae as platte mode to allow us change template color
     imagetruecolortopalette($backImg,false, 255);
+
     $indexx = imagecolorclosest($backImg,$rMineTemplate, $gMimeTemplate, $bMineTemplate);
     imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineUser); // SET NEW COLOR
+
     $indexx = imagecolorclosest($backImg,$rSubTemplate, $gSubTemplate, $bSubTemplate);
     imagecolorset($backImg,$indexx,$rSubUser,$gSubUser,$bSubUser); // SET NEW COLOR
-    $indexx = imagecolorclosest($backImg,$rSubSubTemplate, $gSubSubTemplate, $bSubSubTemplate);
-    imagecolorset($backImg,$indexx,$rMineUser,$gMineUser,$bMineUser); // SET NEW COLOR
+
+/*
+    //after coloer finsh check if image has Blurry
+    if ($img->Blurry == 'yes') {
+        $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+        imagealphablending($BlurryImage, false); // imagesavealpha can only be used by doing this for some reason
+        imagesavealpha($BlurryImage, true); // this one helps you keep the alpha.
+        imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+        imagecopy($backImg, $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+
+
+    }
+    */
 
     //difrent file foreache type
-$imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" . $index .".png", 9);
+    $imgName =  $img->id;
 
-    if ($img->imgType == 'Transparent') {
+    if ($img->imgType == 'Logo' || $img->imgType == 'Social') {
         imagepalettetotruecolor($backImg);
-        imagepng($backImg, "./img/newTemplateTrans/" . $imgName .".png", 9);
+        imagepng($backImg, "./img/Unique/" . $imgName .".png", 9);
 
-    }elseif($img->imgType == 'WithBackGound') {
+    }elseif($img->imgType == 'WithBackGound' || $img->imgType == 'Transparent') {
         imagecolortransparent($backImg,imagecolorat($backImg,500,500));
         imagealphablending($backImg, true);
         imagesavealpha($backImg, true);
-        imagepng($backImg, "./img/newTemplateBack/" . $imgName .".png", 9);
+        imagepng($backImg, "./img/NewItems/" . $imgName .".png", 9);
     }
+
 
 
  }
@@ -485,6 +631,14 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
 
 }
 
+
+    //End Color
+
+
+    //Strart Design
+
+
+    //First Case => Transparent
 
         $uploadedTranparent =  count(session()->get('TransInputImage.image'));
         $countOFTransparent = TemplateImg::select('id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->count();
@@ -507,49 +661,79 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
 
         }
 
-        $TransparentinDesign = TemplateImg::select('TheImg','id')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->get();
-
+        $TransparentinDesign = TemplateImg::select('TheImg','id','Blurry')->where([['imgType','Transparent'],['TemplateID',$TemplateID]])->get();
 
         //start copy
-        foreach ($TransparentinDesign as $index => $trns) {
-            if ($changeColor == true) {
-                $backImg = imagecreatefrompng('./img/newTemplateTrans/Template' . $trns->id . '.png');
+  foreach ($TransparentinDesign as $index => $trans) {
 
-            }else {
-                $backImg = imagecreatefromstring($trns->TheImg);
+                  if (!in_array($trans->id,$allImgPath)) {
+                              if ($changeColor == true) {
+                    $backImg = imagecreatefrompng('./img/NewItems/' . $trans->id . '.png');
+                }else {
+                    $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $trans->id;
+                    $backImg = imagecreatefrompng($imgUrl);
+                }
+
+
+
+              //  $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
+
+                $height = imagesy($allTransImg[$index]);
+                $width = imagesx($allTransImg[$index]);
+                if ( $width > 1080 || $height > 1080) {
+
+                  if ($width > $height) {
+                      $y = 0;
+                      $x = ($width - $height) / 2;
+                      $smallestSide = $height;
+                    } else {
+                      $x = 0;
+                      $y = ($height - $width) / 2;
+                      $smallestSide = $width;
+                }
+
+                $thumbSize = 1080;
+                $thumb = imagecreatetruecolor($thumbSize, $thumbSize);
+                imagecopyresampled($thumb, $allTransImg[$index], 0, 0, $x, $y, $thumbSize, $thumbSize, $smallestSide, $smallestSide);
+                imagecopymerge_alpha($thumb,$backImg, 0, 0, 0, 0,1080,1080, imagesx($backImg), imagesy($backImg));
+                $imgName = $trans->id;
+
+                //After copy done check if post has bulrry
+                if ($trans->Blurry == 'yes') {
+                    $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                    imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                    imagecopy($thumb, $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+                }
+
+                imagepng($thumb,'.' . $FolderPath  . '/' . $imgName .".png", 9);
+
+                }else {
+                $allTransImg[$index] = imagescale($allTransImg[$index] ,imagesx($backImg) ,imagesx($backImg));
+                imagecopymerge_alpha($allTransImg[$index], $backImg, 0, 0, 0, 0,imagesx($allTransImg[$index]),imagesy($allTransImg[$index]), imagesx($backImg), imagesy($backImg));
+                $imgName = $trans->id;
+                //After copy done check if post has bulrry
+                if ($trans->Blurry == 'yes') {
+                    $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                    imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                    imagecopy($allTransImg[$index], $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+                }
+
+                imagepng($allTransImg[$index], '.' . $FolderPath  . '/' . $imgName .".png", 9);
+
+
+                }
+                array_push($allImgPath,$imgName);
+                array_push($allImgPathTrans,$imgName);
             }
 
-               //set width and height to image and make it at center
-            if (imagesx($allTransImg[$index]) <= imagesx($backImg) && imagesy($allTransImg[$index]) <= imagesy($backImg)) {
-                //rate of descree from mine image if was it less than template size
-                $decRate = (imagesx($backImg) * 5) / 100;
-                $new_widht =  imagesx($backImg) - $decRate;
-                $new_height =  (imagesy($backImg) - ($decRate + 90));
-                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
-                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
-
-            }else {
-                $decRate = (imagesx($backImg) * 35) / 100;
-                $new_widht =  imagesx($backImg) - $decRate;
-                $new_height = imagesy($backImg) - $decRate;
-                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
-                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
-            }
-
-            imagecopyresampled($backImg, $allTransImg[$index],  $xoffset, $yoffset, 0, 0,$new_widht,$new_height, imagesx($allTransImg[$index]), imagesy($allTransImg[$index]));
-            $imgName = $trns->id;
-            imagepng($backImg, '.' . $FolderPath . '/' . $imgName .".png", 9);
-            array_push($allImgPath,$imgName);
-            array_push($allImgPathTrans,$imgName);
-
-        }
+}
 
 
 
 
 
 
-            //second case
+            //second case = > With Back
 
         $uploadedWithBackGround =  count(session()->get('WithBackInputImage.image'));
         $countOFWithBackGround = TemplateImg::select('id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->count();
@@ -560,6 +744,7 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
         foreach ($imges as $img) {
             $img = imagecreatefromstring($img);
             array_push($allWithBack,$img);
+
            // imagepng($img, "./img/all_images/" . rand(0,1000) .".png", 9);
         }
 
@@ -573,11 +758,13 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
 
         }
 
-        $WithBackinDesign = TemplateImg::select('TheImg','id')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->get();
+        $WithBackinDesign = TemplateImg::select('TheImg','id','Blurry')->where([['imgType','WithBackGound'],['TemplateID',$TemplateID]])->get();
 
             foreach ($WithBackinDesign as $index => $wtihBack) {
-                if ($changeColor == true) {
-                    $backImg = imagecreatefrompng('./img/newTemplateBack/Template' . $wtihBack->id . '.png');
+
+                  if (!in_array($wtihBack->id,$allImgPath)) {
+                              if ($changeColor == true) {
+                    $backImg = imagecreatefrompng('./img/NewItems/' . $wtihBack->id . '.png');
                 }else {
                     $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $wtihBack->id;
                     $backImg = imagecreatefrompng($imgUrl);
@@ -606,12 +793,26 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
                 imagecopyresampled($thumb, $allWithBack[$index], 0, 0, $x, $y, $thumbSize, $thumbSize, $smallestSide, $smallestSide);
                 imagecopymerge_alpha($thumb,$backImg, 0, 0, 0, 0,1080,1080, imagesx($backImg), imagesy($backImg));
                 $imgName = $wtihBack->id;
+                //After copy done check if post has bulrry
+                if ($wtihBack->Blurry == 'yes') {
+                    $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                    imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                    imagecopy($thumb, $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+                }
+
                 imagepng($thumb,'.' . $FolderPath  . '/' . $imgName .".png", 9);
 
                 }else {
                 $allWithBack[$index] = imagescale($allWithBack[$index] ,imagesx($backImg) ,imagesx($backImg));
                 imagecopymerge_alpha($allWithBack[$index], $backImg, 0, 0, 0, 0,imagesx($allWithBack[$index]),imagesy($allWithBack[$index]), imagesx($backImg), imagesy($backImg));
                 $imgName = $wtihBack->id;
+                //After copy done check if post has bulrry
+                if ($wtihBack->Blurry == 'yes') {
+                    $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                    imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                    imagecopy($allWithBack[$index], $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+                }
+
                 imagepng($allWithBack[$index], '.' . $FolderPath  . '/' . $imgName .".png", 9);
 
 
@@ -620,8 +821,92 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
                 array_push($allImgPathBack,$imgName);
             }
 
+}
+
+
+    // Third Case Logo
+        $logoAsImage = imagecreatefromstring(session()->get('logoAsImage'));
+        $LogoinDesign = TemplateImg::select('TheImg','id','Blurry')->where([['imgType','Logo'],['TemplateID',$TemplateID]])->get();
+
+        //start copy
+        foreach ($LogoinDesign as $index => $logo) {
+
+            if (!in_array($logo->id,$allImgPath)) {
+
+                if ($changeColor == true) {
+                    $backImg = imagecreatefrompng('./img/Unique/' . $logo->id . '.png');
+
+                }else {
+                    $backImg = imagecreatefromstring($logo->TheImg);
+                }
+
+               //set width and height to image and make it at center
+            if (imagesx($logoAsImage) <= imagesx($backImg) && imagesy($logoAsImage) <= imagesy($backImg)) {
+                //rate of descree from mine image if was it less than template size
+
+                $decRate = (imagesx($backImg) * 5) / 100;
+                $new_widht =  imagesx($backImg) - $decRate;
+                $new_height =  (imagesy($backImg) - ($decRate));
+                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
+                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
+
+            }else {
+                $decRate = (imagesx($backImg) * 35) / 100;
+                $new_widht =  imagesx($backImg) - $decRate;
+                $new_height = imagesy($backImg) - $decRate;
+                $xoffset = (imagesx($backImg) -  $new_widht) / 2;
+                $yoffset = (imagesy($backImg)  -   $new_height) / 2;
+            }
+
+            imagecopyresampled($backImg, $logoAsImage,  $xoffset, $yoffset, 0, 0,$new_widht,$new_height, imagesx($logoAsImage), imagesy($logoAsImage));
+            $imgName = $logo->id;
+             //After copy done check if post has bulrry
+            if ($logo->Blurry == 'yes') {
+                $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                imagecopy($backImg, $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+            }
+            imagepng($backImg, '.' . $FolderPath . '/' . $imgName .".png", 9);
+            array_push($allImgPath,$imgName);
+
+        }
+
+ }
+
+
+     // Forth Case Logos
+        $SocialinDesign = TemplateImg::select('TheImg','id','Blurry')->where([['imgType','Social'],['TemplateID',$TemplateID]])->get();
+
+        //start Write
+        foreach ($SocialinDesign as $index => $soical) {
+            if (!in_array($soical->id,$allImgPath)) {
+                $backImg = imagecreatefrompng('./img/Unique/' . $soical->id . '.png');
+                $font =  realpath('./font/ae_AlHor.ttf');
+                $color = imagecolorallocate($backImg, 0, 0, 0);
+                $SocialText = session::get('SocialText');
+                if ($SocialText != null) {
+                    $text = $SocialText;
+                }else{
+                    $text = 'Soouq_sa';
+                }
+                imagettftext($backImg, 50, 0, 310, 380, $color, $font,$text);
+                $imgName = $soical->id;
+                imagepng($backImg, '.' . $FolderPath . '/' . $imgName .".png", 9);
+                array_push($allImgPath,$imgName);
+                 //After Write done check if post has bulrry
+                if ($soical->Blurry == 'yes') {
+                    $BlurryImage = imagecreatefrompng('./img/Blurry.png');
+                    imagefilter($BlurryImage, IMG_FILTER_COLORIZE, 0,0,0,127*0.8);
+                    imagecopy($backImg, $BlurryImage, 0, 0, 0, 0, 1080, 1080);
+                }
+        }
+ }
+
+
 
       sort($allImgPath);
+
+
       session()->put('allImgPath.path', []);
       session()->put('allImgPathTrans.path', []);
       session()->put('allImgPathBack.path', []);
@@ -646,15 +931,21 @@ $imgName = "Template" . $img->id; imagepng($backImg, "./img/newTemplateTrans/" .
 
             //GET ALL TEMPLATE FOR USER CHOSE ONE OF THEM
 
-            if (session::get('Testing') == 'B' || $uploadedWithBackGround == 0) {
-              $allTemplates = Template::select('id')->where('TemplateType','Transparent')->get();
+            if ($uploadedWithBackGround == 0) {
+              $allTemplates = Template::select('id','TemplateBackGroundName')->where('TemplateType','Transparent')->get();
+            }elseif ($uploadedTranparent == 0) {
+              $allTemplates = Template::select('id','TemplateBackGroundName')->where('TemplateType','WithBackGound')->get();
             }else {
-               $allTemplates = Template::all();
+               $allTemplates = Template::select('id','TemplateBackGroundName')->get();
             }
+
             $FirstTemplateID = $TemplateID;
 
 
-        return view('try.step3',compact('allImgPath','UserMineColor','UserSubColor','FolderPath','allTemplates','FirstTemplateID'));
+            $LogoColors = session()->get('LogoColors.color');
+
+
+        return view('try.step3',compact('allImgPath','UserMineColor','UserSubColor','FolderPath','allTemplates','FirstTemplateID','LogoColors'));
     }
 
 
@@ -686,7 +977,7 @@ $user = new User();
 $user->name =  $request->name;
 $user->email =  $request->email;
 $user->PhoneNumber =  $request->PhoneNumber;
-$user->password =  Hash::make(($request->password));
+$user->password =  Crypt::encrypt(($request->password));
 $user->Twitter =  $Twitter;
 $user->Instagram =  $Instagram;
 $user->BusinessType =  $BusinessType;
@@ -701,22 +992,29 @@ $UserID = $user->id;
 
     //save img
        foreach ($request->session()->get('TransInputImage.image') as $img) {
-
+        $img = imagecreatefromstring($img);
+        imagealphablending($img, false);
+        imagesavealpha($img, true);
+        $imageName = rand(0,50000). '.png';
+        imagepng($img,"./img/storage/imgs/". $imageName , 9);
            $form_data = array(
               'UserID'  => $UserID,
               'ImgType'  => 'Transparent',
-              'TheImg' => $img
+              'TheImg' => $imageName
           );
            Img::create($form_data);
-
        }
 
 
        foreach ($request->session()->get('WithBackInputImage.image') as $img) {
+
+            $img = imagecreatefromstring($img);
+            $imageName = rand(0,50000) . '.png';
+            imagepng($img,"./img/storage/imgs/". $imageName , 9);
            $form_data = array(
               'UserID'  => $UserID,
               'ImgType'  => 'WithBackGound',
-              'TheImg' => $img
+              'TheImg' => $imageName
           );
            Img::create($form_data);
 
@@ -730,15 +1028,20 @@ $UserID = $user->id;
        $FolderPath = session()->get('FolderPath');
 
 
+        //reseve to suclude
+        $reverseImageOrder = array_reverse(session()->get('allImgPath.path'));
 
        //save design
-       foreach (session()->get('allImgPath.path') as $key => $img) {
+       foreach ($reverseImageOrder as $key => $img) {
            $image_file = '.' . $FolderPath  . '/' . $img . '.png';
            $image = Image::make($image_file);
            Response::make($image->encode('png'));
+           $image = imagecreatefromstring($image);
+           $imageName = $key + 1 . '_['. Date('yy:m:d', strtotime('+' . $key + 2 .'days')).']' . $UserID;
+           imagepng($image,"./img/storage/user_designs/". $imageName .".png", 9);
            $form_data = array(
               'UserID'  => $UserID,
-              'TheImg' => $image,
+              'TheImg' => $imageName,
               'DesignID' =>$img,
           );
            UserDesign::create($form_data);
@@ -851,9 +1154,12 @@ $FolderPath = session()->get('FolderPath');
        $image_file ='.' . $FolderPath  . '/' . $img . '.png';
        $image = Image::make($image_file);
        Response::make($image->encode('png'));
+        $image = imagecreatefromstring($image);
+        $imageName = rand(0,5000000);
+        imagepng($image,"./img/storage/user_designs/". $imageName .".png", 9);
        $form_data = array(
           'UserID'  => $UserID,
-          'TheImg' => $image,
+          'TheImg' => $imageName,
           'DesignID' =>$img
       );
        UserDesign::create($form_data);
@@ -930,7 +1236,6 @@ $FolderPath = session()->get('FolderPath');
               'ImgID' =>$allUserimagIDArray[$n]
           );
            $imgDesign->update($form_data);
-       }
     //End IMG ID
 
   return Redirect::route('home', array('St' => 'N'));
@@ -940,6 +1245,6 @@ $FolderPath = session()->get('FolderPath');
 
 
 
-
+}
 
 }

@@ -35,7 +35,7 @@
           </tr>
           <tr>
             <th>{{$thisTemplate->TemplateName}}</th>
-            <th><img src="{{ url('/admin/template/fetch_image') }}/ {{$thisTemplate->id}}" style="width: 150px"></th>
+            <th><img src="{{ url('/') }}/img/storage/templates/{{$thisTemplate->TemplateBackGroundName}}"style="width: 150px"></th>
             <th> <a href="{{ route('template.edit',$thisTemplate->id) }}" class="btn btn-primary mb-4 ">تعديل بيانات القالب</a></th>
           </tr>
         </thead>
@@ -46,23 +46,35 @@
     <hr>
     <div class="allImg">
       <div class="row">
-
         @forelse($allImg as $img)
-        <div class="col col-6">
+        <div class="col col-4">
           <div class="card">
             <div class="card-body">
-               <img class="img-responsive" src="{{ url('/admin/templateImg/fetch_image') }}/{{$img->id}}">
+              <img class="img-responsive" src="{{ url('/') }}/img/storage/template_imgs/{{$img->TheImg}}">
             </div>
             <div class="card-footer">
               <form  action="{{ route('templateImg.update',$img->id) }}" method="post" style="float: right;">
                 @csrf
                 @method('PATCH')
-                <input type="radio" name="ImgType" value="Transparent" id="Transparent_{{$img->id}}"  @if($img->ImgType == 'Transparent') checked @endif>
-                <label class="ml-4" for="Transparent_{{$img->id}}">مغرغ</label>
-                <input type="radio" name="ImgType" value="WithBackGound" id="WithBackGound_{{$img->id}}"  @if($img->ImgType == 'WithBackGound') checked @endif>
-                <label for="WithBackGound_{{$img->id}}">بيئي</label>
+                <label>نوع البوست:</label>
+                <div class="form-group">
+                  <select class="form-control" name="ImgType">
+                    <option value="Transparent" @if($img->ImgType == 'Transparent') selected @endif>أبيض</option>
+                    <option value="WithBackGound" @if($img->ImgType == 'WithBackGound') selected @endif>بيئي</option>
+                    <option value="Logo" @if($img->ImgType == 'Logo') selected @endif>شعار</option>
+                    <option value="Social" @if($img->ImgType == 'Social') selected @endif>سوشال ميديا</option>
+                  </select>
+                </div>
+
+
+                <input type="checkbox" name="Blurry" value="yes" id="Blurry_{{$img->id}}" @if($img->Blurry == 'yes') checked @endif>
+                <label class="ml-2" for="Blurry_{{$img->id}}">تعتيق</label>
+                <br>
+
                 <button type="submit" class="btn btn-success ">حفظ </button>
               </form>
+
+
               <form method="Post" action="{{route('templateImg.destroy',$img->id)}}" style="float: left;">
                 @csrf
                 @method('DELETE')

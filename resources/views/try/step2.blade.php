@@ -18,7 +18,7 @@
                         <!-- Main content -->
                         <div class="content">
                             <div class="container-fluid">
-                                {{( session()->get('Testing') )}}
+                                {{-- ( session()->get('Testing') ) --}}
                                 <!-- Srtat Form -->
                                 <div class="row">
                                     <div class="card card-info bg-color  mb-4" style="width:100%">
@@ -26,46 +26,32 @@
                                             @csrf
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-sm-12 mb-30" style="border-left: 1px solid #eb36561f">
-                                                        @if ( session()->get('Testing') == 'B')
+                                                    <div class="col-lg-6 col-sm-12 mb-30"  @if ( session()->get('Testing') == 'B5' || session()->get('Testing') == 'A5') style="display: none;"  @endif>
+
                                                         <div class="form-group select-img">
                                                             <h6 class="control-label">اختر التصميم</h6>
                                                             <div class="row">
-                                                                @foreach($allTemplates as $template)
-                                                                <div class="col-lg-6 col-sm-12">
-                                                                    <label>                                                                              <label>
-                                                                        <input @if($FirstTemplateID == $template->id) checked @endif type="radio" name="TemplateID" value="{{$template->id}}">
-                                                                        <div class="card mb-2 select-img">
-                                                                            <div class="card-body">
-                                                                                <img style="width: 200px; height: 200px;" src="{{url('/')}}/admin/template/fetch_image/{{$template->id }}">
+                                                                <div class="col-lg-12 col-sm-12">
+                                                                    <div class="scrollmenu">
+                                                                        @foreach($allTemplates as $template)
+                                                                        <label>
+                                                                            <input @if($FirstTemplateID == $template->id) checked @endif type="radio" name="TemplateID" value="{{$template->id}}">
+                                                                            <div class="card mb-2 select-img">
+                                                                                <div class="card-body">
+                                                                                    <img style="width: 175px; height: 360px;"  src="{{ url('/') }}/img/storage/templates/{{$template->TemplateBackGroundName}}">
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </label>
+                                                                        </label>
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
-                                                                @endforeach
                                                             </div>
                                                         </div>
-                                                        <hr>
-                                                        @endif
-                                                        <div class="form-group mt-4 mb-2">
-                                                            <p id="Coloralert" class="mb-4 alert alert-danger" style="font-weight: bold;display: none;">زودنا بألوان هويتك لاهنت</p>
-                                                            <h6 class="control-label">لون الهوية الأساسي  (Hex) </h6>
-                                                            <div>
-                                                                <input type="color" name="PicMineColor" id= "PicMineColor" onchange="picMineFun()" >
-                                                                <input id ="MineColor" type="text" name="MineColor" class="mr-2" style="width: 80px;" value="#010101" maxlength="7" >
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <h6 class="control-label">لون الهوية الثانوي  (Hex)</h6>
-                                                            <div>
-                                                                <input type="color" name="PicSubeColor" id= "PicSubColor" onchange="picSubeFun()" >
-                                                                <input id ="SubColor" type="text" name="SubColor" class="mr-2" style="width: 80px;" value="#010101" maxlength="7" >
-                                                            </div>
-                                                        </div>
+
                                                     </div>
                                                     <div class="col-lg-6 col-sm-12">
                                                         <div class="form-group">
-                                                            <h6  class="control-label">نوع المطعم</h6>
+                                                            <h6  class="control-label">نوع النشاط</h6>
                                                             <select  name="BusinessType" class="form-control" onchange='CheckBusinessType(this.value);'>
                                                                 <option value="" disabled>اختر نشاط</option>
                                                                 <option value="cofy">كوفي شوب</option>
@@ -84,27 +70,95 @@
                                                         <div class="form-group mt-4">
                                                             <h6 class="control-label">رقم الجوال</h6>
                                                             <div>
-                                                                <input id="phone" class="form-control" type="tel" name="PhoneNumber" placeholder="05xxxxxxx" minlength="10" maxlength="10" size="10"  >
+                                                                <input id="phone" class="form-control mb-2" type="tel" name="PhoneNumber" placeholder="05xxxxxxx" minlength="10" maxlength="10" size="10" required >
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+
+                                                        @if ($LogoColors == null)
+                                                          <p class="text-center">لإختيار الألوان من الشعار قم   ب[ <a  href="javascript:history.back(1)">رفع الشعار</a> ]</p>
+                                                        @endif
+                                                        <div class="form-group mt-4 mb-2 select-color">
+                                                            <p id="Coloralert" class="mb-4 alert alert-danger" style="font-weight: bold;display: none;">زودنا بألوان هويتك لاهنت</p>
+                                                            <h6 class="control-label ">اللون الأساسي</h6>
+                                                            @if ($LogoColors != null)
+                                                           {{-- <p class="ml-2" style="display: inline;">اختر من الهوية :</p> --}}
+                                                            <label>
+                                                                <input type="radio" name="MineColor">
+                                                                <span onclick="selectMineFun('{{$LogoColors[0]}}')" class="ColorGrups" style="background:{{$LogoColors[0]}}"></span>
+                                                            </label>
+                                                            <label>
+                                                                <input type="radio" name="MineColor">
+                                                                <span onclick="selectMineFun('{{$LogoColors[1]}}')" class="ColorGrups" style="background:{{$LogoColors[1]}}"></span>
+                                                            </label>
+                                                            <label>
+                                                                <input type="radio" name="MineColor">
+                                                                <span onclick="selectMineFun('{{$LogoColors[2]}}')" class="ColorGrups" style="background:{{$LogoColors[2]}}"></span>
+                                                            </label>
+                                                            @endif
+                                                            <span class="MinePalateButton mr-2"> <i class="fas fa-fill-drip"></i> </span>
+                                                            <br>
+
+                                                            <div id="MineColorPalete" style="display: none;">
+                                                                <span class="mt-2 ml-2"> لوحة الألوان</span>
+                                                                <div style="display: inline;">
+                                                                    <div class="MainecolorPickSelector"></div>
+                                                                    <input id ="MineColor" type="text" name="MineColor" class="mr-2" style="width: 80px;"  maxlength="7" >
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <hr>
+                                                        <div class="form-group select-color">
+                                                            <h6 class="control-label ">اللون الثانوي</h6>
+                                                            @if ($LogoColors != null)
+
+                                                            <label>
+                                                                <input  type="radio" name="SubColor">
+                                                                <span onclick="selectSubFun('{{$LogoColors[0]}}')" class="ColorGrups" style="background:{{$LogoColors[0]}}"></span>
+                                                            </label>
+                                                            <label>
+                                                                <input  type="radio" name="SubColor" >
+                                                                <span onclick="selectSubFun('{{$LogoColors[1]}}')" class="ColorGrups" style="background:{{$LogoColors[1]}}"></span>
+                                                            </label>
+                                                            <label>
+                                                                <input type="radio" name="SubColor">
+                                                                <span onclick="selectSubFun('{{$LogoColors[2]}}')" class="ColorGrups" style="background:{{$LogoColors[2]}}"></span>
+                                                            </label>
+
+                                                            @endif
+
+                                                            <span class="SubPalateButton mr-2"> <i class="fas fa-fill-drip"></i> </span>
+                                                            <br>
+
+                                                            <div id="SubColorPalete" style="display: none;">
+                                                                <span class="mt-2 ml-2"> لوحة الألوان</span>
+                                                                <div style="display: inline;">
+                                                                    <div class="SubcolorPickSelector"></div>
+                                                                    <input id ="SubColor" type="text" name="SubColor" class="mr-2" style="width: 80px;"  maxlength="7" >
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                 </div>
-                                                <div class="div-center">
-                                                    <button type="submit" class="btn btn-success"> شوف المحتوى   <i class="fa fa-eye mr-2"></i> </button>
-                                                </div>
-                                            </form>
-                                        </div>
+                                                                                                    <div class="div-center mt-4">
+                                                        <button type="submit" class="btn btn-success"> شوف المحتوى   <i class="fa fa-eye mr-2"></i> </button>
+                                                    </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <!-- End Form -->
                                 </div>
-                                <!-- /.login-card-body -->
+                                <!-- End Form -->
                             </div>
+                            <!-- /.login-card-body -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- Hero Area End -->
 @endsection

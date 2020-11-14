@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Image;
 
+
 class TemplateController extends Controller
 {
         /**
@@ -51,13 +52,14 @@ class TemplateController extends Controller
       ]);
 
          //Store Template background
+         $image = $request->TemplateBackGround;
+        $name =  rand(0,50000).'.'.$image->getClientOriginalExtension();
+        $destinationPath = public_path('./img/storage/templates');
+        $image->move($destinationPath, $name);
 
-         $image_file = $request->TemplateBackGround;
-         $image = Image::make($image_file);
-         Response::make($image->encode('jpeg'));
          $form_data = array(
           'TemplateName'  => $request->TemplateName,
-          'TemplateBackGround' => $image,
+          'TemplateBackGroundName' =>  $name,
           'MineColor' => $request->MineColor,
           'SubColor' => $request->SubColor,
           'SubSubColor' => $request->SubSubColor,
@@ -126,7 +128,7 @@ class TemplateController extends Controller
 
 
             // get all Template image ID
-            $allTemplateImg = TemplateImg::select('id','imgType')->where('TemplateID',$template->id)->get();
+            $allTemplateImg = TemplateImg::select('id','imgType','TheImg')->where('TemplateID',$template->id)->get();
 
 
             //if user change color >> change all template color then store it in another file
@@ -136,8 +138,9 @@ class TemplateController extends Controller
 
              foreach ($allTemplateImg as $index => $img) {
                 //get All image and Crate it as PNG
-                $imgUrl = "http://$_SERVER[HTTP_HOST]/admin/templateImg/fetch_image/". $img->id;
-                $backImg = imagecreatefrompng($imgUrl);
+    $imgUrl = "./img/storage/template_imgs/". $img->TheImg;
+
+    $backImg = imagecreatefrompng($imgUrl);
 
                 //store RGB colors to change template color
                 list($rMineTemplate, $gMimeTemplate, $bMineTemplate) = sscanf($template->MineColor, "#%02x%02x%02x");

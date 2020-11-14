@@ -52,3 +52,8 @@ Route::post('/text/add', 'TextController@add');
 Route::post('/text/edit', 'TextController@edit');
 Route::post('/text/delete', 'TextController@delete');
 Route::get('home/text/fetch_image/{id}', 'TextController@fetch_image');
+
+
+
+Route::get('/publish', 'HomeController@publish')->name('publish');
+Route::post('/publish', 'HomeController@publishRequest')->name('publish');

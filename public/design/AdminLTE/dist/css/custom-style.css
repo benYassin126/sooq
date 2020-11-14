@@ -344,7 +344,9 @@ border: 1px solid #fff;
   left: 50px !important;
 }
 
-
+.marvel-device.iphone-x .screen {
+    direction: ltr;
+}
 
 
 
